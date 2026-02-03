@@ -13,7 +13,7 @@ const Home = () => {
           <span className="material-symbols-outlined absolute bottom-1 -right-4 text-[#D1EAFF] dark:text-blue-900/40 text-lg rotate-[-5deg]" style={{ fontVariationSettings: "'FILL' 1" }}>cloud</span>
           <h1 className="font-logo text-3xl font-bold text-primary flex items-center gap-2 relative z-10">
             <span className="material-symbols-outlined text-4xl align-middle">pets</span>
-            <span className="whitespace-nowrap">달랑무's 홋카이도여행</span>
+            <span className="whitespace-nowrap">달랑무's 홋카이도 여행</span>
           </h1>
         </div>
       </header>
