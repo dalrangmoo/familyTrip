@@ -1,9 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import RestaurantList from './pages/RestaurantList';
+import AttractionList from './pages/AttractionList';
+import ConvenienceStoreList from './pages/ConvenienceStoreList';
+import Transportation from './pages/Transportation';
 import AttractionDetails from './pages/AttractionDetails';
-import TripList from './pages/TripList';
-import TrainTimetable from './pages/TrainTimetable';
+import RestaurantDetails from './pages/RestaurantDetails';
 
 function App() {
   return (
@@ -11,9 +14,12 @@ function App() {
       <div className="min-h-screen bg-background-light dark:bg-background-dark">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/details" element={<AttractionDetails />} />
-          <Route path="/trip-list" element={<TripList />} />
-          <Route path="/timetable" element={<TrainTimetable />} />
+          <Route path="/restaurants" element={<RestaurantList />} />
+          <Route path="/restaurants/:id" element={<RestaurantDetails />} />
+          <Route path="/attractions" element={<AttractionList />} />
+          <Route path="/attractions/:id" element={<AttractionDetails />} />
+          <Route path="/convenience" element={<ConvenienceStoreList />} />
+          <Route path="/transportation" element={<Transportation />} />
         </Routes>
       </div>
     </Router>
