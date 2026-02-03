@@ -1,181 +1,223 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import BottomNav from '../components/BottomNav';
 
 const Home = () => {
   return (
-    <div className="relative flex h-auto min-h-screen w-full max-w-[480px] mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
-      {/* Header */}
-      <div className="sticky top-0 z-50 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between">
-        <div className="text-[#111418] dark:text-white flex size-12 shrink-0 items-center">
-          <span className="material-symbols-outlined text-primary">cloudy_snowing</span>
+    <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200 min-h-screen">
+      <header className="px-5 pt-4 pb-2 flex justify-center items-center sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-50">
+        <div className="relative py-2 px-6 flex items-center justify-center">
+          <span className="material-symbols-outlined absolute -top-1 -left-1 text-[#D1EAFF] dark:text-blue-900/40 text-xl rotate-[-15deg]" style={{ fontVariationSettings: "'FILL' 1" }}>cloud</span>
+          <span className="material-symbols-outlined absolute bottom-0 -left-3 text-[#FFE4E9] dark:text-pink-900/40 text-lg rotate-[10deg]" style={{ fontVariationSettings: "'FILL' 1" }}>cloud</span>
+          <span className="material-symbols-outlined absolute -top-2 -right-1 text-[#FFE4E9] dark:text-pink-900/40 text-2xl rotate-[15deg]" style={{ fontVariationSettings: "'FILL' 1" }}>cloud</span>
+          <span className="material-symbols-outlined absolute bottom-1 -right-4 text-[#D1EAFF] dark:text-blue-900/40 text-lg rotate-[-5deg]" style={{ fontVariationSettings: "'FILL' 1" }}>cloud</span>
+          <h1 className="font-logo text-3xl font-bold text-primary flex items-center gap-2 relative z-10">
+            <span className="material-symbols-outlined text-4xl align-middle">pets</span>
+            <span className="whitespace-nowrap">달랑무's 홋카이도여행</span>
+          </h1>
         </div>
-        <div className="flex flex-col items-center flex-1">
-          <h2 className="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">일본, 홋카이도 삿포로</h2>
-          <p className="text-xs text-[#617289] dark:text-gray-400">가족 여행 • 2월 14일-20일</p>
-        </div>
-        <div className="flex w-12 items-center justify-end">
-          <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-primary/10 text-primary gap-2 text-base font-bold leading-normal">
-            <span className="material-symbols-outlined">person</span>
-          </button>
-        </div>
-      </div>
+      </header>
 
-      <div className="@container">
-        {/* Weather Card */}
-        <div className="px-4 py-3">
-          <div
-            className="bg-cover bg-center flex flex-col justify-end overflow-hidden bg-white rounded-xl min-h-80 shadow-lg"
-            style={{ backgroundImage: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 50%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBl_M2gQTL0gWnWnR3jp-kbf8VxCDhDB_OgnpZ66TabeFYI6NacdqbeSLH2TDUOUjvq4u0ESIc_BYMXigJpxufA6-Sj8c2FnOquE29sO-MKFi1HJ9OCdrFGNFSWwZfI7bsLix9RMZJ8MZ5bRiK9G9aMaNihzQ4UG38Y4cceW6HJUxhRIEOPfMygw09ZCT6dPCCjJd-CF6xUqGOIHBXheolQiWuIohuCElOYvtPWkHyV4cVuaHyZ2NeFSESQecVpMIxGe2E2vn9FrMM")' }}
-          >
-            <div className="flex flex-col p-6 gap-2">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-white text-4xl">ac_unit</span>
-                <p className="text-white tracking-light text-[32px] font-bold leading-tight">-4°C</p>
-              </div>
-              <p className="text-white/90 text-lg font-medium">오늘 폭설이 예상됩니다</p>
-              <div className="flex gap-2 mt-2">
-                <span className="bg-primary/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
-                  <span className="material-symbols-outlined text-sm">warning</span> 한파 주의보
-                </span>
+      <main className="pb-32 pt-2">
+        <section className="px-5 mb-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-zinc-800 flex justify-between items-center">
+            <div className="flex items-center">
+              <img alt="Sunny Weather Icon" className="w-14 h-14 mr-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqlOx040sYMTaUI6xnqFe_nRJpUoC88rHlztPhyqO3cjq_AcBMTQd4e2P4LsevztEAXDf0giHoy4mWViQPazqbhQC0ewE2ybWUNlR13uoNo-6YXqFQ8oyJOUGvVx5KszoOxFeCXUlwCmOsI-a8cqUCxA5KESZyAUtRYbg5fwIALX9OpOSNg-31ULOuCLashosJngGOal0MBQfXU0GC3HQV8hVQE5FswEGJKCQULHs3Tdic4QBg6_-kGwzVEwWMCm3OiSgJDgoDM0qb"/>
+              <div>
+                <p className="text-sm text-slate-500 dark:text-slate-400">삿포로 현재 날씨</p>
+                <h2 className="text-3xl font-bold">-2°C <span className="text-sm font-normal text-slate-400 ml-1">눈 내림</span></h2>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Info Cards */}
-      <div className="flex flex-wrap gap-3 p-4">
-        <div className="flex min-w-[140px] flex-1 flex-col gap-2 rounded-xl p-4 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-2 text-[#617289] dark:text-gray-400">
-            <span className="material-symbols-outlined text-sm">snowing</span>
-            <p className="text-xs font-medium uppercase tracking-wider">강설량</p>
-          </div>
-          <p className="text-[#111418] dark:text-white tracking-light text-xl font-bold leading-tight">15cm</p>
-        </div>
-        <div className="flex min-w-[140px] flex-1 flex-col gap-2 rounded-xl p-4 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center gap-2 text-[#617289] dark:text-gray-400">
-            <span className="material-symbols-outlined text-sm">air</span>
-            <p className="text-xs font-medium uppercase tracking-wider">풍속</p>
-          </div>
-          <p className="text-[#111418] dark:text-white tracking-light text-xl font-bold leading-tight">12km/h</p>
-        </div>
-      </div>
-
-      {/* Next Train Alert */}
-      <Link to="/timetable" className="px-4 block">
-        <div className="bg-primary/5 dark:bg-primary/20 border border-primary/20 rounded-xl p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-primary text-white p-2 rounded-lg">
-              <span className="material-symbols-outlined">train</span>
+            <div className="text-right">
+              <p className="text-sm font-medium text-primary">적설량 5cm</p>
+              <p className="text-xs text-slate-400">습도 78%</p>
             </div>
+          </div>
+        </section>
+
+        <section className="mb-8 px-5">
+          <div className="flex justify-between items-end mb-4">
             <div>
-              <p className="text-[#111418] dark:text-white text-sm font-bold">오타루행 다음 열차</p>
-              <p className="text-primary text-xs font-medium">4번 승강장 • 8분 후 출발</p>
+              <h3 className="text-xl font-bold">실시간 운행 상태</h3>
+              <p className="text-xs text-slate-400 font-display">Real-time Transportation Status</p>
             </div>
+            <Link to="/transportation" className="text-sm text-primary font-medium">전체보기</Link>
           </div>
-          <span className="material-symbols-outlined text-primary">chevron_right</span>
-        </div>
-      </Link>
-
-      {/* Recommended Restaurants */}
-      <div className="flex items-center justify-between px-4 pt-6 pb-2">
-        <h2 className="text-[#111418] dark:text-white text-[20px] font-bold leading-tight tracking-[-0.015em]">추천 맛집</h2>
-        <button className="text-primary text-sm font-bold">전체보기</button>
-      </div>
-      <div className="flex overflow-x-auto hide-scrollbar">
-        <div className="flex items-stretch p-4 gap-4">
-          <div className="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-64 bg-white dark:bg-gray-800 p-2 shadow-sm">
-            <div
-              className="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col"
-              style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCKfzdL6GjbSsc-bsVBNk-EFTTJ4q0NZBWnkXX-sBCGU2NjhCZfk1A-44GsubuF-0ld5ySSlcsSUTmiKfpLiIRJJTbATeyJcU4LxwZXb5Aybsx0sVfuHXcxQDOUZN5rZ6dAea7YKy8QdwuQhXLEK0ZOAlhTXLFmm6MUlBV1tqSxKVileb0w-P6p8_zGrxCtUPRXG480M1WJ4FCtVu7fItBl-_e7D0A9Z6bBw7LC7fPLfjC-RWnbdqgl_bYjXjCx34CICk3Ulju0xlA")' }}
-            >
-              <div className="m-2 self-start bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1">
-                <span className="material-symbols-outlined text-orange-500 text-sm fill-current">star</span>
-                <span className="text-[10px] font-bold text-gray-800">4.9</span>
+          <div className="space-y-3">
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 flex items-center justify-between shadow-sm">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary">train</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm">JR 하코다테 본선</p>
+                  <p className="text-[10px] text-slate-400 font-display">JR Hakodate Line</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">정상 운행</span>
               </div>
             </div>
-            <div className="px-1 pb-2">
-              <p className="text-[#111418] dark:text-white text-base font-bold leading-normal">멘야 사이미</p>
-              <p className="text-[#617289] dark:text-gray-400 text-sm font-normal">유명 미소 라멘 • ₩₩</p>
-            </div>
-          </div>
-          <div className="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-64 bg-white dark:bg-gray-800 p-2 shadow-sm">
-            <div
-              className="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col"
-              style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDn-RjIJ_v2bZ1GBVoMg5NSZodTyjDvZr9Z8NuEp6XaAFki5ydRl2cYhR-KN4TmGbrKlvoYfkOf6DVWlPvCkjOKqYj39vo285JtpWlOiimmF-OMW6MTU96cf_Hr2h4JyAo0BoDBmGz78LhOLzpiO9YnZDDzBMrW75UeyNXlNCoBdQCXI3mVVAD9RfiXss32jqUYPXu3v3w6rBzbO5QHYNLxa2WHB706LKdAvq0xO1t8jSNm_PwonaibtRsRXF619Xe7zRap4SZ5iiU")' }}
-            >
-              <div className="m-2 self-start bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1">
-                <span className="material-symbols-outlined text-orange-500 text-sm fill-current">star</span>
-                <span className="text-[10px] font-bold text-gray-800">4.7</span>
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 flex items-center justify-between shadow-sm">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary">subway</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm">삿포로 시영 지하철</p>
+                  <p className="text-[10px] text-slate-400 font-display">Sapporo Subway</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">정상 운행</span>
               </div>
             </div>
-            <div className="px-1 pb-2">
-              <p className="text-[#111418] dark:text-white text-base font-bold leading-normal">가라쿠 스프카레</p>
-              <p className="text-[#617289] dark:text-gray-400 text-sm font-normal">정통 스프카레 • ₩₩</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Popular Destinations */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <h2 className="text-[#111418] dark:text-white text-[20px] font-bold leading-tight tracking-[-0.015em]">인기 여행지</h2>
-        <button className="text-primary text-sm font-bold">지도보기</button>
-      </div>
-      <div className="flex overflow-x-auto hide-scrollbar">
-        <div className="flex items-stretch p-4 gap-4">
-          <div className="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-64 bg-white dark:bg-gray-800 p-2 shadow-sm">
-            <div
-              className="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col justify-end"
-              style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBOS4HxKfu5K-DO0ExGzRK0TKUb5MK27ofiTW0kLc9-BaDfabDpxDqG5HRZk3AGkYs4CyW9nuoJkXaxSKZSi1P25zpAaJoXOc3Ub4CpD784SD7_GuZA18LpFaAcUF8rXJMLzghbeH6iOWs27UQ9d4iffPDkpA1MRC54FOaB1SKv_yQ4YFjBzeGzkSxTKMyyRD8kfqVSSVckw5fwrEDP6S5TR-4TSyORPQl6UdcVBnA8cr5vhIubsrbngfslz6Y6Bof8iMmbxsWMb4Y")' }}
-            >
-            </div>
-            <div className="px-1 pb-2">
-              <p className="text-[#111418] dark:text-white text-base font-bold leading-normal">오타루 운하</p>
-              <div className="flex items-center gap-1 text-[#617289] dark:text-gray-400 text-sm">
-                <span className="material-symbols-outlined text-sm">directions_car</span>
-                <span>차로 45분 소요</span>
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-primary/20 dark:border-primary/40 flex items-center justify-between shadow-sm">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary">directions_bus</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm">신치토세 공항 리무진</p>
+                  <p className="text-[10px] text-slate-400 font-display">Airport Limousine</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-primary/10">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-primary"></span>
+                <span className="text-xs font-bold text-primary">폭설 지연 (15분)</span>
               </div>
             </div>
           </div>
-          <Link to="/details" className="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-64 bg-white dark:bg-gray-800 p-2 shadow-sm">
-            <div
-              className="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col justify-end"
-              style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5I50qzUyG7GcHbSo0uDRIUYFLD-v2z9pPhqb_mDsTpUwHsAHsx3QV5LO8HOx850JpSHBzMKHHej1Uv7hBN8TCbboHLdLAtCpTiVvdlYtEQluKEAayzzme6_Bc5LVpn_Bxa4MNfc0s80K6IgcvfCwsuvnI8S5gibSPVPCCUJ0QKTTX79_cJXwjoqFgkVNVHMAOQx1Anc9zNEABf9moP4vq_DJjXqZh6_29gKbkBLewmg2TCsWLCidOXxfNl4tyQ-uQdFqTrPxZ68s")' }}
-            >
+        </section>
+
+        <section className="mb-8">
+          <div className="px-5 flex justify-between items-end mb-4">
+            <div>
+              <h3 className="text-xl font-bold">삿포로 맛집 추천</h3>
+              <p className="text-xs text-slate-400 font-display">Sapporo Restaurants</p>
             </div>
-            <div className="px-1 pb-2">
-              <p className="text-[#111418] dark:text-white text-base font-bold leading-normal">비에이 청의 호수</p>
-              <div className="flex items-center gap-1 text-[#617289] dark:text-gray-400 text-sm">
-                <span className="material-symbols-outlined text-sm">train</span>
-                <span>열차로 2.5시간 소요</span>
+            <Link to="/restaurants" className="text-sm text-primary font-medium">전체보기</Link>
+          </div>
+          <div className="flex overflow-x-auto no-scrollbar px-5 space-x-4">
+            <div className="flex-none w-64">
+              <Link to="/restaurants/1">
+                <div className="relative h-40 rounded-2xl overflow-hidden mb-3">
+                  <img alt="Sapporo Ramen" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlYw-zcRP21_jSegXRrkYli9_L1nqjczE1deidALj2Wbnof-kS54ncmUbJ0lN_yMEjC35Wtf2Bqq4--L1BLrRjw02U2XO7nh_Sb_VopM8a_su_cwjSMTo7iHtGaNP8hlzGfpuj2Dk56KOI9nkfuZANI0aO89rZk1HcqlqJnSyBIlWVbdilaE1RISbfL-TWyJoy3ZuPe1vatmkYr8PG8uC8g11Ti9TYGq5VxTY4MTYq7vnnaQasMqegk5FG-4cPsQnp_pIHJ-S-OqY7"/>
+                  <div className="absolute top-2 left-2 bg-primary text-white text-[10px] px-2 py-1 rounded-md font-bold">인기 급상승</div>
+                </div>
+                <h4 className="font-bold text-base truncate">미소 라멘 전문점</h4>
+                <p className="text-xs text-slate-500 mb-1">스스키노 역 도보 5분</p>
+                <div className="flex items-center text-primary">
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  <span className="text-xs font-bold ml-0.5">4.8 (1,200+)</span>
+                </div>
+              </Link>
+            </div>
+            <div className="flex-none w-64">
+              <Link to="/restaurants/2">
+                <div className="relative h-40 rounded-2xl overflow-hidden mb-3">
+                  <img alt="Sapporo Crab" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMSjz_Qr3nx2VdY1tAjePdfnMl2kbnL-pAvgHzSyzweejcI4yJc8KxenkUV33kvFzW0BiFr2BNOZYl5tklhtk5jqlOZfhrYCdheE-HZyqDz1ucTqUsBmxHa-ozCV2NhCL5NrQJ64Crn-WZnT92tP9qEWVHNGVVu0CuM8dp-d4HQTf9m0HLs0OX8791Me98UTBAtRFj8MbYgSTLQ5nOr7gWDVeGsIC0VDfWTYTaGOZglbQEDrTiN5Evjvpv9hnrghtiIBbU8x-I_tCm"/>
+                </div>
+                <h4 className="font-bold text-base truncate">카니 장인</h4>
+                <p className="text-xs text-slate-500 mb-1">니조 시장 내 위치</p>
+                <div className="flex items-center text-primary">
+                  <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                  <span className="text-xs font-bold ml-0.5">4.9 (850)</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="px-5 flex justify-between items-end mb-4">
+            <div>
+              <h3 className="text-xl font-bold">비에이 명소 둘러보기</h3>
+              <p className="text-xs text-slate-400 font-display">Biei Sightseeing</p>
+            </div>
+            <Link to="/attractions" className="text-sm text-slate-400 dark:text-slate-500">더보기</Link>
+          </div>
+          <div className="flex overflow-x-auto no-scrollbar px-5 space-x-4">
+            <div className="flex-none w-40">
+              <Link to="/attractions/1">
+                <div className="relative h-48 rounded-2xl overflow-hidden mb-2 shadow-sm border border-slate-100 dark:border-zinc-800">
+                  <img alt="Biei Trees" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUTD2EN5djhdAoYEYjmBNXSeNp3V3ZbWhXYjogBz8MVpOM60K-Czdry7ql7kgLkwMKcQZT3cK9VLJjMXqEfDXySs17fadxvP2jF7I7PXJMh8uL2mkj-2spBqZJvyFQuKdeM3JfMKJwTmszIvx1lSbLjgSAHM3OdAUyRD2Bbn6AuhosSakHHis5Df4XbrP5QZsLMCaBHBSTndTf9-QckERSYk8oCobiKW35bTPng2_tXGrQDWDEpp3L6AMNdvgfbVmYIdD1uQdXkE-s"/>
+                  <button className="absolute top-2 right-2 p-1.5 bg-black/30 backdrop-blur-sm rounded-full">
+                    <span className="material-symbols-outlined text-white text-lg">favorite</span>
+                  </button>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+                    <p className="text-white font-bold text-sm">켄과 메리의 나무</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+            <div className="flex-none w-40">
+              <Link to="/attractions/2">
+                <div className="relative h-48 rounded-2xl overflow-hidden mb-2 shadow-sm border border-slate-100 dark:border-zinc-800">
+                  <img alt="Biei Blue Pond" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3ukpvJZ4KODJn3JZiiGObyzaGHZifqwsI7tB2Nsxw-Q-78zrZoRS_IVaKcSAAJ5dZmhPNrmeEKMlX4kzkskkjJ1nzO1TF-DtLrdMo33HdirVlKNkzDAiDam7-qTmf4AoJH5N9p-_xRsArPgQEfrk2ttXFfRBOGuxLEPGrRPufAHSUKIrX2T3m5RWYwjsPgOB7cwt0dSRNi3AIGuAuCMlak_2z_q_UXXy1U4vY2bsFpSq0RmWTTLlnojTP3TWrHLW0YfFEQWEUsYp_"/>
+                  <button className="absolute top-2 right-2 p-1.5 bg-black/30 backdrop-blur-sm rounded-full">
+                    <span className="material-symbols-outlined text-white text-lg">favorite_border</span>
+                  </button>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+                    <p className="text-white font-bold text-sm">청의 호수</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-8 px-5">
+          <div className="flex justify-between items-end mb-4">
+            <div>
+              <div className="flex items-center space-x-1">
+                <span className="material-symbols-outlined text-primary">storefront</span>
+                <h3 className="text-xl font-bold">오타루 주변 편의점</h3>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5 font-display">Otaru Convenience Stores</p>
+            </div>
+            <Link to="/convenience" className="text-sm text-primary font-medium">더보기</Link>
+          </div>
+          <div className="space-y-3">
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 flex items-center justify-between shadow-sm w-full">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span className="material-symbols-outlined text-primary">store</span>
+                </div>
+                <div>
+                  <p className="font-bold text-base">로손 오타루 운하점</p>
+                  <p className="text-xs text-slate-500">운하에서 도보 2분 (150m)</p>
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <span className="text-[10px] px-2 py-1 rounded bg-slate-100 dark:bg-zinc-800 font-bold text-slate-600 dark:text-slate-400">24H 영업</span>
               </div>
             </div>
-          </Link>
-        </div>
-      </div>
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-slate-100 dark:border-zinc-800 flex items-center justify-between shadow-sm w-full">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                  <span className="material-symbols-outlined text-blue-600">local_convenience_store</span>
+                </div>
+                <div>
+                  <p className="font-bold text-base">세븐일레븐 사카이마치</p>
+                  <p className="text-xs text-slate-500">오르골당 근처 (300m)</p>
+                </div>
+              </div>
+              <div className="flex-shrink-0">
+                <span className="text-[10px] px-2 py-1 rounded bg-slate-100 dark:bg-zinc-800 font-bold text-slate-600 dark:text-slate-400">24H 영업</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
-      <div className="h-24"></div>
+      <button className="fixed right-5 bottom-32 w-10 h-10 bg-white dark:bg-zinc-800 rounded-full shadow-lg border border-slate-100 dark:border-zinc-700 flex items-center justify-center active:scale-95 transition-transform z-40">
+        <span className="material-symbols-outlined text-slate-500">arrow_upward</span>
+      </button>
 
-      {/* Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-gray-100 dark:border-gray-800 flex justify-around items-center py-3 px-6 z-50">
-        <Link to="/" className="flex flex-col items-center gap-1 text-primary">
-          <span className="material-symbols-outlined font-bold">home</span>
-          <span className="text-[10px] font-bold tracking-tight">홈</span>
-        </Link>
-        <button className="flex flex-col items-center gap-1 text-gray-400">
-          <span className="material-symbols-outlined">explore</span>
-          <span className="text-[10px] font-bold tracking-tight">탐색</span>
-        </button>
-        <button className="flex flex-col items-center gap-1 text-gray-400">
-          <span className="material-symbols-outlined">favorite</span>
-          <span className="text-[10px] font-bold tracking-tight">저장</span>
-        </button>
-        <Link to="/trip-list" className="flex flex-col items-center gap-1 text-gray-400">
-          <span className="material-symbols-outlined">settings</span>
-          <span className="text-[10px] font-bold tracking-tight">여행일정</span>
-        </Link>
-      </div>
+      <BottomNav />
     </div>
   );
 };
