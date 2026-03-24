@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Home, Calendar, Utensils, Navigation, Plane, ChevronRight, MapPin } from 'lucide-react';
 
-// 타입 정의 (Vercel 빌드 에러 방지)
+// Vercel 빌드 에러 방지를 위한 타입 정의
 interface WeatherData {
   temp: string;
   msg: string;
@@ -56,7 +56,7 @@ const DallangmuApp = () => {
       { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동 (국제선 84번, 국내선 22/14번 게이트). 왕복 2,500엔.' },
       { time: '15:00', task: '베셀 호텔 체크인', desc: '체크인은 2시부터. 체크인 전 라멘집 대기표 미리 뽑아두기 추천.' },
       { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집. 추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
-      { time: '오후', task: '시내 투어 & 쇼핑', desc: '맥주박물관(무료), 시계탑, TV타워. GU(8층), 메가돈키호테(2층), 스탠다드(8층), 칼디(9층).' },
+      { time: '오후', task: '시내 투어 & 쇼핑', desc: '맥주박물관(무료), 시계탑, 오도리공원, TV타워. GU(8층), 돈키호테(2층), 스탠다드(8층), 칼디(9층).' },
       { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사. 핫페퍼 사전 예약 완료.' },
     ],
     '5/28': [
@@ -72,11 +72,10 @@ const DallangmuApp = () => {
       { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 출발. ★진행 방향 오른쪽 좌석 추천★ 바다 조망.' },
       { time: '11:00', task: '오타루 관광', desc: '오르골당, 증기시계, 스누피, 어묵공장. 기타이치홀(오후 2/3/4시 이벤트).' },
       { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사 (예약 가능). 르타오 디저트 및 운하 산책.' },
-      { time: '오후', task: '스스키노 복귀', desc: '오타루 일정 후 복귀. 전날 못 갔을 경우 맥주박물관 구경.' },
       { time: '19:00', task: '저녁: 사보텐', desc: '오코노미야키 식사 (대안: 쿠우야 또는 5월 초 예약 필요한 텟판치).' },
     ],
     '5/30': [
-      { time: '09:00', task: '조식: 코메다커피', desc: '나고야 스타일 앙버터 토스트 모닝 세트. 오전 7시 오픈.' },
+      { time: '09:00', task: '조식: 코메다커피', desc: '나고야 스타일 모닝 세트. 오전 7시 오픈.' },
       { time: '10:00', task: '공항 이동', desc: '호텔 1층 앞 공항버스 탑승. 하차 시 티켓 지불. 2층 국내선 관광.' },
       { time: '11:30', task: '공항 점심', desc: '신치토세 공항 구경 및 공항 내 점심 식사.' },
       { time: '14:35', task: '티웨이 TW252 탑승', desc: '삿포로(CTS) 출발. 출국 수속 및 면세점 대기.' },
@@ -146,34 +145,34 @@ const DallangmuApp = () => {
     { name: '르타오 본점', cat: '디저트', desc: '오타루를 대표하는 더블프롬마주 치즈케이크의 명가.' },
     { name: '르타오 파토스', cat: '디저트', desc: '오타루 최대 규모 매장으로 다양한 디저트 시식 가능.' },
     { name: '데니쉬 다니 르타오', cat: '디저트', desc: '비에이 우유를 듬뿍 사용한 고소한 치즈 데니쉬 전문점.' },
-    { name: '류게츠 오타루토점', cat: '디저트', desc: '오타루 매장 한정 타르트와 촉촉한 바움쿠헨이 인기.' },
+    { name: '류게츠 오타루토점', cat: '디저트', desc: '오타루 매장 한정 타르트와 촉촉한 바움쿠헨이 인기인 디저트샵.' },
     { name: '키타카로', cat: '디저트', desc: '입안에서 녹는 바움쿠헨과 커다란 슈크림으로 유명한 전문점.' },
     { name: '키노토야', cat: '디저트', desc: '삿포로역 등에서 만날 수 있는 진한 우유맛 아이스크림 1위 맛집.' },
     { name: '반즈 (BARNES)', cat: '디저트', desc: '수제 건포도를 넣은 "럼 레즌" 아이스크림이 환상적인 곳.' },
-    { name: 'CAFE NORTE SAPPORO', cat: '디저트', desc: '홋카이도 특산물 하스캇푸 소스를 곁들인 아이스크림.' },
+    { name: 'CAFE NORTE SAPPORO', cat: '디저트', desc: '홋카이도 특산물 하스캇푸 소스를 곁들인 상큼한 아이스크림.' },
     { name: '크레미아', cat: '디저트', desc: '고급 풍미 프리미엄 소프트크림 명소.' },
     { name: '밀크무라', cat: '디저트', desc: '130종의 술을 아이스크림에 뿌려 먹는 이색 시메 파르페 전문점.' },
-    { name: '펭귄당', cat: '디저트', desc: '삿포로 밤 파르페 문화의 원조격으로 수제 젤라또가 일품.' },
-    { name: '화이트 코지', cat: '디저트', desc: '요쓰바 유업 직영으로 신선하고 진한 우유 맛 파르페 제공.' },
-    { name: '파르페 술 사토', cat: '디저트', desc: '밤늦게까지 화려한 비주얼의 과일 파르페를 즐기는 곳.' },
+    { name: '펭귄당', cat: '디저트', desc: '삿포로 밤 파르페 문화의 원조격으로 직접 만든 젤라또가 일품.' },
+    { name: '화이트 코지', cat: '디저트', desc: '요쓰바 유업 직영으로 신선하고 진한 우유 맛 파르페를 제공함.' },
+    { name: '파르페 술 사토', cat: '디저트', desc: '밤늦게까지 화려한 비주얼의 제철 과일 파르페를 즐기는 곳.' },
     { name: '카페 노이몬드', cat: '디저트', desc: '다채로운 구성의 젤라또 파르페를 선보이는 전문 카페.' },
-    { name: '파르페테리아 미르', cat: '디저트', desc: '비주얼 쇼크! 깨트려 먹는 재미가 있는 이색 파르페.' },
-    { name: '로지우라 카페', cat: '디저트', desc: '살살 녹는 질감과 고급스러운 맛의 파르페 맛집.' },
-    { name: '기타이치홀', cat: '디저트', desc: '167개의 유리 석유 램프가 켜지는 환상적인 분위기.' },
-    { name: 'cafe 이로나이 식당', cat: '디저트', desc: '옛 민가를 리모델링하여 고즈넉한 분위기를 살린 카페.' },
-    { name: '카히사칸', cat: '디저트', desc: '오타루역 내에 위치해 여행 전후 들르기 좋은 명소.' },
-    { name: '페이스트리 스내플스', cat: '디저트', desc: '하코다테 명물인 입안에서 녹는 "치즈 오믈렛" 전문점.' },
-    { name: '삿포로 모리히코', cat: '디저트', desc: '맛있는 핸드드립 커피와 정갈한 디저트를 즐기는 카페.' },
-    { name: '포플러 팜', cat: '디저트', desc: '붉은 멜론 위에 아이스크림을 올린 "산타 수염" 맛집.' },
-    { name: '준페이 (Junpei)', cat: '기타/지역', desc: '바삭하고 통통한 새우가 일품인 인생 에비동 성지.' },
-    { name: 'Biei Curry', cat: '기타/지역', desc: '비에이 지역의 신선한 채소를 담은 카레 식당.' },
-    { name: '나루토 본점', cat: '기타/지역', desc: '겉바속촉 닭 반 마리 튀김 "한미아게" 원조집.' },
+    { name: '파르페테리아 미르', cat: '디저트', desc: '비주얼 쇼크! 깨트려 먹는 재미가 있는 이색 파르페 전문점.' },
+    { name: '로지우라 카페', cat: '디저트', desc: '살살 녹는 질감과 고급스러운 맛의 파르페를 파는 스스키노 맛집.' },
+    { name: '기타이치홀', cat: '디저트', desc: '167개의 유리 석유 램프가 켜지는 환상적인 분위기의 창고 카페.' },
+    { name: 'cafe 이로나이 식당', cat: '디저트', desc: '옛 민가를 리모델링하여 고즈넉한 분위기를 살린 운치 있는 카페.' },
+    { name: '카히사칸', cat: '디저트', desc: '오타루역 내에 위치해 여행 시작 전후 들르기 좋은 고즈넉한 명소.' },
+    { name: '페이스트리 스내플스', cat: '디저트', desc: '하코다테 명물인 입안에서 녹는 "치즈 오믈렛" 케이크 전문점.' },
+    { name: '삿포로 모리히코', cat: '디저트', desc: '맛있는 핸드드립 커피와 정갈한 디저트를 즐길 수 있는 카페.' },
+    { name: '포플러 팜', cat: '디저트', desc: '붉은 멜론 위에 아이스크림을 올린 "산타 수염" 디저트 맛집.' },
+    { name: '준페이 (Junpei)', cat: '기타/지역', desc: '바삭하고 통통한 새우가 일품인 인생 에비동(새우덮밥) 성지.' },
+    { name: 'Biei Curry', cat: '기타/지역', desc: '비에이 지역의 신선한 채소를 담은 일본식/스리랑카식 카레 식당.' },
+    { name: '나루토 본점', cat: '기타/지역', desc: '겉바속촉 닭 반 마리 튀김인 "한미아게"를 유행시킨 원조집.' },
     { name: '오타루 창고 No.1', cat: '기타/지역', desc: '운하 옆에서 로컬 맥주와 소시지를 즐기는 양조장 카페.' },
-    { name: 'Jacksonville', cat: '기타/지역', desc: '홋카이도산 식재료로 만드는 정통 미국식 수제버거.' },
-    { name: '치토세츠루 이자카야', cat: '기타/지역', desc: '양조장 직영으로 운영되는 토주와 안주 맛집.' },
-    { name: '레스토랑 시갈', cat: '기타/지역', desc: '이시카리만의 풍경을 바라보며 즐기는 비프시츄.' },
-    { name: '테라스 브랏세리', cat: '기타/지역', desc: '오타루 운하 인근 호텔 내 위치한 조식 뷔페.' },
-    { name: '하야시야 식당', cat: '기타/지역', desc: '카레 라멘부터 해산물까지 이른 아침 식사가 가능한 곳.' }
+    { name: 'Jacksonville', cat: '기타/지역', desc: '홋카이도산 식재료로 만드는 정통 미국식 수제버거 맛집.' },
+    { name: '치토세츠루 이자카야', cat: '기타/지역', desc: '삿포로 유일의 양조장 직영으로 운영되는 토주와 안주 맛집.' },
+    { name: '레스토랑 시갈', cat: '기타/지역', desc: '이시카리만의 풍경을 바라보며 깊은 맛의 비프시츄를 즐기는 곳.' },
+    { name: '테라스 브랏세리', cat: '기타/지역', desc: '오타루 운하 인근 호텔 내 위치한 고급스러운 조식 뷔페.' },
+    { name: '하야시야 식당', cat: '기타/지역', desc: '카레 라멘부터 신선한 해산물까지 이른 아침 식사가 가능한 곳.' }
   ];
 
   const categories = ['전체', '야키니쿠', '징기스칸', '스프카레', '스시/해산물', '라멘', '카이센동', '디저트', '게 요리', '기타/지역'];
@@ -187,7 +186,7 @@ const DallangmuApp = () => {
       
       <header className="w-full h-[90px] bg-white px-5 py-6 flex justify-between items-center z-[110] border-b border-[#EEEEEE] max-w-md mx-auto sticky top-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white rounded-full border-2 border-[#1A1A1A] flex items-center justify-center overflow-hidden shrink-0">
+          <div className="w-10 h-10 bg-white rounded-full border-2 border-[#1A1A1A] flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
             <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
                <path d="M12 12C12 12 13 2 20 2C27 2 28 12 28 12" stroke="#2D963F" strokeWidth="4.5" strokeLinecap="round"/>
                <circle cx="20" cy="25" r="13" fill="white" stroke="#1A1A1A" strokeWidth="2.5"/>
@@ -211,7 +210,109 @@ const DallangmuApp = () => {
               </div>
             </div>
             
-            <div className="bg-[#1A1A1A] p-7 rounded-[30px] mb-8 text-white shadow-xl font-black">
-               <div className="flex justify-between items-center text-[16px]">
-                 <div className="flex flex-col items-center"><span className="text-[10px] text-white/50 mb-1 uppercase tracking-widest text-center">Departure</span>TW251 (10:10)</div>
-                 <Plane size={24} className="text-[#2D963F
+            <div className="bg-[#1A1A1A] p-7 rounded-[30px] mb-8 text-white shadow-xl">
+               <div className="flex justify-between items-center text-[16px] font-black">
+                 <div className="flex flex-col items-center"><span className="text-[10px] text-white/50 mb-1 uppercase tracking-widest text-center font-bold">Departure</span>TW251 (10:10)</div>
+                 <Plane size={24} className="text-[#2D963F]" />
+                 <div className="text-right flex flex-col items-center"><span className="text-[10px] text-white/50 mb-1 uppercase tracking-widest text-center font-bold">Return</span>TW252 (14:35)</div>
+               </div>
+            </div>
+
+            <h3 className="text-2xl font-[900] mb-6 px-1 tracking-tight text-[#1A1A1A]">오늘의 루트</h3>
+            <div className="space-y-7 pb-10">
+              {fullSchedule['5/27'].map((item, i) => (
+                <div key={i} className="bg-white rounded-[32px] border border-[#EEEEEE] overflow-hidden shadow-lg">
+                  <div className="px-6 py-4 flex items-center gap-3 border-b border-[#EEEEEE]">
+                    <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
+                    <span className="text-[#1A1A1A] font-[1000] text-[18px] tracking-tight">{item.task}</span>
+                  </div>
+                  <div className="px-6 pb-7 pt-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <p className="flex-1 text-[16px] text-[#222222] leading-relaxed font-normal">{item.desc}</p>
+                      <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center justify-center gap-1 w-20 py-2 bg-[#F8F9FA] rounded-xl text-[#E13B30] font-black text-[12px] border border-[#EEEEEE] active:scale-95 shadow-sm transition-all">
+                        <MapPin size={12} /> 지도
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'schedule' && (
+          <div className="animate-in slide-in-from-right duration-500 pt-0">
+            <div className="sticky top-0 left-0 right-0 bg-[#FBFBFC] py-5 z-[105] border-b border-[#EEEEEE]">
+              <div className="flex flex-wrap gap-2 px-1">
+                {Object.keys(fullSchedule).map(day => (
+                  <button key={day} onClick={() => { setSelectedDay(day); window.scrollTo(0,0); }} className={`px-5 py-2 text-[14px] font-[900] rounded-full border transition-all ${selectedDay === day ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white text-[#999999]'}`}>{day}</button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-7 pb-10 pt-6">
+              {fullSchedule[selectedDay].map((item, i) => (
+                <div key={i} className="bg-white rounded-[32px] border border-[#EEEEEE] overflow-hidden shadow-lg">
+                  <div className="px-6 py-4 flex items-center gap-3 border-b border-[#EEEEEE]">
+                    <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
+                    <span className="text-[#1A1A1A] font-[1000] text-[18px] tracking-tight">{item.task}</span>
+                  </div>
+                  <div className="px-6 pb-7 pt-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <p className="flex-1 text-[16px] text-[#222222] font-normal leading-relaxed whitespace-pre-line">{item.desc}</p>
+                      <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center justify-center gap-1 w-20 py-2 bg-[#F8F9FA] rounded-xl text-[#E13B30] font-black text-[12px] border border-[#EEEEEE] active:scale-95 shadow-sm">
+                        <MapPin size={12} /> 지도
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'gourmet' && (
+          <div className="animate-in fade-in duration-700 pt-0">
+             <div className="sticky top-0 left-0 right-0 bg-[#FBFBFC] py-5 z-[105] border-b border-[#EEEEEE]">
+                <div className="flex flex-wrap gap-2 px-1">
+                  {categories.map(cat => (
+                    <button key={cat} onClick={() => { setSelectedCategory(cat); window.scrollTo(0,0); }} className={`px-3 py-1.5 text-[12px] font-[900] rounded-xl border transition-all ${selectedCategory === cat ? 'bg-[#2D963F] text-white border-[#2D963F]' : 'bg-white text-[#999999]'}`}>{cat}</button>
+                  ))}
+                </div>
+             </div>
+             <div className="grid grid-cols-1 gap-5 pb-10 pt-6">
+               {filteredGourmet.map((shop, i) => (
+                 <div key={i} className="bg-white rounded-[30px] border border-[#EEEEEE] shadow-lg overflow-hidden active:scale-[0.98] transition-all">
+                   <div className="px-6 py-4 border-b border-[#EEEEEE] flex items-center gap-2">
+                      <span className="text-[10px] font-black px-2 py-1 bg-[#F8F9FA] rounded text-[#2D963F] border border-[#2D963F]/20 uppercase tracking-wider">#{shop.cat}</span>
+                      <p className="text-[18px] font-[1000] tracking-tight text-[#1A1A1A] truncate">{shop.name}</p>
+                   </div>
+                   <div className="px-6 pb-6 pt-4 flex items-center justify-between gap-3">
+                      <p className="flex-1 text-[14px] text-[#555555] font-normal leading-snug">{shop.desc}</p>
+                      <button onClick={() => openMaps(shop.name)} className="shrink-0 w-11 h-11 bg-[#F8F9FA] rounded-full flex items-center justify-center border border-[#EEEEEE] text-[#2D963F] shadow-inner">
+                        <Navigation size={18} fill="currentColor" />
+                      </button>
+                   </div>
+                </div>
+               ))}
+             </div>
+          </div>
+        )}
+      </main>
+
+      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-[#EEEEEE] flex justify-around p-6 pb-12 z-[110] shadow-2xl">
+        {[
+          { id: 'home', label: '홈', icon: <Home size={26} />, activeColor: '#E13B30' },
+          { id: 'schedule', label: '일정표', icon: <Calendar size={26} />, activeColor: '#1A1A1A' },
+          { id: 'gourmet', label: '맛집', icon: <Utensils size={26} />, activeColor: '#2D963F' },
+        ].map(tab => (
+          <button key={tab.id} onClick={() => { setActiveTab(tab.id); window.scrollTo(0,0); }} className="flex-1 flex flex-col items-center gap-2 transition-all">
+            {React.cloneElement(tab.icon as React.ReactElement, { strokeWidth: 3, color: activeTab === tab.id ? tab.activeColor : '#CCCCCC' })}
+            <span className="text-[12px] font-black tracking-tighter" style={{ color: activeTab === tab.id ? tab.activeColor : '#CCCCCC' }}>{tab.label}</span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+};
+
+export default DallangmuApp;
