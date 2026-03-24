@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Home, Calendar, Utensils, Navigation, Plane, MapPin } from 'lucide-react';
 
-// Vercel 빌드 에러 방지를 위한 타입 정의
+// Vercel 빌드 에러 방지 및 타입 정의
 interface WeatherData {
   temp: string;
   msg: string;
@@ -42,6 +42,18 @@ const DallangmuApp = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // 구글 지도 검색 최적화 함수 (상호명 + 도시명 조합)
+  const openMaps = (placeName: string, category?: string) => {
+    let locationContext = "Sapporo";
+    if (placeName.includes("오타루") || (category && category.includes("오타루"))) locationContext = "Otaru";
+    if (placeName.includes("비에이") || placeName.includes("준페이")) locationContext = "Biei";
+    
+    // 주소 오류 방지를 위한 정제된 쿼리 생성
+    const cleanQuery = `${placeName} ${locationContext}`;
+    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanQuery)}`;
+    window.open(mapUrl, '_blank');
+  };
+
   const getWeatherStyle = (code: number) => {
     if (code <= 1) return { bg: "from-[#E0F2F1] to-[#B2DFDB]", box: "bg-black/10", text: "text-[#004D40]", line: "border-[#004D40]/20" };
     if (code <= 3) return { bg: "from-[#F5F5F5] to-[#E0E0E0]", box: "bg-black/5", text: "text-[#424242]", line: "border-[#424242]/20" };
@@ -51,36 +63,33 @@ const DallangmuApp = () => {
 
   const fullSchedule: Record<string, any[]> = {
     '5/27': [
-      { time: '06:40', task: '인천공항 출발', desc: '집에서 출발. 6013번 버스 이용 (06:10 / 06:40 배차 확인).' },
-      { time: '10:10', task: '티웨이 TW251 탑승', desc: '제1여객터미널 출발. 모바일 체크인 권장. 삿포로행 이륙.' },
-      { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동 (국제선 84번, 국내선 22/14번 게이트). 왕복 2,500엔.' },
-      { time: '15:00', task: '베셀 호텔 체크인', desc: '체크인은 2시부터. 체크인 전 라멘집 대기표 미리 뽑아두기 추천.' },
-      { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집. 추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
-      { time: '오후', task: '시내 투어 & 쇼핑', desc: '맥주박물관(무료), 시계탑, 오도리공원, TV타워. GU(8층), 메가돈키호테(2층), 스탠다드(8층), 칼디(9층).' },
-      { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사. 핫페퍼 사전 예약 완료.' },
+      { time: '06:40', task: '인천공항 제1여객터미널', desc: '집에서 출발. 6013번 버스 이용 (06:10 / 06:40 배차 확인).' },
+      { time: '10:10', task: '티웨이 TW251 탑승', desc: '모바일 체크인 권장. 삿포로행 이륙.' },
+      { time: '13:00', task: '신치토세 공항', desc: '공항버스로 시내 이동 (국제선 84번, 국내선 22/14번 게이트). 왕복 2,500엔.' },
+      { time: '15:00', task: '베셀 호텔 캄파나 스스키노', desc: '체크인은 2시부터. 체크인 전 라멘집 대기표 미리 뽑아두기 추천.' },
+      { time: '15:30', task: '스아게 플러스 (Suage+)', desc: '유명 스프카레 맛집. 추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
+      { time: '오후', task: '삿포로 맥주 박물관', desc: '무료 관람 가능. 시계탑, 오도리공원, TV타워 산책.' },
+      { time: '19:30', task: '징기스칸 유우히 (Yuuhi)', desc: '양고기 식사. 핫페퍼 사전 예약 완료.' },
     ],
     '5/28': [
-      { time: '아침', task: '호텔 조식', desc: '베셀 호텔 조식 이용 후 투어 집합 장소로 이동.' },
-      { time: '09:00', task: '비에이 투어 시작', desc: '다이와 로이넷 호텔 앞 집합 (흰그림자투어/마이리얼트립 결제 완료).' },
-      { time: '오전', task: '비에이 관광', desc: '팜토미타(30분), 탁신관(30분), 언덕(20분) 방문.' },
-      { time: '14:00', task: '점심: 준페이', desc: '투어 중 에비동 식사 (약 70분 소요). 바삭한 새우 튀김.' },
-      { time: '오후', task: '후속 투어', desc: '청의 호수(30분), 흰수염 폭포(20분), 휴게소 후 삿포로 복귀.' },
-      { time: '20:00', task: '저녁: 니쿠마루', desc: '야키니쿠 식사 (대안: 시부키, 니쿠시키 등 예약 가능).' },
+      { time: '아침', task: '베셀 호텔 조식', desc: '호텔 조식 이용 후 투어 집합 장소로 이동.' },
+      { time: '09:00', task: '다이와 로이넷 호텔 삿포로-스스키노 앞', desc: '비에이 투어 집합 (흰그림자투어).' },
+      { time: '오전', task: '팜 토미타 (Farm Tomita)', desc: '라벤더와 꽃밭 구경 (30분 소요).' },
+      { time: '14:00', task: '준페이 (Junpei) 비에이', desc: '투어 중 에비동 식사. 바삭한 새우 튀김.' },
+      { time: '오후', task: '흰수염 폭포 (Shirahige Waterfall)', desc: '청의 호수와 함께 방문하는 비에이 필수 코스.' },
+      { time: '20:00', task: '야키니쿠 니쿠마루 (Nikumaru)', desc: '삿포로 복귀 후 저녁 식사.' },
     ],
     '5/29': [
-      { time: '아침', task: '아침 식사', desc: '07:00 오픈 "겐텐소노 2" 라멘 또는 호텔 조식.' },
-      { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 출발. ★진행 방향 오른쪽 좌석 추천★ 바다 조망.' },
-      { time: '11:00', task: '오타루 관광', desc: '오르골당, 증기시계, 스누피, 어묵공장. 기타이치홀(오후 2/3/4시 이벤트).' },
-      { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사 (예약 가능). 르타오 디저트 및 운하 산책.' },
-      { time: '오후', task: '스스키노 복귀', desc: '오타루 일정 후 복귀. 전날 못 갔을 경우 맥주박물관 구경.' },
-      { time: '19:00', task: '저녁: 사보텐', desc: '오코노미야키 식사 (대안: 쿠우야 또는 5월 초 예약 필요한 텟판치).' },
+      { time: '아침', task: '겐텐소노 2 라멘', desc: '07:00 오픈 아침 식사 가능한 라멘집.' },
+      { time: '10:00', task: 'JR 삿포로역', desc: '오타루행 열차 탑승. ★오른쪽 좌석 추천★' },
+      { time: '11:00', task: '오타루 운하', desc: '오르골당, 증기시계, 스누피 빌리지 산책.' },
+      { time: '13:00', task: '와규 쿠로사와 오타루 본점', desc: '규카츠 식사. 르타오 본점 디저트 필수.' },
+      { time: '19:00', task: '오코노미야키 사보텐', desc: '스스키노 복귀 후 철판 요리 저녁 식사.' },
     ],
     '5/30': [
-      { time: '09:00', task: '조식: 코메다커피', desc: '나고야 스타일 모닝 세트. 오전 7시 오픈.' },
-      { time: '10:00', task: '공항 이동', desc: '호텔 앞 공항버스 탑승. 하차 시 티켓 지불. 2층 국내선 관광.' },
-      { time: '11:30', task: '공항 점심', desc: '신치토세 공항 구경 및 공항 내 마지막 식사.' },
-      { time: '14:35', task: '티웨이 TW252 탑승', desc: '삿포로(CTS) 출발. 출국 수속 및 면세점 대기.' },
-      { time: '17:40', task: '한국 도착', desc: '인천공항 도착 및 즐거운 일정 마무리.' },
+      { time: '09:00', task: '코메다 커피 삿포로', desc: '나고야 스타일 모닝 세트로 마지막 아침.' },
+      { time: '11:30', task: '신치토세 공항 국내선', desc: '공항 내 상점가 구경 및 마지막 식사.' },
+      { time: '14:35', task: '티웨이 TW252 출발', desc: '삿포로(CTS) 출발. 면세 쇼핑 마무리.' },
     ]
   };
 
@@ -178,7 +187,6 @@ const DallangmuApp = () => {
 
   const categories = ['전체', '야키니쿠', '징기스칸', '스프카레', '스시/해산물', '라멘', '카이센동', '디저트', '게 요리', '기타/지역'];
   const filteredGourmet = selectedCategory === '전체' ? gourmetData : gourmetData.filter(item => item.cat === selectedCategory);
-  const openMaps = (query: string) => window.open(`http://googleusercontent.com/maps.google.com/maps?q=${encodeURIComponent(query)}`, '_blank');
 
   const w = getWeatherStyle(realWeather.code);
 
@@ -289,7 +297,7 @@ const DallangmuApp = () => {
                    </div>
                    <div className="px-6 pb-6 pt-4 flex items-center justify-between gap-3">
                       <p className="flex-1 text-[14px] text-[#555555] font-normal leading-snug">{shop.desc}</p>
-                      <button onClick={() => openMaps(shop.name)} className="shrink-0 w-11 h-11 bg-[#F8F9FA] rounded-full flex items-center justify-center border border-[#EEEEEE] text-[#2D963F] shadow-inner">
+                      <button onClick={() => openMaps(shop.name, shop.cat)} className="shrink-0 w-11 h-11 bg-[#F8F9FA] rounded-full flex items-center justify-center border border-[#EEEEEE] text-[#2D963F] shadow-inner">
                         <Navigation size={18} fill="currentColor" />
                       </button>
                    </div>
@@ -307,7 +315,7 @@ const DallangmuApp = () => {
           { id: 'gourmet', label: '맛집', icon: <Utensils size={26} />, activeColor: '#2D963F' },
         ].map(tab => (
           <button key={tab.id} onClick={() => { setActiveTab(tab.id); window.scrollTo(0,0); }} className="flex-1 flex flex-col items-center gap-2 transition-all">
-            {React.cloneElement(tab.icon as React.ReactElement<any>, { 
+            {React.cloneElement(tab.icon as React.ReactElement<React.SVGProps<SVGSVGElement>>, { 
               strokeWidth: 3, 
               color: activeTab === tab.id ? tab.activeColor : '#CCCCCC' 
             })}
