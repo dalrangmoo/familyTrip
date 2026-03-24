@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, Utensils, Navigation, Plane, ChevronRight, MapPin } from 'lucide-react';
+import { Home, Calendar, Utensils, Navigation, Plane, MapPin } from 'lucide-react';
 
 // Vercel 빌드 에러 방지를 위한 타입 정의
 interface WeatherData {
@@ -56,7 +56,7 @@ const DallangmuApp = () => {
       { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동 (국제선 84번, 국내선 22/14번 게이트). 왕복 2,500엔.' },
       { time: '15:00', task: '베셀 호텔 체크인', desc: '체크인은 2시부터. 체크인 전 라멘집 대기표 미리 뽑아두기 추천.' },
       { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집. 추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
-      { time: '오후', task: '시내 투어 & 쇼핑', desc: '맥주박물관(무료), 시계탑, 오도리공원, TV타워. GU(8층), 돈키호테(2층), 스탠다드(8층), 칼디(9층).' },
+      { time: '오후', task: '시내 투어 & 쇼핑', desc: '맥주박물관(무료), 시계탑, 오도리공원, TV타워. GU(8층), 메가돈키호테(2층), 스탠다드(8층), 칼디(9층).' },
       { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사. 핫페퍼 사전 예약 완료.' },
     ],
     '5/28': [
@@ -72,12 +72,13 @@ const DallangmuApp = () => {
       { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 출발. ★진행 방향 오른쪽 좌석 추천★ 바다 조망.' },
       { time: '11:00', task: '오타루 관광', desc: '오르골당, 증기시계, 스누피, 어묵공장. 기타이치홀(오후 2/3/4시 이벤트).' },
       { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사 (예약 가능). 르타오 디저트 및 운하 산책.' },
+      { time: '오후', task: '스스키노 복귀', desc: '오타루 일정 후 복귀. 전날 못 갔을 경우 맥주박물관 구경.' },
       { time: '19:00', task: '저녁: 사보텐', desc: '오코노미야키 식사 (대안: 쿠우야 또는 5월 초 예약 필요한 텟판치).' },
     ],
     '5/30': [
       { time: '09:00', task: '조식: 코메다커피', desc: '나고야 스타일 모닝 세트. 오전 7시 오픈.' },
-      { time: '10:00', task: '공항 이동', desc: '호텔 1층 앞 공항버스 탑승. 하차 시 티켓 지불. 2층 국내선 관광.' },
-      { time: '11:30', task: '공항 점심', desc: '신치토세 공항 구경 및 공항 내 점심 식사.' },
+      { time: '10:00', task: '공항 이동', desc: '호텔 앞 공항버스 탑승. 하차 시 티켓 지불. 2층 국내선 관광.' },
+      { time: '11:30', task: '공항 점심', desc: '신치토세 공항 구경 및 공항 내 마지막 식사.' },
       { time: '14:35', task: '티웨이 TW252 탑승', desc: '삿포로(CTS) 출발. 출국 수속 및 면세점 대기.' },
       { time: '17:40', task: '한국 도착', desc: '인천공항 도착 및 즐거운 일정 마무리.' },
     ]
@@ -143,7 +144,7 @@ const DallangmuApp = () => {
     { name: '유키지루시 파라', cat: '디저트', desc: '유지방 16%의 진한 "스노 로얄" 푸딩과 아이스크림의 전설.' },
     { name: '롯카테이 삿포로', cat: '디저트', desc: '유통기한이 단 3시간뿐인 "사쿠사쿠파이"를 맛볼 수 있는 본점.' },
     { name: '르타오 본점', cat: '디저트', desc: '오타루를 대표하는 더블프롬마주 치즈케이크의 명가.' },
-    { name: '르타오 파토스', cat: '디저트', desc: '오타루 최대 규모 매장으로 다양한 디저트 시식 가능.' },
+    { name: '르타오 파토스', cat: '디저트', desc: '오타루 최대 규모 르타오 매장으로 다양한 디저트 시식 가능.' },
     { name: '데니쉬 다니 르타오', cat: '디저트', desc: '비에이 우유를 듬뿍 사용한 고소한 치즈 데니쉬 전문점.' },
     { name: '류게츠 오타루토점', cat: '디저트', desc: '오타루 매장 한정 타르트와 촉촉한 바움쿠헨이 인기인 디저트샵.' },
     { name: '키타카로', cat: '디저트', desc: '입안에서 녹는 바움쿠헨과 커다란 슈크림으로 유명한 전문점.' },
@@ -186,7 +187,7 @@ const DallangmuApp = () => {
       
       <header className="w-full h-[90px] bg-white px-5 py-6 flex justify-between items-center z-[110] border-b border-[#EEEEEE] max-w-md mx-auto sticky top-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white rounded-full border-2 border-[#1A1A1A] flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+          <div className="w-10 h-10 bg-white rounded-full border-2 border-[#1A1A1A] flex items-center justify-center overflow-hidden shrink-0">
             <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
                <path d="M12 12C12 12 13 2 20 2C27 2 28 12 28 12" stroke="#2D963F" strokeWidth="4.5" strokeLinecap="round"/>
                <circle cx="20" cy="25" r="13" fill="white" stroke="#1A1A1A" strokeWidth="2.5"/>
@@ -306,7 +307,10 @@ const DallangmuApp = () => {
           { id: 'gourmet', label: '맛집', icon: <Utensils size={26} />, activeColor: '#2D963F' },
         ].map(tab => (
           <button key={tab.id} onClick={() => { setActiveTab(tab.id); window.scrollTo(0,0); }} className="flex-1 flex flex-col items-center gap-2 transition-all">
-            {React.cloneElement(tab.icon as React.ReactElement, { strokeWidth: 3, color: activeTab === tab.id ? tab.activeColor : '#CCCCCC' })}
+            {React.cloneElement(tab.icon as React.ReactElement<any>, { 
+              strokeWidth: 3, 
+              color: activeTab === tab.id ? tab.activeColor : '#CCCCCC' 
+            })}
             <span className="text-[12px] font-black tracking-tighter" style={{ color: activeTab === tab.id ? tab.activeColor : '#CCCCCC' }}>{tab.label}</span>
           </button>
         ))}
