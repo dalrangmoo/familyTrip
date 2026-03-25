@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, Calendar, Utensils, Navigation, Plane, MapPin, Menu, X } from 'lucide-react';
 
+// Vercel 타입 에러 방지를 위한 인터페이스 정의
 interface WeatherData {
   temp: string;
   msg: string;
   code: number;
 }
 
-const DallangmuApp = () => {
+export default function DallangmuApp() {
   const [activeTab, setActiveTab] = useState('home');
   const [selectedDay, setSelectedDay] = useState('5/27');
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -33,7 +34,7 @@ const DallangmuApp = () => {
           if (temp >= 12) return "트렌치코트나 야상이 베스트! 활동성과 스타일을 동시에 잡으세요. 🧥";
           if (temp >= 9) return "아침저녁은 꽤 쌀쌀해요! 경량 패딩이나 도톰한 니트가 필수입니다. 🧣";
           if (temp >= 5) return "추위에 떨면 여행 망쳐요! 울 코트나 패딩으로 든든하게 입으세요. ❄️";
-          return "지금 여행지는 한겨울! 롱패딩과 핫팩으로 무장하고 나가세요. ❄️";
+          return "여행지는 한겨울! 롱패딩과 핫팩으로 무장하고 나가세요. ❄️";
         };
         setRealWeather({ temp: `${t}°`, msg: getCody(t), code: code });
       } catch (err) { 
@@ -49,7 +50,7 @@ const DallangmuApp = () => {
     window.open(`https://www.google.com/maps/search/${encodeURIComponent(placeName + ' ' + context)}`, '_blank');
   };
 
-  // [복구] 5/27 ~ 5/30 전체 상세 일정 (절대 생략 없음)
+  // [복구] 5/27 ~ 5/30 전체 상세 일정 (생략 절대 없음)
   const fullSchedule: Record<string, any[]> = {
     '5/27': [
       { time: '06:40', task: '인천공항 출발', desc: '집에서 출발. 6013번 버스 이용 (06:10 / 06:40 배차 확인).' },
@@ -85,7 +86,7 @@ const DallangmuApp = () => {
     ]
   };
 
-  // [전수 수록] 87개 맛집 리스트 (절대 생략 없음)
+  // [전수 수록] 87개 맛집 리스트 (생략 절대 없음!)
   const gourmetData = [
     { name: '야끼니꾸 구루만', cat: '야키니쿠', desc: '가성비 최고의 홋카이도산 특수부위 전문 맛집.' },
     { name: '와규 이시자키', cat: '야키니쿠', desc: '전실 개별 룸으로 구성된 최고급 암소 와규 전문점.' },
@@ -161,13 +162,13 @@ const DallangmuApp = () => {
     { name: '카페 노이몬드', cat: '디저트', desc: '다채로운 구성의 젤라또 파르페를 선보이는 전문 카페.' },
     { name: '파르페테리아 미르', cat: '디저트', desc: '비주얼 쇼크! 깨트려 먹는 재미가 있는 이색 파르페.' },
     { name: '로지우라 카페', cat: '디저트', desc: '살살 녹는 질감과 고급스러운 맛의 파르페 맛집.' },
-    { name: '기타이치홀', cat: '디저트', desc: '167개의 유리 석유 램프가 켜지는 환상적인 분위기.' },
+    { name: '기기타이치홀', cat: '디저트', desc: '167개의 유리 석유 램프가 켜지는 환상적인 분위기.' },
     { name: 'cafe 이로나이 식당', cat: '디저트', desc: '옛 민가를 리모델링하여 고즈넉한 분위기를 살린 카페.' },
     { name: '카히사칸', cat: '디저트', desc: '오타루역 내에 위치해 여행 전후 들르기 좋은 명소.' },
     { name: '페이스트리 스내플스', cat: '디저트', desc: '하코다테 명물인 입안에서 녹는 "치즈 오믈렛" 전문점.' },
     { name: '삿포로 모리히코', cat: '디저트', desc: '맛있는 핸드드립 커피와 정갈한 디저트를 즐기는 카페.' },
     { name: '포플러 팜', cat: '디저트', desc: '붉은 멜론 위에 아이스크림을 올린 "산타 수염" 맛집.' },
-    { name: '준페이 (Junpei)', cat: '기타/지역', desc: '바삭하고 통통한 새우가 일품인인생 에비동 성지.' },
+    { name: '준페이 (Junpei)', cat: '기타/지역', desc: '바삭하고 통통한 새우가 일품인 인생 에비동 성지.' },
     { name: 'Biei Curry', cat: '기타/지역', desc: '비에이 지역의 신선한 채소를 담은 카레 식당.' },
     { name: '나루토 본점', cat: '기타/지역', desc: '겉바속촉 닭 반 마리 튀김 "한미아게" 원조집.' },
     { name: '오타루 창고 No.1', cat: '기타/지역', desc: '운하 옆에서 로컬 맥주와 소시지를 즐기는 양조장 카페.' },
@@ -317,6 +318,4 @@ const DallangmuApp = () => {
       {isMenuOpen && <div className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[150]" onClick={() => setIsMenuOpen(false)} />}
     </div>
   );
-};
-
-export default DallangmuApp;
+}
