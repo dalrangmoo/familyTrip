@@ -352,7 +352,7 @@ export default function DallangmuApp() {
               </div>
             </div>
 
-            <h3 className="text-xl font-[900] mb-5 px-1">오늘의 루트 (5/27)</h3>
+            <h3 className="text-xl font-[900] mb-5 px-1">오늘의 일정 (5/27)</h3>
             <div className="space-y-4">
               {fullSchedule['5/27'].map((item, i) => (
                 <div key={i} className="bg-white rounded-[24px] border border-[#EEEEEE] p-5 shadow-sm flex items-start justify-between gap-3">
