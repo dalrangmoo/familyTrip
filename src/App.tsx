@@ -312,7 +312,7 @@ export default function DallangmuApp() {
     <div className="w-full bg-[#FBFBFC] min-h-screen font-sans text-[#1A1A1A] overflow-x-hidden flex flex-col items-center">
       
       <header className="w-full bg-white z-[100] border-b border-[#EEEEEE] max-w-md sticky top-0 overflow-hidden">
-        <img src="https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png" alt="HEEHEE TOUR" className="w-full block object-contain" />
+        <img src={activeTab === 'schedule' ? "https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos3.png" : "https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png"} alt="HEEHEE TOUR" className="w-full block object-contain" />
       </header>
 
       <main className="w-full max-w-md px-4 pb-24">
