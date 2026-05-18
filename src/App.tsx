@@ -90,8 +90,8 @@ export default function DallangmuApp() {
   ];
   const openMaps = (placeName: string) => {
     const match = mapLinks.find(([key]) => placeName.includes(key));
-    if (match) { window.open(match[1], '_blank'); return; }
-    window.open(OVERVIEW_MAP, '_blank');
+    if (match) { window.open(match[1], '_blank', 'noopener,noreferrer'); return; }
+    window.open(OVERVIEW_MAP, '_blank', 'noopener,noreferrer');
   };
 
   // [복구] 5/27 ~ 5/30 전체 상세 일정 (생략 절대 없음)
