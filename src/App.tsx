@@ -131,7 +131,7 @@ export default function DallangmuApp() {
     '5/29': [
       { time: '09:00', task: '아침: 겐텐소노2', desc: '라멘 맛집. 07:00 오픈. 호텔에서 이동.' },
       { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 → 미나미오타루역 (35~40분)\n★ 진행 방향 오른쪽 좌석 추천 ★\n편도 800엔' },
-      { time: '11:00', task: '오타루 관광', desc: '오르골당 → 증기시계(15분마다) → 스누피\n→ 어묵공장 → 르타오 → 운하 → 기찻길 → 오타루역\n기타이치홀(2/3/4시 30분씩 이벤트)' },
+      { time: '11:00', task: '오타루 관광', desc: '오르골당 → 증기시계(15분마다) → 스누피 → 어묵공장 → 르타오 → 운하 → 기찻길 → 오타루역\n기타이치홀(2/3/4시 30분씩 이벤트)' },
       { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사. 예약 가능.' },
       { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관\n(북구 2번 정류장, 188번 버스 10분)\n버스: 뒷문 승차, 앞문 하차, 240엔\n맥주박물관: 입장 무료, 잔 450엔, 18:00까지' },
       { time: '19:00', task: '저녁: 츠바메', desc: '야키니쿠 식사. 핫페퍼 예약 완료.' }
@@ -363,17 +363,13 @@ export default function DallangmuApp() {
                         <span className="bg-[#2D963F] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
                         <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
                       </div>
-                      {item.desc.includes('\n') ? (
-                        <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
-                          {item.desc.split('\n').map((line: string, j: number) => (
-                            <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
-                              {line}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-[16px] text-[#555555] leading-snug mt-1">{item.desc}</p>
-                      )}
+                      <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
+                        {item.desc.split('\n').map((line: string, j: number) => (
+                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                     <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#2D963F] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
@@ -400,17 +396,13 @@ export default function DallangmuApp() {
                         <span className="bg-[#2D963F] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
                         <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
                       </div>
-                      {item.desc.includes('\n') ? (
-                        <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
-                          {item.desc.split('\n').map((line: string, j: number) => (
-                            <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
-                              {line}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-[16px] text-[#555555] leading-snug mt-1">{item.desc}</p>
-                      )}
+                      <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
+                        {item.desc.split('\n').map((line: string, j: number) => (
+                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                     <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#2D963F] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
