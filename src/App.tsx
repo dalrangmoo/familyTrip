@@ -225,6 +225,16 @@ export default function DallangmuApp() {
     return { bg: "from-[#F3E5F5] to-[#E1BEE7]", box: "bg-purple-900/10", line: "border-[#4A148C]/20" };
   };
   const w = getW();
+  const getWeatherLabel = (code: number) => {
+    if (code === 0) return '맑음 ☀️';
+    if (code <= 2) return '구름 조금 ⛅';
+    if (code === 3) return '흐림 ☁️';
+    if (code <= 48) return '안개 🌫️';
+    if (code <= 67) return '비 🌧️';
+    if (code <= 77) return '눈 ❄️';
+    if (code <= 82) return '소나기 🌦️';
+    return '천둥번개 ⛈️';
+  };
 
   return (
     <div className="w-full bg-[#FBFBFC] min-h-screen font-sans text-[#1A1A1A] overflow-x-hidden flex flex-col items-center">
@@ -247,20 +257,32 @@ export default function DallangmuApp() {
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
             <div className={`w-full p-6 rounded-[28px] mb-6 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
-              <div className={`w-full px-5 py-3 rounded-2xl ${w.box} shadow-inner mb-3 flex items-center justify-center`}>
+              <div className={`w-full px-5 py-3 rounded-2xl ${w.box} shadow-inner mb-3 flex items-center justify-center gap-3`}>
                 <p className="text-[20px] font-[1000]">삿포로 {realWeather.temp}</p>
+                <span className="text-[14px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
               </div>
               <div className={`w-full pt-3 border-t ${w.line}`}>
                 <p className="text-[12px] font-bold opacity-80 text-center">{realWeather.msg}</p>
               </div>
             </div>
             
-            <div className="bg-[#1A1A1A] p-6 rounded-[28px] mb-8 text-white shadow-lg">
-               <div className="flex justify-between items-center text-[14px] font-black">
-                 <div className="flex flex-col items-center"><span className="text-[9px] text-white/40 mb-1 uppercase">Dep</span>TW0263 (10:10)</div>
-                 <Plane size={20} className="text-[#2D963F]" />
-                 <div className="text-right flex flex-col items-center"><span className="text-[9px] text-white/40 mb-1 uppercase">Ret</span>TW0264 (14:30)</div>
-               </div>
+            <div className="bg-gradient-to-br from-[#48CAE4] to-[#0096C7] p-6 rounded-[28px] mb-8 text-white shadow-lg">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-[9px] text-white/60 uppercase tracking-widest">Departure</span>
+                  <span className="text-[15px] font-black">TW0263</span>
+                  <span className="text-[12px] font-bold text-white/80">10:10</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <Plane size={18} className="text-white" />
+                  <span className="text-[9px] text-white/60 uppercase tracking-wider">ICN → CTS</span>
+                </div>
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-[9px] text-white/60 uppercase tracking-widest">Return</span>
+                  <span className="text-[15px] font-black">TW0264</span>
+                  <span className="text-[12px] font-bold text-white/80">14:30</span>
+                </div>
+              </div>
             </div>
 
             <h3 className="text-xl font-[900] mb-5 px-1">오늘의 루트 (5/27)</h3>
