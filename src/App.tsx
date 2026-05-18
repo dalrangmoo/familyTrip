@@ -320,7 +320,7 @@ export default function DallangmuApp() {
             </div>
             
             <div className="bg-white rounded-[24px] border border-[#EEEEEE] px-5 py-4 shadow-sm mb-6">
-              <p className="text-[13px] font-black text-[#AAAAAA] text-right mb-3">{formatTime(currentTime)}</p>
+              <p className="text-[13px] font-black text-[#1A1A1A] text-center mb-3">{formatTime(currentTime)}</p>
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 shrink-0">
