@@ -8,6 +8,13 @@ interface WeatherData {
   code: number;
 }
 
+interface DayWeather {
+  date: string;
+  max: number;
+  min: number;
+  code: number;
+}
+
 export default function DallangmuApp() {
   const [activeTab, setActiveTab] = useState('home');
   const [selectedDay, setSelectedDay] = useState('5/27');
@@ -15,12 +22,13 @@ export default function DallangmuApp() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [realWeather, setRealWeather] = useState<WeatherData>({ temp: '..', msg: '날씨 로딩 중', code: 0 });
+  const [tripWeather, setTripWeather] = useState<DayWeather[]>([]);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     const fetchWeather = async () => {
       try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.0667&longitude=141.35&current_weather=true&timezone=Asia%2FTokyo');
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.0667&longitude=141.35&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&start_date=2026-05-27&end_date=2026-05-30&timezone=Asia%2FTokyo');
         const data = await res.json();
         const t = Math.round(data.current_weather.temperature);
         const code = data.current_weather.weathercode;
@@ -37,8 +45,16 @@ export default function DallangmuApp() {
           return "여행지는 한겨울! 롱패딩과 핫팩으로 무장하고 나가세요. ❄️";
         };
         setRealWeather({ temp: `${t}°`, msg: getCody(t), code: code });
-      } catch (err) { 
-        setRealWeather({ temp: '6°', msg: "추우니 패딩으로 든든하게 입으세요! ❄️", code: 0 }); 
+        if (data.daily && data.daily.time) {
+          setTripWeather(data.daily.time.map((date: string, i: number) => ({
+            date: date.slice(5).replace('-', '/'),
+            max: Math.round(data.daily.temperature_2m_max[i]),
+            min: Math.round(data.daily.temperature_2m_min[i]),
+            code: data.daily.weathercode[i]
+          })));
+        }
+      } catch (err) {
+        setRealWeather({ temp: '6°', msg: "추우니 패딩으로 든든하게 입으세요! ❄️", code: 0 });
       }
     };
     fetchWeather();
@@ -236,6 +252,17 @@ export default function DallangmuApp() {
     return '천둥번개 ⛈️';
   };
 
+  const getWeatherEmoji = (code: number) => {
+    if (code === 0) return '☀️';
+    if (code <= 2) return '⛅';
+    if (code === 3) return '☁️';
+    if (code <= 48) return '🌫️';
+    if (code <= 67) return '🌧️';
+    if (code <= 77) return '❄️';
+    if (code <= 82) return '🌦️';
+    return '⛈️';
+  };
+
   return (
     <div className="w-full bg-[#FBFBFC] min-h-screen font-sans text-[#1A1A1A] overflow-x-hidden flex flex-col items-center">
       
@@ -264,6 +291,21 @@ export default function DallangmuApp() {
               <div className={`w-full pt-3 border-t ${w.line}`}>
                 <p className="text-[14px] font-bold opacity-80 text-center">{realWeather.msg}</p>
               </div>
+              {tripWeather.length > 0 && (
+                <div className="w-full pt-3 mt-2 border-t border-black/10">
+                  <p className="text-[10px] font-black opacity-40 mb-2 text-center uppercase tracking-widest">여행 날씨 예보</p>
+                  <div className="grid grid-cols-4 gap-1">
+                    {tripWeather.map((day, i) => (
+                      <div key={i} className="flex flex-col items-center gap-0.5 py-1">
+                        <span className="text-[11px] font-black opacity-60">{day.date}</span>
+                        <span className="text-[18px] leading-tight">{getWeatherEmoji(day.code)}</span>
+                        <span className="text-[13px] font-bold">{day.max}°</span>
+                        <span className="text-[11px] opacity-50">{day.min}°</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="bg-gradient-to-br from-[#48CAE4] to-[#0096C7] p-6 rounded-[28px] mb-8 text-white shadow-lg">
