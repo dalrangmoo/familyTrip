@@ -62,14 +62,36 @@ export default function DallangmuApp() {
   }, []);
 
   const OVERVIEW_MAP = 'https://www.google.com/maps/@43.4134022,141.7915009,8.5z/data=!4m3!11m2!2sofAFs3H3yhsORQMF46038g!3e3?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D';
-  const generalTasks = ['공항버스 출발', '카메라 픽업', 'TW0263', 'TW0264', '시내 투어', '호텔 조식', '비에이 관광', '후속 투어', '오타루 이동', '오타루 관광', '공항 이동', '공항 점심', '한국 도착'];
+  const mapLinks: Array<[string, string]> = [
+    ['공항버스',        'https://maps.app.goo.gl/FHmBku5rPKMDBaqb9'],
+    ['카메라 픽업',     'https://maps.app.goo.gl/FHmBku5rPKMDBaqb9'],
+    ['TW0263',         'https://maps.app.goo.gl/FHmBku5rPKMDBaqb9'],
+    ['한국 도착',       'https://maps.app.goo.gl/FHmBku5rPKMDBaqb9'],
+    ['신치토세',        'https://maps.app.goo.gl/M2dJbtNdD4x7Tx9T6'],
+    ['TW0264',         'https://maps.app.goo.gl/M2dJbtNdD4x7Tx9T6'],
+    ['공항 이동',       'https://maps.app.goo.gl/M2dJbtNdD4x7Tx9T6'],
+    ['공항 점심',       'https://maps.app.goo.gl/M2dJbtNdD4x7Tx9T6'],
+    ['베셀',           'https://maps.app.goo.gl/CV5pUugbLAqN3UjJ8'],
+    ['호텔 조식',       'https://maps.app.goo.gl/CV5pUugbLAqN3UjJ8'],
+    ['스아게',         'https://maps.app.goo.gl/tQaYrCbPQknC39L6A'],
+    ['시내 투어',       'https://maps.app.goo.gl/7j2MkHQoPs7yjHp59'],
+    ['유우히',         'https://maps.app.goo.gl/ytiXAUyNYG4gGPfq5'],
+    ['비에이 투어 시작', 'https://maps.app.goo.gl/wKC2xsezhcXDf4bW6'],
+    ['비에이 관광',     'https://maps.app.goo.gl/wGwDBkfLjMAR5MBw9'],
+    ['후속 투어',       'https://maps.app.goo.gl/wGwDBkfLjMAR5MBw9'],
+    ['다이마루',        'https://maps.app.goo.gl/y68vzoGdsuNRWZ7h8'],
+    ['카도야',         'https://maps.app.goo.gl/8mRMuBu3LAnVCMVD8'],
+    ['겐텐소노',        'https://maps.app.goo.gl/x4cA7quzbpjNuEoC9'],
+    ['오타루',         'https://maps.app.goo.gl/F8GFdBmUgH61wTfW8'],
+    ['와규 쿠로사와',   'https://maps.app.goo.gl/kP94YVcX9nuYL7WS9'],
+    ['맥주박물관',      'https://maps.app.goo.gl/Sy4ZSJxa9rWmf9wt9'],
+    ['츠바메',         'https://maps.app.goo.gl/1vZxctTDgXXNP86g8'],
+    ['코메다',         'https://maps.app.goo.gl/WvCFavVHPdyeRWGZ7'],
+  ];
   const openMaps = (placeName: string) => {
-    if (generalTasks.some(g => placeName.includes(g))) {
-      window.open(OVERVIEW_MAP, '_blank');
-      return;
-    }
-    const context = placeName.includes("오타루") ? "Otaru" : placeName.includes("비에이") ? "Biei" : "Sapporo";
-    window.open(`https://www.google.com/maps/search/${encodeURIComponent(placeName + ' ' + context)}`, '_blank');
+    const match = mapLinks.find(([key]) => placeName.includes(key));
+    if (match) { window.open(match[1], '_blank'); return; }
+    window.open(OVERVIEW_MAP, '_blank');
   };
 
   // [복구] 5/27 ~ 5/30 전체 상세 일정 (생략 절대 없음)
