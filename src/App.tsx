@@ -351,7 +351,7 @@ export default function DallangmuApp() {
                     <span className="text-[15px] font-[900]">삿포로</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-black text-[#1a55aa]">TW0263</span>
+                    <span className="text-[13px] font-black text-[#1A55AA]">TW0263</span>
                     <span className="text-[15px] font-[900]">10:10</span>
                     <span className="text-[12px] text-[#BBBBBB]">→</span>
                     <span className="text-[15px] font-[900]">13:00</span>
@@ -365,7 +365,7 @@ export default function DallangmuApp() {
                     <span className="text-[15px] font-[900]">인천</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-black text-[#1a55aa]">TW0264</span>
+                    <span className="text-[13px] font-black text-[#1A55AA]">TW0264</span>
                     <span className="text-[15px] font-[900]">14:30</span>
                     <span className="text-[12px] text-[#BBBBBB]">→</span>
                     <span className="text-[15px] font-[900]">17:40</span>
@@ -378,22 +378,22 @@ export default function DallangmuApp() {
             <div className="space-y-4">
               {fullSchedule['5/27'].map((item, i) => (
                 <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
-                  <div className="w-[6px] bg-[#1a55aa] shrink-0" />
+                  <div className="w-[6px] bg-[#1A55AA] shrink-0" />
                   <div className="flex-1 p-5 flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="bg-[#1a55aa] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
+                        <span className="bg-[#1A55AA] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
                         <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
                       </div>
                       <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#1a55aa] before:font-black before:text-[13px]">
+                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#1A55AA] before:font-black before:text-[13px]">
                             {line}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#1a55aa] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
+                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#1A55AA] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
                 </div>
               ))}
@@ -411,22 +411,22 @@ export default function DallangmuApp() {
             <div className="space-y-4">
               {fullSchedule[selectedDay].map((item, i) => (
                 <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
-                  <div className="w-[6px] bg-[#1a55aa] shrink-0" />
+                  <div className="w-[6px] bg-[#1A55AA] shrink-0" />
                   <div className="flex-1 p-5 flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="bg-[#1a55aa] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
+                        <span className="bg-[#1A55AA] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
                         <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
                       </div>
                       <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#1a55aa] before:font-black before:text-[13px]">
+                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#1A55AA] before:font-black before:text-[13px]">
                             {line}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#1a55aa] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
+                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#1A55AA] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
                 </div>
               ))}
@@ -438,7 +438,7 @@ export default function DallangmuApp() {
           <div className="animate-in fade-in duration-500 pt-4">
              <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
                 {categories.map(cat => (
-                  <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 shrink-0 text-[14px] font-[900] rounded-xl border transition-all ${selectedCategory === cat ? 'bg-[#1a55aa] text-white border-[#1a55aa]' : 'bg-white text-[#999999]'}`}>{cat}</button>
+                  <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 shrink-0 text-[14px] font-[900] rounded-xl border transition-all ${selectedCategory === cat ? 'bg-[#1A55AA] text-white border-[#1A55AA]' : 'bg-white text-[#999999]'}`}>{cat}</button>
                 ))}
              </div>
              <div className="grid grid-cols-1 gap-4">
@@ -446,12 +446,12 @@ export default function DallangmuApp() {
                  <div key={i} className="bg-white rounded-[24px] border border-[#EEEEEE] p-5 shadow-sm flex items-center justify-between gap-3">
                    <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[9px] font-black px-1.5 py-0.5 bg-[#F8F9FA] rounded text-[#1a55aa] border border-[#1a55aa]/20 uppercase">#{shop.cat}</span>
+                        <span className="text-[9px] font-black px-1.5 py-0.5 bg-[#F8F9FA] rounded text-[#1A55AA] border border-[#1A55AA]/20 uppercase">#{shop.cat}</span>
                         <p className="text-[18px] font-[900] truncate">{shop.name}</p>
                       </div>
                       <p className="text-[15px] text-[#666666] leading-tight">{shop.desc}</p>
                    </div>
-                   <button onClick={() => openMaps(shop.name)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center border border-[#EEEEEE] text-[#1a55aa] active:scale-90"><Navigation size={16} fill="currentColor" /></button>
+                   <button onClick={() => openMaps(shop.name)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center border border-[#EEEEEE] text-[#1A55AA] active:scale-90"><Navigation size={16} fill="currentColor" /></button>
                 </div>
                ))}
              </div>
@@ -472,7 +472,7 @@ export default function DallangmuApp() {
             </button>
             <button onClick={() => { setActiveTab('gourmet'); setIsMenuOpen(false); window.scrollTo(0,0); }} className="flex items-center gap-3">
               <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg text-[13px] font-black shadow-md border border-black/5">맛집</span>
-              <div className="w-12 h-12 bg-[#1a55aa] text-white rounded-full flex items-center justify-center shadow-lg"><Utensils size={20} /></div>
+              <div className="w-12 h-12 bg-[#1A55AA] text-white rounded-full flex items-center justify-center shadow-lg"><Utensils size={20} /></div>
             </button>
           </div>
         )}
