@@ -39,7 +39,7 @@ export default function DallangmuApp() {
           if (temp >= 23) return "낮 활동이 많다면 반팔! 에어컨 대비 얇은 셔츠도 좋아요. 👕";
           if (temp >= 20) return "긴팔 티셔츠 한 장이면 충분! 가벼운 발걸음으로 여행하세요. 😊";
           if (temp >= 17) return "일교차가 커요! 사진용 예쁜 자켓을 꼭 챙기세요. 🧥";
-          if (temp >= 12) return "트렌치코트나 야상이 베스트! 활동성과 스타일을 동시에 잡으세요. 🧥";
+          if (temp >= 12) return "트렌치코트나 야상이 베스트!\n활동성과 스타일을 동시에 잡으세요. 🧥";
           if (temp >= 9) return "아침저녁은 꽤 쌀쌀해요! 경량 패딩이나 도톰한 니트가 필수입니다. 🧣";
           if (temp >= 5) return "추위에 떨면 여행 망쳐요! 울 코트나 패딩으로 든든하게 입으세요. ❄️";
           return "여행지는 한겨울! 롱패딩과 핫팩으로 무장하고 나가세요. ❄️";
@@ -241,10 +241,10 @@ export default function DallangmuApp() {
   const filteredGourmet = selectedCategory === '전체' ? gourmetData : gourmetData.filter(item => item.cat === selectedCategory);
 
   const getW = () => {
-    if (realWeather.code <= 1) return { bg: "from-[#E0F2F1] to-[#B2DFDB]", box: "bg-black/10", line: "border-[#004D40]/20" };
-    if (realWeather.code <= 3) return { bg: "from-[#F5F5F5] to-[#E0E0E0]", box: "bg-black/5", line: "border-[#424242]/20" };
-    if (realWeather.code <= 67) return { bg: "from-[#E3F2FD] to-[#BBDEFB]", box: "bg-blue-900/10", line: "border-[#0D47A1]/20" };
-    return { bg: "from-[#F3E5F5] to-[#E1BEE7]", box: "bg-purple-900/10", line: "border-[#4A148C]/20" };
+    if (realWeather.code <= 1) return { bg: "from-[#FFF59D] to-[#FFD54F]", box: "bg-amber-400/25", line: "border-amber-400/40" };
+    if (realWeather.code <= 3) return { bg: "from-[#B3E5FC] to-[#E1F5FE]", box: "bg-sky-400/20", line: "border-sky-400/30" };
+    if (realWeather.code <= 67) return { bg: "from-[#80DEEA] to-[#B2EBF2]", box: "bg-cyan-400/20", line: "border-cyan-400/30" };
+    return { bg: "from-[#CE93D8] to-[#EDE7F6]", box: "bg-purple-400/20", line: "border-purple-400/30" };
   };
   const w = getW();
   const getWeatherLabel = (code: number) => {
@@ -302,7 +302,7 @@ export default function DallangmuApp() {
                 <span className="text-[18px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
               </div>
               <div className={`w-full pt-3 border-t ${w.line}`}>
-                <p className="text-[15px] font-bold opacity-80 text-center">{realWeather.msg}</p>
+                <p className="text-[15px] font-bold opacity-80 text-center whitespace-pre-line">{realWeather.msg}</p>
               </div>
               {tripWeather.length > 0 && (
                 <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-black/10">
