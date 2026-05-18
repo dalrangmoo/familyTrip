@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, Calendar, Utensils, Navigation, Plane, MapPin, Menu, X } from 'lucide-react';
+import { Home, Calendar, Utensils, Navigation, Plane, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from 'lucide-react';
 
 // Vercel 타입 에러 방지를 위한 인터페이스 정의
 interface WeatherData {
@@ -252,15 +252,21 @@ export default function DallangmuApp() {
     return '천둥번개 ⛈️';
   };
 
-  const getWeatherEmoji = (code: number) => {
-    if (code === 0) return '☀️';
-    if (code <= 2) return '⛅';
-    if (code === 3) return '☁️';
-    if (code <= 48) return '🌫️';
-    if (code <= 67) return '🌧️';
-    if (code <= 77) return '❄️';
-    if (code <= 82) return '🌦️';
-    return '⛈️';
+  const getWeatherIcon = (code: number, size = 32) => {
+    if (code === 0) return <Sun size={size} className="text-amber-400" />;
+    if (code <= 2) return <CloudSun size={size} className="text-gray-400" />;
+    if (code === 3) return <Cloud size={size} className="text-gray-500" />;
+    if (code <= 48) return <Cloud size={size} className="text-gray-400" />;
+    if (code <= 67) return <CloudRain size={size} className="text-blue-500" />;
+    if (code <= 77) return <CloudSnow size={size} className="text-blue-300" />;
+    if (code <= 82) return <CloudDrizzle size={size} className="text-blue-400" />;
+    return <CloudLightning size={size} className="text-purple-400" />;
+  };
+
+  const getDayLabel = (dateStr: string) => {
+    const [m, d] = dateStr.split('/');
+    const date = new Date(2026, parseInt(m) - 1, parseInt(d));
+    return ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
   };
 
   return (
@@ -285,25 +291,23 @@ export default function DallangmuApp() {
           <div className="animate-in fade-in duration-500 pt-6">
             <div className={`w-full p-6 rounded-[28px] mb-6 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
               <div className={`w-full px-5 py-3 rounded-2xl ${w.box} shadow-inner mb-3 flex items-center justify-center gap-3`}>
-                <p className="text-[22px] font-[1000]">삿포로 {realWeather.temp}</p>
-                <span className="text-[16px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
+                <p className="text-[26px] font-[1000]">삿포로 {realWeather.temp}</p>
+                <span className="text-[18px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
               </div>
               <div className={`w-full pt-3 border-t ${w.line}`}>
-                <p className="text-[14px] font-bold opacity-80 text-center">{realWeather.msg}</p>
+                <p className="text-[15px] font-bold opacity-80 text-center">{realWeather.msg}</p>
               </div>
               {tripWeather.length > 0 && (
-                <div className="w-full pt-3 mt-2 border-t border-black/10">
-                  <p className="text-[10px] font-black opacity-40 mb-2 text-center uppercase tracking-widest">여행 날씨 예보</p>
-                  <div className="grid grid-cols-4 gap-1">
-                    {tripWeather.map((day, i) => (
-                      <div key={i} className="flex flex-col items-center gap-0.5 py-1">
-                        <span className="text-[11px] font-black opacity-60">{day.date}</span>
-                        <span className="text-[18px] leading-tight">{getWeatherEmoji(day.code)}</span>
-                        <span className="text-[13px] font-bold">{day.max}°</span>
-                        <span className="text-[11px] opacity-50">{day.min}°</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-black/10">
+                  {tripWeather.map((day, i) => (
+                    <div key={i} className="flex flex-col items-center gap-1.5 bg-white/50 backdrop-blur-sm rounded-2xl py-3 px-1 border border-white/70 shadow-sm">
+                      <span className="text-[11px] font-black opacity-40 uppercase">{getDayLabel(day.date)}</span>
+                      <span className="text-[14px] font-[900]">{day.date}</span>
+                      <div className="my-0.5">{getWeatherIcon(day.code, 30)}</div>
+                      <span className="text-[18px] font-[900]">{day.max}°</span>
+                      <span className="text-[13px] opacity-45 font-bold">{day.min}°</span>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
