@@ -76,7 +76,7 @@ export default function DallangmuApp() {
     ['스아게',         'https://maps.app.goo.gl/tQaYrCbPQknC39L6A'],
     ['시내 투어',       'https://maps.app.goo.gl/7j2MkHQoPs7yjHp59'],
     ['유우히',         'https://maps.app.goo.gl/ytiXAUyNYG4gGPfq5'],
-    ['비에이 투어 시작', 'https://maps.app.goo.gl/wKC2xsezhcXDf4bW6'],
+    ['비에이 투어 시작', 'https://maps.app.goo.gl/xnZ7xkeymWsZv7s7A?g_st=ac'],
     ['비에이 관광',     'https://maps.app.goo.gl/wGwDBkfLjMAR5MBw9'],
     ['후속 투어',       'https://maps.app.goo.gl/wGwDBkfLjMAR5MBw9'],
     ['다이마루',        'https://maps.app.goo.gl/y68vzoGdsuNRWZ7h8'],
@@ -145,10 +145,10 @@ export default function DallangmuApp() {
     '5/28': [
       { time: '08:00', task: '호텔 조식', desc: '베셀 호텔 조식 이용 후 투어 집합 장소로 이동.' },
       { time: '09:30', task: '비에이 투어 시작', desc: '다이와 로이넷 호텔 앞 집합.\n(흰그림자투어 / 네이버 예약 완료.)' },
-      { time: '오전', task: '비에이 관광', desc: '휴게소(10분) → 팜도미타(30분) → 탁신관(30분) → 언덕(20분) 방문.' },
-      { time: '점심', task: '점심: 다이마루', desc: '돈가츠 식사.' },
-      { time: '오후', task: '후속 투어', desc: '청의 호수(30분) → 흰수염 폭포(20분) → 휴게소(10분) 후 삿포로 복귀.' },
-      { time: '20:30', task: '저녁: 카도야', desc: '장어덮밥 식사.' }
+      { time: '오전', task: '비에이 관광', desc: '휴게소(10분) → 흰수염폭포(20분) → 청의호수(30분)' },
+      { time: '점심', task: '점심: 비에이역', desc: '비에이역 주변 식사 (약 60분)' },
+      { time: '오후', task: '후속 투어', desc: '팜도미타(60분) → 휴게소(10분)\n스스키노 19:00 도착' },
+      { time: '19:30', task: '저녁: 카도야', desc: '장어덮밥 식사.' }
     ],
     '5/29': [
       { time: '09:00', task: '아침: 겐텐소노2', desc: '라멘 맛집. 07:00 오픈. 호텔에서 이동.' },
