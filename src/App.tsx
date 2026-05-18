@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, Calendar, Utensils, Navigation, Plane, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from 'lucide-react';
+import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from 'lucide-react';
 
 // Vercel 타입 에러 방지를 위한 인터페이스 정의
 interface WeatherData {
@@ -275,12 +275,22 @@ export default function DallangmuApp() {
     return ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
   };
 
+  const formatTime = (d: Date) => {
+    const yy = String(d.getFullYear()).slice(2);
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const hours = d.getHours();
+    const ampm = hours < 12 ? '오전' : '오후';
+    const h = String(hours % 12 || 12).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return `${yy}/${mm}/${dd} ${ampm} ${h}:${min}`;
+  };
+
   return (
     <div className="w-full bg-[#FBFBFC] min-h-screen font-sans text-[#1A1A1A] overflow-x-hidden flex flex-col items-center">
       
-      <header className="w-full h-[70px] bg-white px-5 flex justify-between items-center z-[100] border-b border-[#EEEEEE] max-w-md sticky top-0">
-        <img src="https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png" alt="HEEHEE TOUR" className="h-10 w-auto object-contain" />
-        <p className="text-[13px] font-black">{currentTime.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit' })}</p>
+      <header className="w-full bg-white z-[100] border-b border-[#EEEEEE] max-w-md sticky top-0 overflow-hidden">
+        <img src="https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png" alt="HEEHEE TOUR" className="w-full block object-contain" />
       </header>
 
       <main className="w-full max-w-md px-4 pb-24">
@@ -309,21 +319,35 @@ export default function DallangmuApp() {
               )}
             </div>
             
-            <div className="bg-gradient-to-br from-[#48CAE4] to-[#0096C7] p-6 rounded-[28px] mb-8 text-white shadow-lg">
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-[9px] text-white/60 uppercase tracking-widest">출발</span>
-                  <span className="text-[17px] font-black">TW0263</span>
-                  <span className="text-[14px] font-bold text-white/80">10:10</span>
+            <div className="bg-white rounded-[24px] border border-[#EEEEEE] px-5 py-4 shadow-sm mb-6">
+              <p className="text-[13px] font-black text-[#AAAAAA] text-right mb-3">{formatTime(currentTime)}</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-[15px] font-[900]">인천</span>
+                    <span className="text-[12px] text-[#BBBBBB]">→</span>
+                    <span className="text-[15px] font-[900]">삿포로</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[13px] font-black text-[#2D963F]">TW0263</span>
+                    <span className="text-[15px] font-[900]">10:10</span>
+                    <span className="text-[12px] text-[#BBBBBB]">→</span>
+                    <span className="text-[15px] font-[900]">13:00</span>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center gap-1">
-                  <Plane size={18} className="text-white" />
-                  <span className="text-[9px] text-white/60 uppercase tracking-wider">ICN → CTS</span>
-                </div>
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-[9px] text-white/60 uppercase tracking-widest">귀국</span>
-                  <span className="text-[17px] font-black">TW0264</span>
-                  <span className="text-[14px] font-bold text-white/80">14:30</span>
+                <div className="border-t border-[#F4F4F4]" />
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-[15px] font-[900]">삿포로</span>
+                    <span className="text-[12px] text-[#BBBBBB]">→</span>
+                    <span className="text-[15px] font-[900]">인천</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[13px] font-black text-[#2D963F]">TW0264</span>
+                    <span className="text-[15px] font-[900]">14:30</span>
+                    <span className="text-[12px] text-[#BBBBBB]">→</span>
+                    <span className="text-[15px] font-[900]">17:40</span>
+                  </div>
                 </div>
               </div>
             </div>
