@@ -364,7 +364,7 @@ export default function DallangmuApp() {
                     {item.desc.includes('\n') ? (
                       <ul className="mt-1 space-y-1 list-none text-left">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-4 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[1px] before:text-[#2D963F] before:font-black before:text-[13px]">
+                          <li key={j} className="relative pl-2 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
                             {line}
                           </li>
                         ))}
@@ -398,7 +398,7 @@ export default function DallangmuApp() {
                     {item.desc.includes('\n') ? (
                       <ul className="mt-1 space-y-1 list-none text-left">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-4 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[1px] before:text-[#2D963F] before:font-black before:text-[13px]">
+                          <li key={j} className="relative pl-2 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
                             {line}
                           </li>
                         ))}
