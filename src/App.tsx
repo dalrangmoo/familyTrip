@@ -61,7 +61,13 @@ export default function DallangmuApp() {
     return () => clearInterval(timer);
   }, []);
 
+  const OVERVIEW_MAP = 'https://www.google.com/maps/@43.4134022,141.7915009,8.5z/data=!4m3!11m2!2sofAFs3H3yhsORQMF46038g!3e3?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D';
+  const generalTasks = ['공항버스 출발', '카메라 픽업', 'TW0263', 'TW0264', '시내 투어', '호텔 조식', '비에이 관광', '후속 투어', '오타루 이동', '오타루 관광', '공항 이동', '공항 점심', '한국 도착'];
   const openMaps = (placeName: string) => {
+    if (generalTasks.some(g => placeName.includes(g))) {
+      window.open(OVERVIEW_MAP, '_blank');
+      return;
+    }
     const context = placeName.includes("오타루") ? "Otaru" : placeName.includes("비에이") ? "Biei" : "Sapporo";
     window.open(`https://www.google.com/maps/search/${encodeURIComponent(placeName + ' ' + context)}`, '_blank');
   };
@@ -105,13 +111,13 @@ export default function DallangmuApp() {
   // [전수 수록] 87개 맛집 리스트 (생략 절대 없음!)
   Object.assign(fullSchedule, {
     '5/27': [
-      { time: '06:10', task: '공항버스 출발', desc: '6013번 버스 탑승 (06:10 출발, 06:40 도착 예정)\n편도 17,000원, 소요 약 90분' },
-      { time: '07:40', task: '렌터카 픽업', desc: '렌탈공룡 픽업. T1 3층 출발층 8번 출입구에서 대기.' },
+      { time: '06:10', task: '공항버스 출발', desc: '6013번 버스 (06:10 / 06:40 배차)\n편도 17,000원, 소요 약 90분' },
+      { time: '07:40', task: '카메라 픽업', desc: '렌탈공룡 카메라 픽업\nT1 3층 출발층 8번 출입구에서 대기' },
       { time: '10:10', task: '티웨이 TW0263 탑승', desc: '제1여객터미널 출발. 투어비스 이용.\n비행시간 약 2시간 50분. 삿포로행 이륙.' },
       { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동\n국제선 1층 84번 / 국내선 22·14번 게이트\n왕복 2,500엔 / 편도 1,300엔, 소요 약 90분' },
       { time: '15:00', task: '베셀 호텔 체크인', desc: '아고다 예약. 체크인은 2시부터.\n★ 체크인 전 스아게+ 웨이팅 확인\n★ 체크인 시 조식 신청' },
       { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집. 추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
-      { time: '오후', task: '시내 투어 & 쇼핑', desc: '구경: 시계탑 → 오도리공원 → TV타워\n쇼핑: GU(8층), 스탠다드(8층), 칼디(9층), 메가돈키(2층)' },
+      { time: '오후', task: '시내 투어 & 쇼핑', desc: '구경: 시계탑 → 오도리공원 → TV타워\n쇼핑: GU(~20시), 스탠다드(~20시), 칼디(~21시), 메가돈키(~02시)' },
       { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사. 핫페퍼 사전 예약 완료.' }
     ],
     '5/28': [
@@ -127,7 +133,7 @@ export default function DallangmuApp() {
       { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 → 미나미오타루역 (35~40분)\n★ 진행 방향 오른쪽 좌석 추천 ★\n편도 800엔' },
       { time: '11:00', task: '오타루 관광', desc: '오르골당 → 증기시계(15분마다) → 스누피\n→ 어묵공장 → 르타오 → 운하 → 기찻길 → 오타루역\n기타이치홀(2/3/4시 30분씩 이벤트)' },
       { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사. 예약 가능.' },
-      { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관\n(북구 2번 정류장, 100번 버스 10분)\n버스: 뒷문 승차, 앞문 하차, 240엔\n맥주박물관: 입장 무료, 잔 450엔, 18:00까지' },
+      { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관\n(북구 2번 정류장, 188번 버스 10분)\n버스: 뒷문 승차, 앞문 하차, 240엔\n맥주박물관: 입장 무료, 잔 450엔, 18:00까지' },
       { time: '19:00', task: '저녁: 츠바메', desc: '야키니쿠 식사. 핫페퍼 예약 완료.' }
     ],
     '5/30': [
@@ -273,16 +279,7 @@ export default function DallangmuApp() {
     <div className="w-full bg-[#FBFBFC] min-h-screen font-sans text-[#1A1A1A] overflow-x-hidden flex flex-col items-center">
       
       <header className="w-full h-[70px] bg-white px-5 flex justify-between items-center z-[100] border-b border-[#EEEEEE] max-w-md sticky top-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-white rounded-full border-2 border-[#1A1A1A] flex items-center justify-center shrink-0">
-            <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6">
-               <path d="M12 12C12 12 13 2 20 2C27 2 28 12 28 12" stroke="#2D963F" strokeWidth="4.5" strokeLinecap="round"/>
-               <circle cx="20" cy="25" r="13" fill="white" stroke="#1A1A1A" strokeWidth="2.5"/>
-               <circle cx="16" cy="24" r="1.8" fill="#1A1A1A"/><circle cx="24" cy="24" r="1.8" fill="#1A1A1A"/>
-            </svg>
-          </div>
-          <h1 className="text-lg font-[900] italic uppercase tracking-tighter">Dallangmu</h1>
-        </div>
+        <img src="https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png" alt="HEEHEE TOUR" className="h-10 w-auto object-contain" />
         <p className="text-[13px] font-black">{currentTime.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit' })}</p>
       </header>
 
@@ -340,7 +337,18 @@ export default function DallangmuApp() {
                       <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
                       <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
-                    <p className="text-[16px] text-[#555555] leading-snug whitespace-pre-line">{item.desc}</p>
+                    {item.desc.includes('\n') ? (
+                      <div className="mt-1 space-y-1">
+                        {item.desc.split('\n').map((line: string, j: number) => (
+                          <div key={j} className="flex items-start gap-1.5">
+                            <span className="text-[#2D963F] font-black text-[13px] shrink-0 mt-0.5">·</span>
+                            <span className="text-[15px] text-[#555555] leading-snug">{line}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[15px] text-[#555555] leading-snug mt-1">{item.desc}</p>
+                    )}
                   </div>
                   <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center text-[#E13B30] border border-[#EEEEEE] active:scale-90"><MapPin size={16} /></button>
                 </div>
@@ -364,7 +372,18 @@ export default function DallangmuApp() {
                       <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
                       <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
-                    <p className="text-[16px] text-[#555555] leading-snug whitespace-pre-line">{item.desc}</p>
+                    {item.desc.includes('\n') ? (
+                      <div className="mt-1 space-y-1">
+                        {item.desc.split('\n').map((line: string, j: number) => (
+                          <div key={j} className="flex items-start gap-1.5">
+                            <span className="text-[#2D963F] font-black text-[13px] shrink-0 mt-0.5">·</span>
+                            <span className="text-[15px] text-[#555555] leading-snug">{line}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[15px] text-[#555555] leading-snug mt-1">{item.desc}</p>
+                    )}
                   </div>
                   <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center text-[#E13B30] border border-[#EEEEEE] active:scale-90"><MapPin size={16} /></button>
                 </div>
