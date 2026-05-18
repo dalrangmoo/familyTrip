@@ -362,14 +362,13 @@ export default function DallangmuApp() {
                       <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
                     {item.desc.includes('\n') ? (
-                      <div className="mt-1 space-y-1">
+                      <ul className="mt-1 space-y-1 list-none">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <div key={j} className="flex items-start gap-1.5">
-                            <span className="text-[#2D963F] font-black text-[13px] shrink-0 mt-0.5">·</span>
-                            <span className="text-[15px] text-[#555555] leading-snug">{line}</span>
-                          </div>
+                          <li key={j} className="relative pl-4 text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[2px] before:text-[#2D963F] before:font-black before:text-[13px]">
+                            {line}
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     ) : (
                       <p className="text-[15px] text-[#555555] leading-snug mt-1">{item.desc}</p>
                     )}
@@ -397,14 +396,13 @@ export default function DallangmuApp() {
                       <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
                     {item.desc.includes('\n') ? (
-                      <div className="mt-1 space-y-1">
+                      <ul className="mt-1 space-y-1 list-none">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <div key={j} className="flex items-start gap-1.5">
-                            <span className="text-[#2D963F] font-black text-[13px] shrink-0 mt-0.5">·</span>
-                            <span className="text-[15px] text-[#555555] leading-snug">{line}</span>
-                          </div>
+                          <li key={j} className="relative pl-4 text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[2px] before:text-[#2D963F] before:font-black before:text-[13px]">
+                            {line}
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     ) : (
                       <p className="text-[15px] text-[#555555] leading-snug mt-1">{item.desc}</p>
                     )}
