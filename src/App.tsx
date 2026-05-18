@@ -362,9 +362,9 @@ export default function DallangmuApp() {
                       <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
                     {item.desc.includes('\n') ? (
-                      <ul className="mt-1 space-y-1 list-none">
+                      <ul className="mt-1 space-y-1 list-none text-left">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-4 text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[2px] before:text-[#2D963F] before:font-black before:text-[13px]">
+                          <li key={j} className="relative pl-4 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[1px] before:text-[#2D963F] before:font-black before:text-[13px]">
                             {line}
                           </li>
                         ))}
@@ -396,9 +396,9 @@ export default function DallangmuApp() {
                       <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
                     {item.desc.includes('\n') ? (
-                      <ul className="mt-1 space-y-1 list-none">
+                      <ul className="mt-1 space-y-1 list-none text-left">
                         {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-4 text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[2px] before:text-[#2D963F] before:font-black before:text-[13px]">
+                          <li key={j} className="relative pl-4 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-[1px] before:text-[#2D963F] before:font-black before:text-[13px]">
                             {line}
                           </li>
                         ))}
