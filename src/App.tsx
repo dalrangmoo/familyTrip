@@ -89,13 +89,13 @@ export default function DallangmuApp() {
   // [전수 수록] 87개 맛집 리스트 (생략 절대 없음!)
   Object.assign(fullSchedule, {
     '5/27': [
-      { time: '06:10', task: '공항버스 출발', desc: '6013번 버스 탑승 (06:10 출발, 06:40 도착 예정). 편도 17,000원, 소요 약 90분.' },
+      { time: '06:10', task: '공항버스 출발', desc: '6013번 버스 탑승 (06:10 출발, 06:40 도착 예정)\n편도 17,000원, 소요 약 90분' },
       { time: '07:40', task: '렌터카 픽업', desc: '렌탈공룡 픽업. T1 3층 출발층 8번 출입구에서 대기.' },
-      { time: '10:10', task: '티웨이 TW0263 탑승', desc: '제1여객터미널 출발. 투어비스 이용. 비행시간 약 2시간 50분. 삿포로행 이륙.' },
-      { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동 (국제선 1층 84번, 국내선 22/14번 게이트). 왕복 2,500엔 / 편도 1,300엔. 소요 약 90분.' },
-      { time: '15:00', task: '베셀 호텔 체크인', desc: '아고다 예약. 체크인은 2시부터. ★체크인 전 스아게+ 웨이팅 확인 / 체크인 시 조식 신청★' },
+      { time: '10:10', task: '티웨이 TW0263 탑승', desc: '제1여객터미널 출발. 투어비스 이용.\n비행시간 약 2시간 50분. 삿포로행 이륙.' },
+      { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동\n국제선 1층 84번 / 국내선 22·14번 게이트\n왕복 2,500엔 / 편도 1,300엔, 소요 약 90분' },
+      { time: '15:00', task: '베셀 호텔 체크인', desc: '아고다 예약. 체크인은 2시부터.\n★ 체크인 전 스아게+ 웨이팅 확인\n★ 체크인 시 조식 신청' },
       { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집. 추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
-      { time: '오후', task: '시내 투어 & 쇼핑', desc: '시계탑 → 오도리공원 → TV타워. GU(8층), 스탠다드(8층), 칼디(9층), 메가돈키(2층).' },
+      { time: '오후', task: '시내 투어 & 쇼핑', desc: '구경: 시계탑 → 오도리공원 → TV타워\n쇼핑: GU(8층), 스탠다드(8층), 칼디(9층), 메가돈키(2층)' },
       { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사. 핫페퍼 사전 예약 완료.' }
     ],
     '5/28': [
@@ -108,15 +108,15 @@ export default function DallangmuApp() {
     ],
     '5/29': [
       { time: '09:00', task: '아침: 겐텐소노2', desc: '라멘 맛집. 07:00 오픈. 호텔에서 이동.' },
-      { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 → 미나미오타루역 (35~40분). ★진행 방향 오른쪽 좌석 추천★ 편도 800엔.' },
-      { time: '11:00', task: '오타루 관광', desc: '오르골당 → 증기시계(15분마다 증기) → 스누피 → 어묵공장 → 르타오 → 운하 → 기찻길 → 오타루역. 기타이치홀(2/3/4시 30분씩 이벤트).' },
+      { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 → 미나미오타루역 (35~40분)\n★ 진행 방향 오른쪽 좌석 추천 ★\n편도 800엔' },
+      { time: '11:00', task: '오타루 관광', desc: '오르골당 → 증기시계(15분마다) → 스누피\n→ 어묵공장 → 르타오 → 운하 → 기찻길 → 오타루역\n기타이치홀(2/3/4시 30분씩 이벤트)' },
       { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사. 예약 가능.' },
-      { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관(북구 2번 정류장, 100번 버스 10분). 버스: 뒷문 승차, 앞문 하차, 240엔. 맥주박물관: 입장 무료, 잔 450엔, 18:00까지.' },
+      { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관\n(북구 2번 정류장, 100번 버스 10분)\n버스: 뒷문 승차, 앞문 하차, 240엔\n맥주박물관: 입장 무료, 잔 450엔, 18:00까지' },
       { time: '19:00', task: '저녁: 츠바메', desc: '야키니쿠 식사. 핫페퍼 예약 완료.' }
     ],
     '5/30': [
       { time: '09:00', task: '조식: 코메다커피', desc: '나고야 스타일 앙버터 토스트 모닝 세트. 오전 7시 오픈.' },
-      { time: '10:00', task: '공항 이동', desc: '공항버스 탑승. 1출구 앞 하차 후 티켓 제출. 에컬 탑승 → 2층 국제선.' },
+      { time: '10:00', task: '공항 이동', desc: '공항버스 탑승. 1출구 앞 하차 후 티켓 제출.\n에컬 탑승 → 2층 국제선' },
       { time: '11:30', task: '공항 점심', desc: '신치토세 공항 구경 및 공항 내 점심 식사.' },
       { time: '14:30', task: '티웨이 TW0264 탑승', desc: '삿포로(CTS) 출발. 비행시간 약 3시간 10분. 출국 수속 및 면세점.' },
       { time: '17:40', task: '한국 도착', desc: '인천공항 도착 및 즐거운 일정 마무리.' }
@@ -258,29 +258,29 @@ export default function DallangmuApp() {
           <div className="animate-in fade-in duration-500 pt-6">
             <div className={`w-full p-6 rounded-[28px] mb-6 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
               <div className={`w-full px-5 py-3 rounded-2xl ${w.box} shadow-inner mb-3 flex items-center justify-center gap-3`}>
-                <p className="text-[20px] font-[1000]">삿포로 {realWeather.temp}</p>
-                <span className="text-[14px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
+                <p className="text-[22px] font-[1000]">삿포로 {realWeather.temp}</p>
+                <span className="text-[16px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
               </div>
               <div className={`w-full pt-3 border-t ${w.line}`}>
-                <p className="text-[12px] font-bold opacity-80 text-center">{realWeather.msg}</p>
+                <p className="text-[14px] font-bold opacity-80 text-center">{realWeather.msg}</p>
               </div>
             </div>
             
             <div className="bg-gradient-to-br from-[#48CAE4] to-[#0096C7] p-6 rounded-[28px] mb-8 text-white shadow-lg">
               <div className="flex justify-between items-center">
                 <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-[9px] text-white/60 uppercase tracking-widest">Departure</span>
-                  <span className="text-[15px] font-black">TW0263</span>
-                  <span className="text-[12px] font-bold text-white/80">10:10</span>
+                  <span className="text-[9px] text-white/60 uppercase tracking-widest">출발</span>
+                  <span className="text-[17px] font-black">TW0263</span>
+                  <span className="text-[14px] font-bold text-white/80">10:10</span>
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <Plane size={18} className="text-white" />
                   <span className="text-[9px] text-white/60 uppercase tracking-wider">ICN → CTS</span>
                 </div>
                 <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-[9px] text-white/60 uppercase tracking-widest">Return</span>
-                  <span className="text-[15px] font-black">TW0264</span>
-                  <span className="text-[12px] font-bold text-white/80">14:30</span>
+                  <span className="text-[9px] text-white/60 uppercase tracking-widest">귀국</span>
+                  <span className="text-[17px] font-black">TW0264</span>
+                  <span className="text-[14px] font-bold text-white/80">14:30</span>
                 </div>
               </div>
             </div>
@@ -291,10 +291,10 @@ export default function DallangmuApp() {
                 <div key={i} className="bg-white rounded-[24px] border border-[#EEEEEE] p-5 shadow-sm flex items-start justify-between gap-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[#2D963F] font-black text-[13px]">{item.time}</span>
-                      <span className="text-[#1A1A1A] font-[900] text-[16px]">{item.task}</span>
+                      <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
+                      <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
-                    <p className="text-[14px] text-[#555555] leading-snug">{item.desc}</p>
+                    <p className="text-[16px] text-[#555555] leading-snug whitespace-pre-line">{item.desc}</p>
                   </div>
                   <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center text-[#E13B30] border border-[#EEEEEE] active:scale-90"><MapPin size={16} /></button>
                 </div>
@@ -307,7 +307,7 @@ export default function DallangmuApp() {
           <div className="animate-in slide-in-from-right duration-500 pt-4">
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
               {Object.keys(fullSchedule).map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`px-5 py-2 shrink-0 text-[13px] font-[900] rounded-full border transition-all ${selectedDay === day ? 'bg-[#1A1A1A] text-white' : 'bg-white text-[#999999]'}`}>{day}</button>
+                <button key={day} onClick={() => setSelectedDay(day)} className={`px-5 py-2 shrink-0 text-[15px] font-[900] rounded-full border transition-all ${selectedDay === day ? 'bg-[#1A1A1A] text-white' : 'bg-white text-[#999999]'}`}>{day}</button>
               ))}
             </div>
             <div className="space-y-4">
@@ -315,10 +315,10 @@ export default function DallangmuApp() {
                 <div key={i} className="bg-white rounded-[24px] border border-[#EEEEEE] p-5 shadow-sm flex items-start justify-between gap-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[#2D963F] font-black text-[13px]">{item.time}</span>
-                      <span className="text-[#1A1A1A] font-[900] text-[16px]">{item.task}</span>
+                      <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
+                      <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
                     </div>
-                    <p className="text-[14px] text-[#555555] leading-snug">{item.desc}</p>
+                    <p className="text-[16px] text-[#555555] leading-snug whitespace-pre-line">{item.desc}</p>
                   </div>
                   <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center text-[#E13B30] border border-[#EEEEEE] active:scale-90"><MapPin size={16} /></button>
                 </div>
@@ -331,7 +331,7 @@ export default function DallangmuApp() {
           <div className="animate-in fade-in duration-500 pt-4">
              <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
                 {categories.map(cat => (
-                  <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 shrink-0 text-[12px] font-[900] rounded-xl border transition-all ${selectedCategory === cat ? 'bg-[#2D963F] text-white border-[#2D963F]' : 'bg-white text-[#999999]'}`}>{cat}</button>
+                  <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 shrink-0 text-[14px] font-[900] rounded-xl border transition-all ${selectedCategory === cat ? 'bg-[#2D963F] text-white border-[#2D963F]' : 'bg-white text-[#999999]'}`}>{cat}</button>
                 ))}
              </div>
              <div className="grid grid-cols-1 gap-4">
@@ -340,9 +340,9 @@ export default function DallangmuApp() {
                    <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-[9px] font-black px-1.5 py-0.5 bg-[#F8F9FA] rounded text-[#2D963F] border border-[#2D963F]/20 uppercase">#{shop.cat}</span>
-                        <p className="text-[16px] font-[900] truncate">{shop.name}</p>
+                        <p className="text-[18px] font-[900] truncate">{shop.name}</p>
                       </div>
-                      <p className="text-[13px] text-[#666666] leading-tight">{shop.desc}</p>
+                      <p className="text-[15px] text-[#666666] leading-tight">{shop.desc}</p>
                    </div>
                    <button onClick={() => openMaps(shop.name)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center border border-[#EEEEEE] text-[#2D963F] active:scale-90"><Navigation size={16} fill="currentColor" /></button>
                 </div>
