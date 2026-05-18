@@ -352,28 +352,31 @@ export default function DallangmuApp() {
               </div>
             </div>
 
-            <h3 className="text-xl font-[900] mb-5 px-1">오늘의 일정 (5/27)</h3>
+            <h3 className="text-2xl font-[900] mb-5 px-1">오늘의 일정 (5/27)</h3>
             <div className="space-y-4">
               {fullSchedule['5/27'].map((item, i) => (
-                <div key={i} className="bg-white rounded-[24px] border border-[#EEEEEE] p-5 shadow-sm flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
-                      <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
+                <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
+                  <div className="w-[6px] bg-[#2D963F] shrink-0" />
+                  <div className="flex-1 p-5 flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <span className="bg-[#2D963F] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
+                        <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
+                      </div>
+                      {item.desc.includes('\n') ? (
+                        <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
+                          {item.desc.split('\n').map((line: string, j: number) => (
+                            <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
+                              {line}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-[16px] text-[#555555] leading-snug mt-1">{item.desc}</p>
+                      )}
                     </div>
-                    {item.desc.includes('\n') ? (
-                      <ul className="mt-1 ml-2 space-y-1 list-none text-left">
-                        {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-2 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-[15px] text-[#555555] leading-snug mt-1">{item.desc}</p>
-                    )}
+                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#2D963F] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
-                  <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center text-[#E13B30] border border-[#EEEEEE] active:scale-90"><MapPin size={16} /></button>
                 </div>
               ))}
             </div>
@@ -389,25 +392,28 @@ export default function DallangmuApp() {
             </div>
             <div className="space-y-4">
               {fullSchedule[selectedDay].map((item, i) => (
-                <div key={i} className="bg-white rounded-[24px] border border-[#EEEEEE] p-5 shadow-sm flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[#2D963F] font-black text-[15px]">{item.time}</span>
-                      <span className="text-[#1A1A1A] font-[900] text-[18px]">{item.task}</span>
+                <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
+                  <div className="w-[6px] bg-[#2D963F] shrink-0" />
+                  <div className="flex-1 p-5 flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <span className="bg-[#2D963F] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
+                        <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
+                      </div>
+                      {item.desc.includes('\n') ? (
+                        <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
+                          {item.desc.split('\n').map((line: string, j: number) => (
+                            <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
+                              {line}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-[16px] text-[#555555] leading-snug mt-1">{item.desc}</p>
+                      )}
                     </div>
-                    {item.desc.includes('\n') ? (
-                      <ul className="mt-1 ml-2 space-y-1 list-none text-left">
-                        {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-2 text-left text-[15px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#2D963F] before:font-black before:text-[13px]">
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-[15px] text-[#555555] leading-snug mt-1">{item.desc}</p>
-                    )}
+                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#2D963F] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
-                  <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#F8F9FA] rounded-full flex items-center justify-center text-[#E13B30] border border-[#EEEEEE] active:scale-90"><MapPin size={16} /></button>
                 </div>
               ))}
             </div>
