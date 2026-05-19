@@ -404,12 +404,12 @@ const dayDesc: Record<string, string> = {
             
             {/* 현재 시각 카드 */}
             <div className="rounded-[18px] bg-gradient-to-br from-[#1A55AA] to-[#2E6FD8] px-5 py-4 mb-3 shadow-md text-center select-none">
-              <p className="text-white/50 text-[11px] font-black tracking-[0.2em] uppercase mb-2">
+              <p className="text-white/90 text-[13px] font-black tracking-[0.15em] mb-2">
                 {currentTime.getFullYear()}. {String(currentTime.getMonth()+1).padStart(2,'0')}. {String(currentTime.getDate()).padStart(2,'0')} &nbsp;
                 {['일','월','화','수','목','금','토'][currentTime.getDay()]}요일
               </p>
               <div className="flex items-end justify-center gap-2">
-                <span className="text-white/60 text-[13px] font-black bg-white/10 px-2 py-0.5 rounded-full mb-1">
+                <span className="text-white text-[14px] font-black bg-white/25 px-2.5 py-0.5 rounded-full mb-1">
                   {currentTime.getHours() < 12 ? '오전' : '오후'}
                 </span>
                 <span className="text-white text-[42px] font-[900] tabular-nums leading-none tracking-tight">
