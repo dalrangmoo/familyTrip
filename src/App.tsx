@@ -24,17 +24,12 @@ const dayTheme: Record<string, string> = {
   '5/29': '오타루',
   '5/30': '마지막날',
 };
-const dayIcon: Record<string, string> = {
-  '5/27': '✈️',
-  '5/28': '🏔️',
-  '5/29': '⛵',
-  '5/30': '🛍️',
-};
+
 const dayDesc: Record<string, string> = {
-  '5/27': '삿포로 도착! 스프카레와 징기스칸으로 첫 식사를 즐겨요.',
+  '5/27': '삿포로 도착! 스프카레를 첫 식사로 즐겨요.',
   '5/28': '비에이 투어로 홋카이도 자연을 만끽해요.',
-  '5/29': '오타루 운하와 해산물 맛집 투어!',
-  '5/30': '쇼핑 마무리 후 귀국. 즐거운 여행이었어요!',
+  '5/29': '오타루 운하, 오르골당, 증기시계 관광!',
+  '5/30': '즐거웠던 여행을 마무리하고 귀국!',
 };
   const todayKey = (() => { const n = new Date(); return `${n.getMonth()+1}/${n.getDate()}`; })();
   const [selectedDay, setSelectedDay] = useState(tripDays.includes(todayKey) ? todayKey : '5/27');
@@ -121,9 +116,9 @@ const dayDesc: Record<string, string> = {
       { time: '10:10', task: '티웨이 TW251 탑승', desc: '제1여객터미널 출발. 모바일 체크인 권장. 삿포로행 이륙.' },
       { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동 (국제선 84번, 국내선 22/14번 게이트). 왕복 2,500엔.' },
       { time: '15:00', task: '베셀 호텔 체크인', desc: '체크인은 2시부터. 체크인 전 라멘집 대기표 미리 뽑아두기 추천.' },
-      { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집.\n(추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.)' },
+      { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집.\n추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
       { time: '오후', task: '시내 투어 & 쇼핑', desc: '맥주박물관(무료), 시계탑, TV타워. GU(8층), 돈키호테(2층), 스탠다드(8층).' },
-      { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사.\n(핫페퍼 사전 예약 완료.)' }
+      { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사.\n핫페퍼 사전 예약 완료.' }
     ],
     '5/28': [
       { time: '08:00', task: '호텔 조식', desc: '베셀 호텔 조식 이용 후 투어 집합 장소로 이동.' },
@@ -154,17 +149,17 @@ const dayDesc: Record<string, string> = {
   Object.assign(fullSchedule, {
     '5/27': [
       { time: '06:10', task: '공항버스 출발', desc: '6013번 버스 (06:10 / 06:40 배차)\n편도 17,000원, 소요 약 90분' },
-      { time: '07:40', task: '카메라 픽업', desc: '렌탈공룡 카메라 픽업\nT1 3층 출발층 8번 출입구에서 대기' },
+      { time: '07:40', task: '카메라 픽업', desc: '렌탈공룡 카메라 픽업\nT1 3층 출발층 8번에서 픽업' },
       { time: '10:10', task: '티웨이 TW0263 탑승', desc: '제1여객터미널 출발. 투어비스 이용.\n비행시간 약 2시간 50분. 삿포로행 이륙.' },
       { time: '13:00', task: '신치토세 도착', desc: '공항버스로 시내 이동\n국제선 1층 84번 / 국내선 22·14번 게이트\n왕복 2,500엔 / 편도 1,300엔, 소요 약 90분' },
       { time: '15:00', task: '베셀 호텔 체크인', desc: '아고다 예약. 체크인은 2시부터.\n★ 체크인 전 스아게+ 웨이팅 확인\n★ 체크인 시 조식 신청' },
-      { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집.\n(추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.)' },
+      { time: '15:30', task: '점심: 스아게+', desc: '유명 스프카레 맛집.\n추천 메뉴: 닭, 돼지, 브로콜리 추가 필수.' },
       { time: '오후', task: '시내 투어 & 쇼핑', desc: '구경: 시계탑 → 오도리공원 → TV타워\n쇼핑: GU(~20시), 스탠다드(~20시), 칼디(~21시), 메가돈키(~02시)' },
-      { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사.\n(핫페퍼 사전 예약 완료.)' }
+      { time: '19:30', task: '저녁: 유우히', desc: '징기스칸(양고기) 식사.\n핫페퍼 사전 예약 완료.' }
     ],
     '5/28': [
       { time: '08:00', task: '호텔 조식', desc: '베셀 호텔 조식 이용 후 투어 집합 장소로 이동.' },
-      { time: '09:30', task: '비에이 투어 시작', desc: '다이와 로이넷 호텔 앞 집합.\n(흰그림자투어 / 네이버 예약 완료.)' },
+      { time: '09:30', task: '비에이 투어 시작', desc: '다이와 로이넷 호텔 앞 집합.\n흰그림자투어 / 네이버 예약 완료.' },
       { time: '오전', task: '비에이 관광', desc: '휴게소(10분) → 흰수염폭포(20분) → 청의호수(30분)' },
       { time: '점심', task: '점심: 비에이역', desc: '비에이역 주변 식사 (약 60분)' },
       { time: '오후', task: '후속 투어', desc: '팜도미타(60분) → 휴게소(10분)\n스스키노 19:00 도착' },
@@ -175,7 +170,7 @@ const dayDesc: Record<string, string> = {
       { time: '10:00', task: '오타루 이동', desc: 'JR 삿포로역 → 미나미오타루역 (35~40분)\n★ 진행 방향 오른쪽 좌석 추천 ★\n편도 800엔' },
       { time: '11:00', task: '오타루 관광', desc: '오르골당 → 증기시계(15분마다) → 스누피 → 어묵공장 → 르타오 → 운하 → 기찻길 → 오타루역\n기타이치홀(2/3/4시 30분씩 이벤트)' },
       { time: '13:00', task: '점심: 와규 쿠로사와', desc: '규카츠 식사. 예약 가능.' },
-      { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관\n(북구 2번 정류장, 188번 버스 10분)\n버스: 뒷문 승차, 앞문 하차, 240엔\n맥주박물관: 입장 무료, 잔 450엔, 18:00까지' },
+      { time: '오후', task: '삿포로 복귀 & 맥주박물관', desc: '오타루역 → 삿포로역 → 맥주박물관\n북구 2번 정류장, 188번 버스 10분\n버스: 뒷문 승차, 앞문 하차, 240엔\n맥주박물관: 입장 무료, 잔 450엔, 18:00까지' },
       { time: '19:00', task: '저녁: 츠바메', desc: '야키니쿠 식사. 핫페퍼 예약 완료.' }
     ],
     '5/30': [
@@ -481,8 +476,6 @@ const dayDesc: Record<string, string> = {
 
                 <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-3 rounded-2xl w-full transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
                   <span className={`text-[15px] font-black ${selectedDay === day ? 'text-white' : 'text-[#333]'}`}>{day} {getDayLabel(day)}</span>
-                  <span className="text-[26px] my-1.5">{dayIcon[day]}</span>
-                  <span className={`text-[13px] font-bold ${selectedDay === day ? 'text-white/90' : 'text-[#555]'}`}>{dayTheme[day]}</span>
                 </button>
               ))}
             </div>
@@ -550,8 +543,6 @@ const dayDesc: Record<string, string> = {
               {Object.keys(fullSchedule).map(day => (
                 <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-3 rounded-2xl w-full transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
                   <span className={`text-[15px] font-black ${selectedDay === day ? 'text-white' : 'text-[#333]'}`}>{day} {getDayLabel(day)}</span>
-                  <span className="text-[26px] my-1.5">{dayIcon[day]}</span>
-                  <span className={`text-[13px] font-bold ${selectedDay === day ? 'text-white/90' : 'text-[#555]'}`}>{dayTheme[day]}</span>
                 </button>
               ))}
             </div>
