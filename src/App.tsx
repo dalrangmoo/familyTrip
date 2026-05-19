@@ -388,8 +388,7 @@ const dayDesc: Record<string, string> = {
                 <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10">
                   {tripWeather.map((day, i) => (
                     <div key={i} className="flex flex-col items-center gap-1 bg-white/50 backdrop-blur-sm rounded-xl py-2 px-1 border border-white/70 shadow-sm">
-                      <span className="text-[11px] font-black opacity-40">{getDayLabel(day.date)}</span>
-                      <span className="text-[14px] font-[900]">{day.date}</span>
+                      <span className="text-[11px] font-black opacity-60 leading-tight">{`${String(day.date.split('/')[0]).padStart(2,'0')}/${String(day.date.split('/')[1]).padStart(2,'0')}(${getDayLabel(day.date)})`}</span>
                       <div>{getWeatherIcon(day.code, 28)}</div>
                       <div className="flex items-center gap-1">
                         <span className="text-[18px] font-[900]">{day.max}°</span>
@@ -435,8 +434,8 @@ const dayDesc: Record<string, string> = {
             </div>
 
             <div className="flex items-center justify-between mb-4 px-1">
-              <h3 className="text-2xl font-[900]">오늘의 일정</h3>
-              <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#C8D8EE] bg-white text-[#1A55AA] text-[13px] font-black shadow-sm active:scale-95 transition-all">전체일정 보기 <span className="text-[15px] leading-none">›</span></button>
+              <h3 className="text-2xl font-[900]">🗓️ 오늘의 일정</h3>
+              <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1A55AA] text-white text-[13px] font-black shadow-md active:scale-95 transition-all">📅 전체일정</button>
             </div>
 
             <div className="grid grid-cols-4 gap-1.5 mb-5">
