@@ -434,8 +434,34 @@ const dayDesc: Record<string, string> = {
             </div>
 
             <div className="flex items-center justify-between mb-4 px-1">
-              <h3 className="text-2xl font-[900]">🗓️ 오늘의 일정</h3>
-              <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1A55AA] text-white text-[13px] font-black shadow-md active:scale-95 transition-all">📅 전체일정</button>
+              <h3 className="text-2xl font-[900] flex items-center gap-2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A55AA" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <line x1="8" y1="14" x2="11" y2="14"/>
+                  <line x1="13" y1="14" x2="16" y2="14"/>
+                  <line x1="8" y1="18" x2="11" y2="18"/>
+                </svg>
+                오늘의 일정
+              </h3>
+              <div className="relative inline-flex rounded-xl overflow-hidden">
+                <span className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
+                  <span className="absolute -inset-full animate-spin [animation-duration:4s] bg-[conic-gradient(from_0deg,_#1A55AA_0deg,_#1A55AA_40deg,_transparent_60deg)]" />
+                </span>
+                <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="relative z-10 m-[1.5px] rounded-[10px] bg-white flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-black text-[#1A55AA] active:scale-95 transition-all">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                    <line x1="8" y1="14" x2="11" y2="14"/>
+                    <line x1="13" y1="14" x2="16" y2="14"/>
+                  </svg>
+                  전체일정
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-4 gap-1.5 mb-5">
