@@ -17,7 +17,13 @@ interface DayWeather {
 
 export default function DallangmuApp() {
   const [activeTab, setActiveTab] = useState('home');
-  const tripDays = ['5/27', '5/28', '5/29', '5/30'];
+const tripDays = ['5/27', '5/28', '5/29', '5/30'];
+const dayTheme: Record<string, string> = {
+  '5/27': '여행시작!',
+  '5/28': '비에이',
+  '5/29': '오타루',
+  '5/30': '마지막날',
+};
   const todayKey = (() => { const n = new Date(); return `${n.getMonth()+1}/${n.getDate()}`; })();
   const [selectedDay, setSelectedDay] = useState(tripDays.includes(todayKey) ? todayKey : '5/27');
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -299,6 +305,13 @@ export default function DallangmuApp() {
     return ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
   };
 
+  const getDayFullLabel = (dateStr: string) => {
+    const [m, d] = dateStr.split('/');
+    const date = new Date(2026, parseInt(m) - 1, parseInt(d));
+    const day = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+    return `${m}월${d}일(${day})`;
+  };
+
   const formatTime = (d: Date) => {
     const yy = String(d.getFullYear()).slice(2);
     const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -308,6 +321,24 @@ export default function DallangmuApp() {
     const h = String(hours % 12 || 12).padStart(2, '0');
     const min = String(d.getMinutes()).padStart(2, '0');
     return `${yy}/${mm}/${dd} ${ampm} ${h}:${min}`;
+  };
+
+  const parseMin = (t: string): number | null => {
+    const m = t.match(/^(\d{1,2}):(\d{2})$/);
+    return m ? parseInt(m[1]) * 60 + parseInt(m[2]) : null;
+  };
+  const getItemStatus = (item: any, items: any[], index: number): 'past' | 'current' | 'future' => {
+    const todayKey2 = `${currentTime.getMonth()+1}/${currentTime.getDate()}`;
+    if (selectedDay !== todayKey2) return 'future';
+    const now = currentTime.getHours() * 60 + currentTime.getMinutes();
+    const itemMin = parseMin(item.time);
+    if (itemMin === null) return 'future';
+    if (now < itemMin) return 'future';
+    for (let j = index + 1; j < items.length; j++) {
+      const nm = parseMin(items[j].time);
+      if (nm !== null) return now < nm ? 'current' : 'past';
+    }
+    return 'current';
   };
 
   return (
@@ -338,7 +369,8 @@ export default function DallangmuApp() {
                       <span className="text-[18px] font-[900]">{day.max}°</span>
                       <span className="text-[13px] opacity-45 font-bold">{day.min}°</span>
                     </div>
-                  ))}
+                  );
+                })}
                 </div>
               )}
             </div>
@@ -377,33 +409,47 @@ export default function DallangmuApp() {
             </div>
 
             <h3 className="text-2xl font-[900] mb-3 px-1">오늘의 일정</h3>
-            <div className="grid grid-cols-4 gap-1 bg-[#F0F0F2] p-1 rounded-2xl mb-5">
+            <div className="flex border-b-2 border-[#F0F0F2] mb-5">
               {tripDays.map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-2.5 rounded-xl transition-all ${selectedDay === day ? 'bg-[#1A55AA] text-white shadow-md' : 'text-[#AAAAAA]'}`}>
-                  <span className={`text-[11px] font-black mb-0.5 ${selectedDay === day ? 'text-white/70' : 'text-[#CCCCCC]'}`}>{getDayLabel(day)}</span>
-                  <span className="text-[15px] font-[900]">{day}</span>
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex-1 flex flex-col items-center pb-3 pt-1 relative transition-all ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>
+                  <span className={`text-[10px] font-black mb-0.5 ${selectedDay === day ? 'text-[#1A55AA]/70' : 'text-[#CCCCCC]'}`}>{getDayFullLabel(day)}</span>
+                  <span className={`text-[13px] font-[900] ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{dayTheme[day]}</span>
+                  {selectedDay === day && <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#1A55AA] rounded-full" />}
                 </button>
               ))}
             </div>
-            <div className="space-y-4">
-              {fullSchedule[selectedDay].map((item, i) => (
-                <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
-                  <div className="w-[6px] bg-[#1A55AA] shrink-0" />
-                  <div className="flex-1 p-5 flex items-start justify-between gap-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="bg-[#1A55AA] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
-                        <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
+                <div className="relative">
+                  <div className="absolute left-[19px] top-5 bottom-5 w-[2px] bg-[#EEEEEE] z-0" />
+                  {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
+                    const status = getItemStatus(item, arr, i);
+                    return (
+                    <div key={i} className="relative flex gap-3 mb-5">
+                      <div className="relative z-10 shrink-0 flex flex-col items-center">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                          status === 'current' ? 'bg-[#1A55AA] shadow-[0_0_0_5px_rgba(26,85,170,0.18)]' :
+                          status === 'past' ? 'bg-[#DDDDDD]' : 'bg-white border-2 border-[#DDDDDD]'
+                        }`}>
+                          <span className={`text-[9px] font-black leading-none text-center ${status === 'current' ? 'text-white' : status === 'past' ? 'text-[#AAAAAA]' : 'text-[#CCCCCC]'}`}>
+                            {item.time.includes(':') ? item.time : '·'}
+                          </span>
+                        </div>
                       </div>
-                      <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
-                        {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#1A55AA] before:font-black before:text-[13px]">
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className={`flex-1 rounded-[18px] overflow-hidden border transition-all ${
+                        status === 'current' ? 'border-[#1A55AA] shadow-[0_4px_20px_rgba(26,85,170,0.18)]' :
+                        status === 'past' ? 'border-[#EEEEEE] opacity-50' : 'border-[#EEEEEE] bg-white'
+                      }`}>
+                        <div className={`px-4 py-3 flex items-center justify-between gap-2 ${status === 'current' ? 'bg-[#1A55AA]' : 'bg-white'}`}>
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <span className={`text-[11px] font-black px-2 py-0.5 rounded-full shrink-0 ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#888]'}`}>{item.time}</span>
+                            <span className={`text-[15px] font-[900] truncate ${status === 'current' ? 'text-white' : 'text-[#1A1A1A]'}`}>{item.task}</span>
+                          </div>
+                          <button onClick={() => openMaps(item.task)} className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#1A55AA]'}`}><MapPin size={13} /></button>
+                        </div>
+                        <div className={`px-4 py-3 border-t ${status === 'current' ? 'bg-[#F0F5FF] border-[#D0DEFF]' : 'bg-white border-[#F4F4F4]'}`}>
+                          {item.desc.split('\n').map((line: string, j: number) => (
+                            <p key={j} className={`text-[13px] leading-snug mb-0.5 ${status === 'current' ? 'text-[#1A55AA] font-semibold' : 'text-[#666]'}`}>{line}</p>
+                          ))}
                     </div>
-                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#1A55AA] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
                   </div>
                 </div>
               ))}
@@ -413,33 +459,47 @@ export default function DallangmuApp() {
 
         {activeTab === 'schedule' && (
           <div className="animate-in slide-in-from-right duration-500 pt-4">
-            <div className="grid grid-cols-4 gap-1 bg-[#F0F0F2] p-1 rounded-2xl mb-6">
-              {Object.keys(fullSchedule).map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-2.5 rounded-xl transition-all ${selectedDay === day ? 'bg-[#1A55AA] text-white shadow-md' : 'text-[#AAAAAA]'}`}>
-                  <span className={`text-[11px] font-black mb-0.5 ${selectedDay === day ? 'text-white/70' : 'text-[#CCCCCC]'}`}>{getDayLabel(day)}</span>
-                  <span className="text-[15px] font-[900]">{day}</span>
-                </button>
+              <div className="flex border-b-2 border-[#F0F0F2] mb-6">
+                {Object.keys(fullSchedule).map(day => (
+                  <button key={day} onClick={() => setSelectedDay(day)} className={`flex-1 flex flex-col items-center pb-3 pt-1 relative transition-all ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>
+                    <span className={`text-[10px] font-black mb-0.5 ${selectedDay === day ? 'text-[#1A55AA]/70' : 'text-[#CCCCCC]'}`}>{getDayFullLabel(day)}</span>
+                    <span className={`text-[13px] font-[900] ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{dayTheme[day]}</span>
+                    {selectedDay === day && <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#1A55AA] rounded-full" />}
+                  </button>
               ))}
             </div>
-            <div className="space-y-4">
-              {fullSchedule[selectedDay].map((item, i) => (
-                <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
-                  <div className="w-[6px] bg-[#1A55AA] shrink-0" />
-                  <div className="flex-1 p-5 flex items-start justify-between gap-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="bg-[#1A55AA] text-white font-black text-[13px] px-2.5 py-0.5 rounded-full shrink-0">{item.time}</span>
-                        <span className="text-[#1A1A1A] font-[900] text-[20px] leading-tight">{item.task}</span>
+              <div className="relative">
+                <div className="absolute left-[19px] top-5 bottom-5 w-[2px] bg-[#EEEEEE] z-0" />
+                {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
+                  const status = getItemStatus(item, arr, i);
+                  return (
+                  <div key={i} className="relative flex gap-3 mb-5">
+                    <div className="relative z-10 shrink-0 flex flex-col items-center">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                        status === 'current' ? 'bg-[#1A55AA] shadow-[0_0_0_5px_rgba(26,85,170,0.18)]' :
+                        status === 'past' ? 'bg-[#DDDDDD]' : 'bg-white border-2 border-[#DDDDDD]'
+                      }`}>
+                        <span className={`text-[9px] font-black leading-none text-center ${status === 'current' ? 'text-white' : status === 'past' ? 'text-[#AAAAAA]' : 'text-[#CCCCCC]'}`}>
+                          {item.time.includes(':') ? item.time : '·'}
+                        </span>
                       </div>
-                      <ul className="mt-1.5 ml-2 space-y-1.5 list-none text-left">
-                        {item.desc.split('\n').map((line: string, j: number) => (
-                          <li key={j} className="relative pl-2 text-left text-[16px] text-[#555555] leading-snug before:content-['•'] before:absolute before:left-0 before:top-0 before:text-[#1A55AA] before:font-black before:text-[13px]">
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
                     </div>
-                    <button onClick={() => openMaps(item.task)} className="shrink-0 w-11 h-11 bg-[#1A55AA] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={17} /></button>
+                    <div className={`flex-1 rounded-[18px] overflow-hidden border transition-all ${
+                      status === 'current' ? 'border-[#1A55AA] shadow-[0_4px_20px_rgba(26,85,170,0.18)]' :
+                      status === 'past' ? 'border-[#EEEEEE] opacity-50' : 'border-[#EEEEEE] bg-white'
+                    }`}>
+                      <div className={`px-4 py-3 flex items-center justify-between gap-2 ${status === 'current' ? 'bg-[#1A55AA]' : 'bg-white'}`}>
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <span className={`text-[11px] font-black px-2 py-0.5 rounded-full shrink-0 ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#888]'}`}>{item.time}</span>
+                          <span className={`text-[15px] font-[900] truncate ${status === 'current' ? 'text-white' : 'text-[#1A1A1A]'}`}>{item.task}</span>
+                        </div>
+                        <button onClick={() => openMaps(item.task)} className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#1A55AA]'}`}><MapPin size={13} /></button>
+                      </div>
+                      <div className={`px-4 py-3 border-t ${status === 'current' ? 'bg-[#F0F5FF] border-[#D0DEFF]' : 'bg-white border-[#F4F4F4]'}`}>
+                        {item.desc.split('\n').map((line: string, j: number) => (
+                          <p key={j} className={`text-[13px] leading-snug mb-0.5 ${status === 'current' ? 'text-[#1A55AA] font-semibold' : 'text-[#666]'}`}>{line}</p>
+                        ))}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -452,7 +512,8 @@ export default function DallangmuApp() {
              <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
                 {categories.map(cat => (
                   <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 shrink-0 text-[14px] font-[900] rounded-xl border transition-all ${selectedCategory === cat ? 'bg-[#1A55AA] text-white border-[#1A55AA]' : 'bg-white text-[#999999]'}`}>{cat}</button>
-                ))}
+                  );
+                })}
              </div>
              <div className="grid grid-cols-1 gap-4">
                {filteredGourmet.map((shop, i) => (
