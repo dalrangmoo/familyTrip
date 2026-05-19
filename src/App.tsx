@@ -378,23 +378,23 @@ const dayDesc: Record<string, string> = {
       <main className="w-full max-w-md px-4 pb-24">
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
-            <div className={`w-full p-6 rounded-[28px] mb-6 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
-              <div className={`w-full px-5 py-3 rounded-2xl ${w.box} shadow-inner mb-3 flex items-center justify-center gap-3`}>
+            <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
+              <div className={`flex items-center justify-between px-4 py-2.5 rounded-xl ${w.box} shadow-inner mb-2.5`}>
                 <p className="text-[26px] font-[1000]">삿포로 {realWeather.temp}</p>
                 <span className="text-[18px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
               </div>
-              <div className={`w-full pt-3 border-t ${w.line}`}>
-                <p className="text-[15px] font-bold opacity-80 text-center whitespace-pre-line">{realWeather.msg}</p>
-              </div>
+              <p className="text-[15px] font-bold opacity-80 text-center whitespace-pre-line leading-snug mb-2.5">{realWeather.msg}</p>
               {tripWeather.length > 0 && (
-                <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-black/10">
+                <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10">
                   {tripWeather.map((day, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1.5 bg-white/50 backdrop-blur-sm rounded-2xl py-3 px-1 border border-white/70 shadow-sm">
-                      <span className="text-[11px] font-black opacity-40 uppercase">{getDayLabel(day.date)}</span>
+                    <div key={i} className="flex flex-col items-center gap-1 bg-white/50 backdrop-blur-sm rounded-xl py-2 px-1 border border-white/70 shadow-sm">
+                      <span className="text-[11px] font-black opacity-40">{getDayLabel(day.date)}</span>
                       <span className="text-[14px] font-[900]">{day.date}</span>
-                      <div className="my-0.5">{getWeatherIcon(day.code, 30)}</div>
-                      <span className="text-[18px] font-[900]">{day.max}°</span>
-                      <span className="text-[13px] opacity-45 font-bold">{day.min}°</span>
+                      <div>{getWeatherIcon(day.code, 28)}</div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[18px] font-[900]">{day.max}°</span>
+                        <span className="text-[13px] opacity-45 font-bold">{day.min}°</span>
+                      </div>
                     </div>
                   ))}
                 </div>
