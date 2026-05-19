@@ -110,6 +110,12 @@ code {
   background: var(--code-bg);
 }
 
+@keyframes blink-colon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+.blink { animation: blink-colon 1s step-end infinite; }
+
 @keyframes shine-rotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

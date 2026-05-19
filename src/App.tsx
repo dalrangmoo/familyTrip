@@ -312,16 +312,6 @@ const dayDesc: Record<string, string> = {
     return ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
   };
 
-  const formatTime = (d: Date) => {
-    const yy = String(d.getFullYear()).slice(2);
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const hours = d.getHours();
-    const ampm = hours < 12 ? '오전' : '오후';
-    const h = String(hours % 12 || 12).padStart(2, '0');
-    const min = String(d.getMinutes()).padStart(2, '0');
-    return `${yy}/${mm}/${dd} ${ampm} ${h}:${min}`;
-  };
 
   const parseMin = (t: string): number | null => {
     const m = t.match(/^(\d{1,2}):(\d{2})$/);
@@ -413,9 +403,24 @@ const dayDesc: Record<string, string> = {
             </div>
             
             {/* 현재 시각 카드 */}
-            <div className="rounded-[18px] bg-gradient-to-r from-[#1A55AA] to-[#3B7DD8] px-5 py-4 mb-3 flex flex-col items-center justify-center shadow-sm text-center">
-              <p className="text-white/60 text-[12px] font-black mb-1">현재 시각</p>
-              <p className="text-white text-[26px] font-[900] tracking-tight">{formatTime(currentTime)}</p>
+            <div className="rounded-[18px] bg-gradient-to-br from-[#1A55AA] to-[#2E6FD8] px-5 py-4 mb-3 shadow-md text-center select-none">
+              <p className="text-white/50 text-[11px] font-black tracking-[0.2em] uppercase mb-2">
+                {currentTime.getFullYear()}. {String(currentTime.getMonth()+1).padStart(2,'0')}. {String(currentTime.getDate()).padStart(2,'0')} &nbsp;
+                {['일','월','화','수','목','금','토'][currentTime.getDay()]}요일
+              </p>
+              <div className="flex items-end justify-center gap-2">
+                <span className="text-white/60 text-[13px] font-black bg-white/10 px-2 py-0.5 rounded-full mb-1">
+                  {currentTime.getHours() < 12 ? '오전' : '오후'}
+                </span>
+                <span className="text-white text-[42px] font-[900] tabular-nums leading-none tracking-tight">
+                  {String(currentTime.getHours() % 12 || 12).padStart(2,'0')}
+                  <span className="blink">:</span>
+                  {String(currentTime.getMinutes()).padStart(2,'0')}
+                </span>
+                <span className="text-white/40 text-[18px] font-bold tabular-nums leading-none mb-1">
+                  {String(currentTime.getSeconds()).padStart(2,'0')}
+                </span>
+              </div>
             </div>
 
             {/* 항공편 카드 */}
