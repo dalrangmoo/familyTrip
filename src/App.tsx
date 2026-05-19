@@ -343,12 +343,24 @@ const dayDesc: Record<string, string> = {
   };
 
   const getItemStatus = (item: any, items: any[], index: number): 'past' | 'current' | 'future' => {
+    const today = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
+    const tripStart = new Date(2026, 4, 27); // 5/27 여행 시작일
+
+    // 여행 시작 전: 5/27 탭의 첫 번째 항목만 활성화
+    if (today < tripStart) {
+      return (selectedDay === '5/27' && index === 0) ? 'current' : 'future';
+    }
+
+    // 여행 시작 후: 오늘이 아닌 탭은 모두 future
     const todayKey2 = `${currentTime.getMonth()+1}/${currentTime.getDate()}`;
     if (selectedDay !== todayKey2) return 'future';
+
+    // 오늘 탭: 실시간 타임테이블 로직
     const now = currentTime.getHours() * 60 + currentTime.getMinutes();
     const itemMin = parseMin(item.time);
     if (itemMin === null) return 'future';
-    if (now < itemMin) return 'future';
+    // 당일 첫 일정 시작 전이면 첫 항목 활성화
+    if (now < itemMin) return index === 0 ? 'current' : 'future';
     for (let j = index + 1; j < items.length; j++) {
       const nm = parseMin(items[j].time);
       if (nm !== null) return now < nm ? 'current' : 'past';
