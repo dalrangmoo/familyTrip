@@ -24,6 +24,18 @@ const dayTheme: Record<string, string> = {
   '5/29': '오타루',
   '5/30': '마지막날',
 };
+const dayIcon: Record<string, string> = {
+  '5/27': '✈️',
+  '5/28': '🏔️',
+  '5/29': '⛵',
+  '5/30': '🛍️',
+};
+const dayDesc: Record<string, string> = {
+  '5/27': '삿포로 도착! 스프카레와 징기스칸으로 첫 식사를 즐겨요.',
+  '5/28': '비에이 투어로 홋카이도 자연을 만끽해요.',
+  '5/29': '오타루 운하와 해산물 맛집 투어!',
+  '5/30': '쇼핑 마무리 후 귀국. 즐거운 여행이었어요!',
+};
   const todayKey = (() => { const n = new Date(); return `${n.getMonth()+1}/${n.getDate()}`; })();
   const [selectedDay, setSelectedDay] = useState(tripDays.includes(todayKey) ? todayKey : '5/27');
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -305,13 +317,6 @@ const dayTheme: Record<string, string> = {
     return ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
   };
 
-  const getDayFullLabel = (dateStr: string) => {
-    const [m, d] = dateStr.split('/');
-    const date = new Date(2026, parseInt(m) - 1, parseInt(d));
-    const day = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-    return `${m}월${d}일(${day})`;
-  };
-
   const formatTime = (d: Date) => {
     const yy = String(d.getFullYear()).slice(2);
     const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -327,6 +332,16 @@ const dayTheme: Record<string, string> = {
     const m = t.match(/^(\d{1,2}):(\d{2})$/);
     return m ? parseInt(m[1]) * 60 + parseInt(m[2]) : null;
   };
+  const getItemIcon = (task: string): string => {
+    if (task.includes('출발') || task.includes('탑승') || task.includes('도착') || task.includes('공항') || task.includes('TW')) return '✈️';
+    if (task.includes('호텔') || task.includes('체크인') || task.includes('베셀') || task.includes('조식')) return '🏨';
+    if (task.includes('점심') || task.includes('저녁') || task.includes('식사') || task.includes('라멘') || task.includes('카레') || task.includes('커피') || task.includes('아침')) return '🍽️';
+    if (task.includes('투어') || task.includes('관광') || task.includes('비에이') || task.includes('오타루')) return '🗺️';
+    if (task.includes('쇼핑') || task.includes('이동')) return '🛍️';
+    if (task.includes('카메라')) return '📷';
+    return '📍';
+  };
+
   const getItemStatus = (item: any, items: any[], index: number): 'past' | 'current' | 'future' => {
     const todayKey2 = `${currentTime.getMonth()+1}/${currentTime.getDate()}`;
     if (selectedDay !== todayKey2) return 'future';
@@ -407,103 +422,104 @@ const dayTheme: Record<string, string> = {
               </div>
             </div>
 
-            <h3 className="text-2xl font-[900] mb-3 px-1">오늘의 일정</h3>
-            <div className="flex border-b-2 border-[#F0F0F2] mb-5">
+            <h3 className="text-2xl font-[900] mb-4 px-1">오늘의 일정</h3>
+
+            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar mb-5">
               {tripDays.map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`flex-1 flex flex-col items-center pb-3 pt-1 relative transition-all ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>
-                  <span className={`text-[10px] font-black mb-0.5 ${selectedDay === day ? 'text-[#1A55AA]/70' : 'text-[#CCCCCC]'}`}>{getDayFullLabel(day)}</span>
-                  <span className={`text-[13px] font-[900] ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{dayTheme[day]}</span>
-                  {selectedDay === day && <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#1A55AA] rounded-full" />}
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center px-4 py-3 rounded-2xl shrink-0 min-w-[76px] transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
+                  <span className={`text-[13px] font-black ${selectedDay === day ? 'text-white' : 'text-[#555]'}`}>{day} {getDayLabel(day)}</span>
+                  <span className="text-[24px] my-1.5">{dayIcon[day]}</span>
+                  <span className={`text-[11px] font-bold ${selectedDay === day ? 'text-white/80' : 'text-[#AAA]'}`}>{dayTheme[day]}</span>
                 </button>
               ))}
             </div>
-                <div className="relative">
-                  <div className="absolute left-[19px] top-5 bottom-5 w-[2px] bg-[#EEEEEE] z-0" />
-                  {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
-                    const status = getItemStatus(item, arr, i);
-                    return (
-                    <div key={i} className="relative flex gap-3 mb-5">
-                      <div className="relative z-10 shrink-0 flex flex-col items-center">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                          status === 'current' ? 'bg-[#1A55AA] shadow-[0_0_0_5px_rgba(26,85,170,0.18)]' :
-                          status === 'past' ? 'bg-[#DDDDDD]' : 'bg-white border-2 border-[#DDDDDD]'
-                        }`}>
-                          <span className={`text-[9px] font-black leading-none text-center ${status === 'current' ? 'text-white' : status === 'past' ? 'text-[#AAAAAA]' : 'text-[#CCCCCC]'}`}>
-                            {item.time.includes(':') ? item.time : '·'}
-                          </span>
+
+            <div className="flex items-start justify-between mb-5 px-1">
+              <div className="flex-1">
+                <p className="text-[18px] font-black text-[#1A1A1A]">{selectedDay} ({getDayLabel(selectedDay)}) {dayTheme[selectedDay]}</p>
+                <p className="text-[13px] text-[#888] mt-0.5 leading-snug">{dayDesc[selectedDay]}</p>
+              </div>
+              <div className="shrink-0 ml-3 text-right">
+                <p className="text-[14px] font-black text-[#1A55AA]">{realWeather.temp}</p>
+                <p className="text-[11px] text-[#AAA]">삿포로</p>
+              </div>
+            </div>
+
+            <div className="relative">
+              {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
+                const status = getItemStatus(item, arr, i);
+                return (
+                  <div key={i} className="flex gap-3 mb-1">
+                    <div className="flex flex-col items-center w-14 shrink-0">
+                      <span className={`text-[10px] font-black mb-1 ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{item.time}</span>
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[16px] z-10 shadow-sm border-2 ${status === 'current' ? 'bg-[#1A55AA] border-[#1A55AA] shadow-[0_0_0_4px_rgba(26,85,170,0.15)]' : status === 'past' ? 'bg-[#EEEEEE] border-[#EEEEEE]' : 'bg-white border-[#E0E0E0]'}`}>{getItemIcon(item.task)}</div>
+                      {i < arr.length - 1 && <div className="w-[2px] flex-1 min-h-[24px] bg-[#EEEEEE] mt-1" />}
+                    </div>
+                    <div className={`flex-1 pb-4 ${status === 'past' ? 'opacity-45' : ''}`}>
+                      <div className={`bg-white rounded-2xl border p-4 shadow-sm transition-all ${status === 'current' ? 'border-[#1A55AA]/30 shadow-[0_4px_20px_rgba(26,85,170,0.12)]' : 'border-[#EEEEEE]'}`}>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className={`text-[16px] font-[900] leading-tight ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#1A1A1A]'}`}>{item.task}</span>
+                          <span className="text-[#CCCCCC] text-[18px] shrink-0">›</span>
                         </div>
+                        <p className="text-[13px] text-[#888] mt-1.5 leading-snug">{item.desc.split('\n')[0]}</p>
+                        {item.desc.includes('\n') && <p className="text-[12px] text-[#BBBBBB] mt-0.5 leading-snug">{item.desc.split('\n').slice(1).join(' ')}</p>}
+                        <button onClick={() => openMaps(item.task)} className={`mt-2.5 flex items-center gap-1 text-[12px] font-black ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#AAAAAA]'}`}><MapPin size={11} /> 지도 보기</button>
                       </div>
-                      <div className={`flex-1 rounded-[18px] overflow-hidden border transition-all ${
-                        status === 'current' ? 'border-[#1A55AA] shadow-[0_4px_20px_rgba(26,85,170,0.18)]' :
-                        status === 'past' ? 'border-[#EEEEEE] opacity-50' : 'border-[#EEEEEE] bg-white'
-                      }`}>
-                        <div className={`px-4 py-3 flex items-center justify-between gap-2 ${status === 'current' ? 'bg-[#1A55AA]' : 'bg-white'}`}>
-                          <div className="flex items-center gap-2 flex-1 min-w-0">
-                            <span className={`text-[11px] font-black px-2 py-0.5 rounded-full shrink-0 ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#888]'}`}>{item.time}</span>
-                            <span className={`text-[15px] font-[900] truncate ${status === 'current' ? 'text-white' : 'text-[#1A1A1A]'}`}>{item.task}</span>
-                          </div>
-                          <button onClick={() => openMaps(item.task)} className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#1A55AA]'}`}><MapPin size={13} /></button>
-                        </div>
-                        <div className={`px-4 py-3 border-t ${status === 'current' ? 'bg-[#F0F5FF] border-[#D0DEFF]' : 'bg-white border-[#F4F4F4]'}`}>
-                          {item.desc.split('\n').map((line: string, j: number) => (
-                            <p key={j} className={`text-[13px] leading-snug mb-0.5 ${status === 'current' ? 'text-[#1A55AA] font-semibold' : 'text-[#666]'}`}>{line}</p>
-                          ))}
                     </div>
                   </div>
-                </div>
-                    );
-                  })}
+                );
+              })}
             </div>
           </div>
         )}
 
         {activeTab === 'schedule' && (
           <div className="animate-in slide-in-from-right duration-500 pt-4">
-              <div className="flex border-b-2 border-[#F0F0F2] mb-6">
-                {Object.keys(fullSchedule).map(day => (
-                  <button key={day} onClick={() => setSelectedDay(day)} className={`flex-1 flex flex-col items-center pb-3 pt-1 relative transition-all ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>
-                    <span className={`text-[10px] font-black mb-0.5 ${selectedDay === day ? 'text-[#1A55AA]/70' : 'text-[#CCCCCC]'}`}>{getDayFullLabel(day)}</span>
-                    <span className={`text-[13px] font-[900] ${selectedDay === day ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{dayTheme[day]}</span>
-                    {selectedDay === day && <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-8 h-[3px] bg-[#1A55AA] rounded-full" />}
-                  </button>
+            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar mb-5">
+              {Object.keys(fullSchedule).map(day => (
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center px-4 py-3 rounded-2xl shrink-0 min-w-[76px] transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
+                  <span className={`text-[13px] font-black ${selectedDay === day ? 'text-white' : 'text-[#555]'}`}>{day} {getDayLabel(day)}</span>
+                  <span className="text-[24px] my-1.5">{dayIcon[day]}</span>
+                  <span className={`text-[11px] font-bold ${selectedDay === day ? 'text-white/80' : 'text-[#AAA]'}`}>{dayTheme[day]}</span>
+                </button>
               ))}
             </div>
-              <div className="relative">
-                <div className="absolute left-[19px] top-5 bottom-5 w-[2px] bg-[#EEEEEE] z-0" />
-                {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
-                  const status = getItemStatus(item, arr, i);
-                  return (
-                  <div key={i} className="relative flex gap-3 mb-5">
-                    <div className="relative z-10 shrink-0 flex flex-col items-center">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                        status === 'current' ? 'bg-[#1A55AA] shadow-[0_0_0_5px_rgba(26,85,170,0.18)]' :
-                        status === 'past' ? 'bg-[#DDDDDD]' : 'bg-white border-2 border-[#DDDDDD]'
-                      }`}>
-                        <span className={`text-[9px] font-black leading-none text-center ${status === 'current' ? 'text-white' : status === 'past' ? 'text-[#AAAAAA]' : 'text-[#CCCCCC]'}`}>
-                          {item.time.includes(':') ? item.time : '·'}
-                        </span>
-                      </div>
+
+            <div className="flex items-start justify-between mb-5 px-1">
+              <div className="flex-1">
+                <p className="text-[18px] font-black text-[#1A1A1A]">{selectedDay} ({getDayLabel(selectedDay)}) {dayTheme[selectedDay]}</p>
+                <p className="text-[13px] text-[#888] mt-0.5 leading-snug">{dayDesc[selectedDay]}</p>
+              </div>
+              <div className="shrink-0 ml-3 text-right">
+                <p className="text-[14px] font-black text-[#1A55AA]">{realWeather.temp}</p>
+                <p className="text-[11px] text-[#AAA]">삿포로</p>
+              </div>
+            </div>
+
+            <div className="relative">
+              {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
+                const status = getItemStatus(item, arr, i);
+                return (
+                  <div key={i} className="flex gap-3 mb-1">
+                    <div className="flex flex-col items-center w-14 shrink-0">
+                      <span className={`text-[10px] font-black mb-1 ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{item.time}</span>
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[16px] z-10 shadow-sm border-2 ${status === 'current' ? 'bg-[#1A55AA] border-[#1A55AA] shadow-[0_0_0_4px_rgba(26,85,170,0.15)]' : status === 'past' ? 'bg-[#EEEEEE] border-[#EEEEEE]' : 'bg-white border-[#E0E0E0]'}`}>{getItemIcon(item.task)}</div>
+                      {i < arr.length - 1 && <div className="w-[2px] flex-1 min-h-[24px] bg-[#EEEEEE] mt-1" />}
                     </div>
-                    <div className={`flex-1 rounded-[18px] overflow-hidden border transition-all ${
-                      status === 'current' ? 'border-[#1A55AA] shadow-[0_4px_20px_rgba(26,85,170,0.18)]' :
-                      status === 'past' ? 'border-[#EEEEEE] opacity-50' : 'border-[#EEEEEE] bg-white'
-                    }`}>
-                      <div className={`px-4 py-3 flex items-center justify-between gap-2 ${status === 'current' ? 'bg-[#1A55AA]' : 'bg-white'}`}>
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <span className={`text-[11px] font-black px-2 py-0.5 rounded-full shrink-0 ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#888]'}`}>{item.time}</span>
-                          <span className={`text-[15px] font-[900] truncate ${status === 'current' ? 'text-white' : 'text-[#1A1A1A]'}`}>{item.task}</span>
+                    <div className={`flex-1 pb-4 ${status === 'past' ? 'opacity-45' : ''}`}>
+                      <div className={`bg-white rounded-2xl border p-4 shadow-sm transition-all ${status === 'current' ? 'border-[#1A55AA]/30 shadow-[0_4px_20px_rgba(26,85,170,0.12)]' : 'border-[#EEEEEE]'}`}>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className={`text-[16px] font-[900] leading-tight ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#1A1A1A]'}`}>{item.task}</span>
+                          <span className="text-[#CCCCCC] text-[18px] shrink-0">›</span>
                         </div>
-                        <button onClick={() => openMaps(item.task)} className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all ${status === 'current' ? 'bg-white/20 text-white' : 'bg-[#F4F4F4] text-[#1A55AA]'}`}><MapPin size={13} /></button>
+                        <p className="text-[13px] text-[#888] mt-1.5 leading-snug">{item.desc.split('\n')[0]}</p>
+                        {item.desc.includes('\n') && <p className="text-[12px] text-[#BBBBBB] mt-0.5 leading-snug">{item.desc.split('\n').slice(1).join(' ')}</p>}
+                        <button onClick={() => openMaps(item.task)} className={`mt-2.5 flex items-center gap-1 text-[12px] font-black ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#AAAAAA]'}`}><MapPin size={11} /> 지도 보기</button>
                       </div>
-                      <div className={`px-4 py-3 border-t ${status === 'current' ? 'bg-[#F0F5FF] border-[#D0DEFF]' : 'bg-white border-[#F4F4F4]'}`}>
-                        {item.desc.split('\n').map((line: string, j: number) => (
-                          <p key={j} className={`text-[13px] leading-snug mb-0.5 ${status === 'current' ? 'text-[#1A55AA] font-semibold' : 'text-[#666]'}`}>{line}</p>
-                        ))}
                     </div>
                   </div>
-                </div>
-                    );
-                  })}
+                );
+              })}
             </div>
           </div>
         )}
