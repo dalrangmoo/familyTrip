@@ -424,7 +424,7 @@ const dayDesc: Record<string, string> = {
 
             <div className="flex items-center justify-between mb-4 px-1">
               <h3 className="text-2xl font-[900]">오늘의 일정</h3>
-              <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="flex items-center gap-0.5 text-[14px] font-black text-[#1A55AA]">전체일정 보기 <span className="text-[18px] leading-none">›</span></button>
+              <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#C8D8EE] bg-white text-[#1A55AA] text-[13px] font-black shadow-sm active:scale-95 transition-all">전체일정 보기 <span className="text-[15px] leading-none">›</span></button>
             </div>
 
             <div className="grid grid-cols-4 gap-1.5 mb-5">
@@ -451,7 +451,7 @@ const dayDesc: Record<string, string> = {
 
             <div className="relative">
               {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
-                const status = i === 0 ? 'current' : getItemStatus(item, arr, i); // 테스트용
+                const status = getItemStatus(item, arr, i);
                 return (
                   <div key={i} className="flex gap-3 mb-1">
                     <div className="flex flex-col items-center w-14 shrink-0">
@@ -465,7 +465,7 @@ const dayDesc: Record<string, string> = {
                           <div className="shine-card-inner">
                             <div className="flex items-center justify-between gap-2 mb-2">
                               <span className="text-[20px] font-[900] leading-tight text-[#E13B30]">{item.task}</span>
-                              <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#E13B30]"><MapPin size={13} /> 지도</button>
+                              <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#E13B30] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={16} /></button>
                             </div>
                             <ul className="space-y-1.5 list-none text-left">
                               {item.desc.split('\n').map((line: string, j: number) => (
@@ -478,7 +478,7 @@ const dayDesc: Record<string, string> = {
                         <div className="bg-white rounded-2xl border border-[#E8E8E8] p-4 shadow-sm">
                           <div className="flex items-center justify-between gap-2 mb-2">
                             <span className="text-[20px] font-[900] leading-tight text-[#111]">{item.task}</span>
-                            <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#888]"><MapPin size={13} /> 지도</button>
+                            <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#1A55AA] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={16} /></button>
                           </div>
                           <ul className="space-y-1.5 list-none text-left">
                             {item.desc.split('\n').map((line: string, j: number) => (
@@ -520,7 +520,7 @@ const dayDesc: Record<string, string> = {
 
             <div className="relative">
               {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
-                const status = i === 0 ? 'current' : getItemStatus(item, arr, i); // 테스트용
+                const status = getItemStatus(item, arr, i);
                 return (
                   <div key={i} className="flex gap-3 mb-1">
                     <div className="flex flex-col items-center w-14 shrink-0">
@@ -534,7 +534,7 @@ const dayDesc: Record<string, string> = {
                           <div className="shine-card-inner">
                             <div className="flex items-center justify-between gap-2 mb-2">
                               <span className="text-[20px] font-[900] leading-tight text-[#E13B30]">{item.task}</span>
-                              <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#E13B30]"><MapPin size={13} /> 지도</button>
+                              <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#E13B30] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={16} /></button>
                             </div>
                             <ul className="space-y-1.5 list-none text-left">
                               {item.desc.split('\n').map((line: string, j: number) => (
@@ -547,7 +547,7 @@ const dayDesc: Record<string, string> = {
                         <div className="bg-white rounded-2xl border border-[#E8E8E8] p-4 shadow-sm">
                           <div className="flex items-center justify-between gap-2 mb-2">
                             <span className="text-[20px] font-[900] leading-tight text-[#111]">{item.task}</span>
-                            <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#888]"><MapPin size={13} /> 지도</button>
+                            <button onClick={() => openMaps(item.task)} className="shrink-0 w-10 h-10 bg-[#1A55AA] rounded-full flex items-center justify-center text-white shadow-md active:scale-90"><MapPin size={16} /></button>
                           </div>
                           <ul className="space-y-1.5 list-none text-left">
                             {item.desc.split('\n').map((line: string, j: number) => (
