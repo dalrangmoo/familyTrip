@@ -94,7 +94,7 @@ const dayDesc: Record<string, string> = {
     ['비에이 투어 시작', 'https://maps.app.goo.gl/xnZ7xkeymWsZv7s7A?g_st=ac'],
     ['비에이 관광',     'https://maps.app.goo.gl/wGwDBkfLjMAR5MBw9'],
     ['후속 투어',       'https://maps.app.goo.gl/wGwDBkfLjMAR5MBw9'],
-    ['다이마루',        'https://maps.app.goo.gl/y68vzoGdsuNRWZ7h8'],
+    ['다이마루',        'https://www.google.com/maps/place/%EB%8B%A4%EC%9D%B4%EB%A7%88%EB%A3%A8+1+Chome-7-2+Nakamachi,+Biei,+Kamikawa+District,+Hokkaido+071-0207+%EC%9D%BC%EB%B3%B8/data=!4m2!3m1!1s0x5f0cc5c369df0d79:0x9ff82fcf46ad7f0c'],
     ['카도야',         'https://maps.app.goo.gl/8mRMuBu3LAnVCMVD8'],
     ['겐텐소노',        'https://maps.app.goo.gl/x4cA7quzbpjNuEoC9'],
     ['오타루',         'https://maps.app.goo.gl/F8GFdBmUgH61wTfW8'],
@@ -161,7 +161,7 @@ const dayDesc: Record<string, string> = {
       { time: '08:00', task: '호텔 조식', desc: '베셀 호텔 조식 이용 후 투어 집합 장소로 이동.' },
       { time: '09:30', task: '비에이 투어 시작', desc: '다이와 로이넷 호텔 앞 집합.\n흰그림자투어 / 네이버 예약 완료.' },
       { time: '오전', task: '비에이 관광', desc: '휴게소(10분) → 흰수염폭포(20분) → 청의호수(30분)' },
-      { time: '점심', task: '점심: 비에이역', desc: '비에이역 주변 식사 (약 60분)' },
+      { time: '점심', task: '점심: 다이마루', desc: '비에이역 앞 돈카츠 맛집.\n비에이 투어 중 점심 식사.' },
       { time: '오후', task: '후속 투어', desc: '팜도미타(60분) → 휴게소(10분)\n스스키노 19:00 도착' },
       { time: '19:30', task: '저녁: 카도야', desc: '장어덮밥 식사.' }
     ],
@@ -412,35 +412,65 @@ const dayDesc: Record<string, string> = {
               )}
             </div>
             
-            <div className="bg-white rounded-[24px] border border-[#EEEEEE] px-5 py-4 shadow-sm mb-6">
-              <p className="text-[13px] font-black text-[#1A1A1A] text-center mb-3">{formatTime(currentTime)}</p>
+            {/* 현재 시각 카드 */}
+            <div className="rounded-[18px] bg-gradient-to-r from-[#1A55AA] to-[#3B7DD8] px-5 py-4 mb-3 flex flex-col items-center justify-center shadow-sm text-center">
+              <p className="text-white/60 text-[12px] font-black mb-1">현재 시각</p>
+              <p className="text-white text-[26px] font-[900] tracking-tight">{formatTime(currentTime)}</p>
+            </div>
+
+            {/* 항공편 카드 */}
+            <div className="bg-white rounded-[18px] border border-[#E8EEF8] px-5 py-4 shadow-sm mb-6">
+              <div className="flex items-center gap-1.5 mb-3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1A55AA" stroke="none">
+                  <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                </svg>
+                <span className="text-[12px] font-black text-[#888]">항공편 정보</span>
+              </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[15px] font-[900]">인천</span>
-                    <span className="text-[12px] text-[#BBBBBB]">→</span>
-                    <span className="text-[15px] font-[900]">삿포로</span>
-                  </div>
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-black text-[#1A55AA]">TW0263</span>
-                    <span className="text-[15px] font-[900]">10:10</span>
-                    <span className="text-[12px] text-[#BBBBBB]">→</span>
-                    <span className="text-[15px] font-[900]">13:00</span>
+                    <div className="text-center">
+                      <p className="text-[16px] font-[900] leading-tight">ICN</p>
+                      <p className="text-[10px] text-[#AAA] font-bold">인천</p>
+                    </div>
+                    <div className="flex flex-col items-center px-2">
+                      <span className="text-[10px] font-black text-[#1A55AA] mb-0.5">TW0263</span>
+                      <div className="flex items-center gap-0.5">
+                        <div className="w-8 h-[1.5px] bg-[#DDDDDD]"/>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="#1A55AA"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                        <div className="w-8 h-[1.5px] bg-[#DDDDDD]"/>
+                      </div>
+                      <span className="text-[10px] text-[#AAA] mt-0.5">5/27</span>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[16px] font-[900] leading-tight">CTS</p>
+                      <p className="text-[10px] text-[#AAA] font-bold">삿포로</p>
+                    </div>
                   </div>
+                  <p className="text-[15px] font-[900] text-[#1A1A1A]">10:10 → 13:00</p>
                 </div>
-                <div className="border-t border-[#F4F4F4]" />
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[15px] font-[900]">삿포로</span>
-                    <span className="text-[12px] text-[#BBBBBB]">→</span>
-                    <span className="text-[15px] font-[900]">인천</span>
-                  </div>
+                <div className="border-t border-[#F4F4F4]"/>
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-black text-[#1A55AA]">TW0264</span>
-                    <span className="text-[15px] font-[900]">14:30</span>
-                    <span className="text-[12px] text-[#BBBBBB]">→</span>
-                    <span className="text-[15px] font-[900]">17:40</span>
+                    <div className="text-center">
+                      <p className="text-[16px] font-[900] leading-tight">CTS</p>
+                      <p className="text-[10px] text-[#AAA] font-bold">삿포로</p>
+                    </div>
+                    <div className="flex flex-col items-center px-2">
+                      <span className="text-[10px] font-black text-[#1A55AA] mb-0.5">TW0264</span>
+                      <div className="flex items-center gap-0.5">
+                        <div className="w-8 h-[1.5px] bg-[#DDDDDD]"/>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="#1A55AA"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+                        <div className="w-8 h-[1.5px] bg-[#DDDDDD]"/>
+                      </div>
+                      <span className="text-[10px] text-[#AAA] mt-0.5">5/30</span>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[16px] font-[900] leading-tight">ICN</p>
+                      <p className="text-[10px] text-[#AAA] font-bold">인천</p>
+                    </div>
                   </div>
+                  <p className="text-[15px] font-[900] text-[#1A1A1A]">14:30 → 17:40</p>
                 </div>
               </div>
             </div>
