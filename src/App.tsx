@@ -463,7 +463,7 @@ const dayDesc: Record<string, string> = {
                 </svg>
                 오늘의 일정
               </h3>
-              <div className="relative inline-flex rounded-xl overflow-hidden ring-2 ring-[#1A1A1A]">
+              <div className="relative inline-flex rounded-xl overflow-hidden ring-[0.5px] ring-[#1A1A1A]">
                 <span className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
                   <span className="absolute -inset-full animate-spin [animation-duration:4s] bg-[conic-gradient(from_0deg,_#1A55AA_0deg,_#1A55AA_40deg,_transparent_60deg)]" />
                 </span>
