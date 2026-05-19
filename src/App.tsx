@@ -377,9 +377,12 @@ export default function DallangmuApp() {
             </div>
 
             <h3 className="text-2xl font-[900] mb-3 px-1">오늘의 일정</h3>
-            <div className="flex gap-2 mb-5 overflow-x-auto pb-1 no-scrollbar">
+            <div className="grid grid-cols-4 gap-1 bg-[#F0F0F2] p-1 rounded-2xl mb-5">
               {tripDays.map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`px-5 py-2 shrink-0 text-[15px] font-[900] rounded-full border transition-all ${selectedDay === day ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white text-[#999999] border-[#EEEEEE]'}`}>{day}</button>
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-2.5 rounded-xl transition-all ${selectedDay === day ? 'bg-[#1A55AA] text-white shadow-md' : 'text-[#AAAAAA]'}`}>
+                  <span className={`text-[11px] font-black mb-0.5 ${selectedDay === day ? 'text-white/70' : 'text-[#CCCCCC]'}`}>{getDayLabel(day)}</span>
+                  <span className="text-[15px] font-[900]">{day}</span>
+                </button>
               ))}
             </div>
             <div className="space-y-4">
@@ -410,9 +413,12 @@ export default function DallangmuApp() {
 
         {activeTab === 'schedule' && (
           <div className="animate-in slide-in-from-right duration-500 pt-4">
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
+            <div className="grid grid-cols-4 gap-1 bg-[#F0F0F2] p-1 rounded-2xl mb-6">
               {Object.keys(fullSchedule).map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`px-5 py-2 shrink-0 text-[15px] font-[900] rounded-full border transition-all ${selectedDay === day ? 'bg-[#1A1A1A] text-white' : 'bg-white text-[#999999]'}`}>{day}</button>
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-2.5 rounded-xl transition-all ${selectedDay === day ? 'bg-[#1A55AA] text-white shadow-md' : 'text-[#AAAAAA]'}`}>
+                  <span className={`text-[11px] font-black mb-0.5 ${selectedDay === day ? 'text-white/70' : 'text-[#CCCCCC]'}`}>{getDayLabel(day)}</span>
+                  <span className="text-[15px] font-[900]">{day}</span>
+                </button>
               ))}
             </div>
             <div className="space-y-4">
