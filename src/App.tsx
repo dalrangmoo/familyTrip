@@ -360,7 +360,7 @@ const dayDesc: Record<string, string> = {
     <div className="w-full bg-[#FBFBFC] min-h-screen font-sans text-[#1A1A1A] overflow-x-hidden flex flex-col items-center">
       
       <header className="w-full bg-white z-[100] border-b border-[#EEEEEE] max-w-md sticky top-0 overflow-hidden">
-        <img src={activeTab === 'schedule' ? "https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos3.png" : "https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png"} alt="HEEHEE TOUR" className="w-full block object-contain" />
+        <img src={activeTab === 'schedule' ? "https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos3.png" : "https://www.starfield.co.kr/cdn/images/event/regular2/dalrangmoos.png"} alt="HEEHEE TOUR" className="w-full block object-contain cursor-pointer" onClick={() => { setActiveTab('home'); setIsMenuOpen(false); window.scrollTo(0,0); }} />
       </header>
 
       <main className="w-full max-w-md px-4 pb-24">
@@ -422,10 +422,14 @@ const dayDesc: Record<string, string> = {
               </div>
             </div>
 
-            <h3 className="text-2xl font-[900] mb-4 px-1">오늘의 일정</h3>
+            <div className="flex items-center justify-between mb-4 px-1">
+              <h3 className="text-2xl font-[900]">오늘의 일정</h3>
+              <button onClick={() => { setActiveTab('schedule'); window.scrollTo(0,0); }} className="flex items-center gap-0.5 text-[14px] font-black text-[#1A55AA]">전체일정 보기 <span className="text-[18px] leading-none">›</span></button>
+            </div>
 
             <div className="grid grid-cols-4 gap-1.5 mb-5">
               {tripDays.map(day => (
+
                 <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-3 rounded-2xl w-full transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
                   <span className={`text-[15px] font-black ${selectedDay === day ? 'text-white' : 'text-[#333]'}`}>{day} {getDayLabel(day)}</span>
                   <span className="text-[26px] my-1.5">{dayIcon[day]}</span>
@@ -447,7 +451,7 @@ const dayDesc: Record<string, string> = {
 
             <div className="relative">
               {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
-                const status = getItemStatus(item, arr, i);
+                const status = i === 0 ? 'current' : getItemStatus(item, arr, i); // 테스트용
                 return (
                   <div key={i} className="flex gap-3 mb-1">
                     <div className="flex flex-col items-center w-14 shrink-0">
@@ -516,7 +520,7 @@ const dayDesc: Record<string, string> = {
 
             <div className="relative">
               {fullSchedule[selectedDay].map((item: any, i: number, arr: any[]) => {
-                const status = getItemStatus(item, arr, i);
+                const status = i === 0 ? 'current' : getItemStatus(item, arr, i); // 테스트용
                 return (
                   <div key={i} className="flex gap-3 mb-1">
                     <div className="flex flex-col items-center w-14 shrink-0">
