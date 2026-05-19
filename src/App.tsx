@@ -358,7 +358,24 @@ const dayDesc: Record<string, string> = {
     // 오늘 탭: 실시간 타임테이블 로직
     const now = currentTime.getHours() * 60 + currentTime.getMinutes();
     const itemMin = parseMin(item.time);
-    if (itemMin === null) return 'future';
+
+    // "오후/오전/점심" 등 시간 미정 항목: 앞뒤 파싱 가능한 시간 사이에 같이 활성화
+    if (itemMin === null) {
+      let prevMin: number | null = null;
+      for (let j = index - 1; j >= 0; j--) {
+        const pm = parseMin(items[j].time);
+        if (pm !== null) { prevMin = pm; break; }
+      }
+      let nextMin: number | null = null;
+      for (let j = index + 1; j < items.length; j++) {
+        const nm = parseMin(items[j].time);
+        if (nm !== null) { nextMin = nm; break; }
+      }
+      if (prevMin === null || now < prevMin) return 'future';
+      if (nextMin !== null && now >= nextMin) return 'past';
+      return 'current';
+    }
+
     // 당일 첫 일정 시작 전이면 첫 항목 활성화
     if (now < itemMin) return index === 0 ? 'current' : 'future';
     for (let j = index + 1; j < items.length; j++) {
@@ -446,7 +463,7 @@ const dayDesc: Record<string, string> = {
                 </svg>
                 오늘의 일정
               </h3>
-              <div className="relative inline-flex rounded-xl overflow-hidden">
+              <div className="relative inline-flex rounded-xl overflow-hidden ring-2 ring-[#1A1A1A]">
                 <span className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
                   <span className="absolute -inset-full animate-spin [animation-duration:4s] bg-[conic-gradient(from_0deg,_#1A55AA_0deg,_#1A55AA_40deg,_transparent_60deg)]" />
                 </span>
