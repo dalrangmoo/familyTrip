@@ -109,3 +109,32 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+@keyframes shine-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.shine-card {
+  position: relative;
+  border-radius: 18px;
+  padding: 2px;
+  overflow: hidden;
+  background: white;
+}
+
+.shine-card::before {
+  content: '';
+  position: absolute;
+  inset: -120%;
+  background: conic-gradient(from 0deg, transparent 0%, #E13B30 15%, #FF8C00 35%, #FFD700 50%, transparent 60%);
+  animation: shine-rotate 2.5s linear infinite;
+}
+
+.shine-card-inner {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  z-index: 1;
+  padding: 16px;
+}

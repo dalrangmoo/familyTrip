@@ -424,24 +424,24 @@ const dayDesc: Record<string, string> = {
 
             <h3 className="text-2xl font-[900] mb-4 px-1">오늘의 일정</h3>
 
-            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar mb-5">
+            <div className="grid grid-cols-4 gap-1.5 mb-5">
               {tripDays.map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center px-4 py-3 rounded-2xl shrink-0 min-w-[76px] transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
-                  <span className={`text-[13px] font-black ${selectedDay === day ? 'text-white' : 'text-[#555]'}`}>{day} {getDayLabel(day)}</span>
-                  <span className="text-[24px] my-1.5">{dayIcon[day]}</span>
-                  <span className={`text-[11px] font-bold ${selectedDay === day ? 'text-white/80' : 'text-[#AAA]'}`}>{dayTheme[day]}</span>
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-3 rounded-2xl w-full transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
+                  <span className={`text-[15px] font-black ${selectedDay === day ? 'text-white' : 'text-[#333]'}`}>{day} {getDayLabel(day)}</span>
+                  <span className="text-[26px] my-1.5">{dayIcon[day]}</span>
+                  <span className={`text-[13px] font-bold ${selectedDay === day ? 'text-white/90' : 'text-[#555]'}`}>{dayTheme[day]}</span>
                 </button>
               ))}
             </div>
 
             <div className="flex items-start justify-between mb-5 px-1">
               <div className="flex-1">
-                <p className="text-[18px] font-black text-[#1A1A1A]">{selectedDay} ({getDayLabel(selectedDay)}) {dayTheme[selectedDay]}</p>
-                <p className="text-[13px] text-[#888] mt-0.5 leading-snug">{dayDesc[selectedDay]}</p>
+                <p className="text-[22px] font-black text-[#111111]">{selectedDay} ({getDayLabel(selectedDay)}) {dayTheme[selectedDay]}</p>
+                <p className="text-[16px] text-[#444] mt-1 leading-snug">{dayDesc[selectedDay]}</p>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-[14px] font-black text-[#1A55AA]">{realWeather.temp}</p>
-                <p className="text-[11px] text-[#AAA]">삿포로</p>
+                <p className="text-[17px] font-black text-[#1A55AA]">{realWeather.temp}</p>
+                <p className="text-[13px] text-[#666]">삿포로</p>
               </div>
             </div>
 
@@ -451,20 +451,38 @@ const dayDesc: Record<string, string> = {
                 return (
                   <div key={i} className="flex gap-3 mb-1">
                     <div className="flex flex-col items-center w-14 shrink-0">
-                      <span className={`text-[10px] font-black mb-1 ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{item.time}</span>
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[16px] z-10 shadow-sm border-2 ${status === 'current' ? 'bg-[#1A55AA] border-[#1A55AA] shadow-[0_0_0_4px_rgba(26,85,170,0.15)]' : status === 'past' ? 'bg-[#EEEEEE] border-[#EEEEEE]' : 'bg-white border-[#E0E0E0]'}`}>{getItemIcon(item.task)}</div>
+                      <span className={`text-[13px] font-black mb-1 ${status === 'current' ? 'text-[#E13B30]' : 'text-[#777]'}`}>{item.time}</span>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[18px] z-10 shadow-sm border-2 ${status === 'current' ? 'bg-[#E13B30] border-[#E13B30] shadow-[0_0_0_4px_rgba(225,59,48,0.2)]' : status === 'past' ? 'bg-[#EEEEEE] border-[#EEEEEE]' : 'bg-white border-[#E0E0E0]'}`}>{getItemIcon(item.task)}</div>
                       {i < arr.length - 1 && <div className="w-[2px] flex-1 min-h-[24px] bg-[#EEEEEE] mt-1" />}
                     </div>
-                    <div className={`flex-1 pb-4 ${status === 'past' ? 'opacity-45' : ''}`}>
-                      <div className={`bg-white rounded-2xl border p-4 shadow-sm transition-all ${status === 'current' ? 'border-[#1A55AA]/30 shadow-[0_4px_20px_rgba(26,85,170,0.12)]' : 'border-[#EEEEEE]'}`}>
-                        <div className="flex items-center justify-between gap-2">
-                          <span className={`text-[16px] font-[900] leading-tight ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#1A1A1A]'}`}>{item.task}</span>
-                          <span className="text-[#CCCCCC] text-[18px] shrink-0">›</span>
+                    <div className={`flex-1 pb-5 ${status === 'past' ? 'opacity-40' : ''}`}>
+                      {status === 'current' ? (
+                        <div className="shine-card">
+                          <div className="shine-card-inner">
+                            <div className="flex items-center justify-between gap-2 mb-2">
+                              <span className="text-[20px] font-[900] leading-tight text-[#E13B30]">{item.task}</span>
+                              <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#E13B30]"><MapPin size={13} /> 지도</button>
+                            </div>
+                            <ul className="space-y-1.5 list-none text-left">
+                              {item.desc.split('\n').map((line: string, j: number) => (
+                                <li key={j} className="relative pl-4 text-[16px] text-[#222] leading-snug before:content-['•'] before:absolute before:left-0 before:text-[#E13B30] before:font-black">{line}</li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
-                        <p className="text-[13px] text-[#888] mt-1.5 leading-snug">{item.desc.split('\n')[0]}</p>
-                        {item.desc.includes('\n') && <p className="text-[12px] text-[#BBBBBB] mt-0.5 leading-snug">{item.desc.split('\n').slice(1).join(' ')}</p>}
-                        <button onClick={() => openMaps(item.task)} className={`mt-2.5 flex items-center gap-1 text-[12px] font-black ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#AAAAAA]'}`}><MapPin size={11} /> 지도 보기</button>
-                      </div>
+                      ) : (
+                        <div className="bg-white rounded-2xl border border-[#E8E8E8] p-4 shadow-sm">
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <span className="text-[20px] font-[900] leading-tight text-[#111]">{item.task}</span>
+                            <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#888]"><MapPin size={13} /> 지도</button>
+                          </div>
+                          <ul className="space-y-1.5 list-none text-left">
+                            {item.desc.split('\n').map((line: string, j: number) => (
+                              <li key={j} className="relative pl-4 text-[16px] text-[#444] leading-snug before:content-['•'] before:absolute before:left-0 before:text-[#1A55AA] before:font-black">{line}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -475,24 +493,24 @@ const dayDesc: Record<string, string> = {
 
         {activeTab === 'schedule' && (
           <div className="animate-in slide-in-from-right duration-500 pt-4">
-            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar mb-5">
+            <div className="grid grid-cols-4 gap-1.5 mb-5">
               {Object.keys(fullSchedule).map(day => (
-                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center px-4 py-3 rounded-2xl shrink-0 min-w-[76px] transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
-                  <span className={`text-[13px] font-black ${selectedDay === day ? 'text-white' : 'text-[#555]'}`}>{day} {getDayLabel(day)}</span>
-                  <span className="text-[24px] my-1.5">{dayIcon[day]}</span>
-                  <span className={`text-[11px] font-bold ${selectedDay === day ? 'text-white/80' : 'text-[#AAA]'}`}>{dayTheme[day]}</span>
+                <button key={day} onClick={() => setSelectedDay(day)} className={`flex flex-col items-center py-3 rounded-2xl w-full transition-all border ${selectedDay === day ? 'bg-[#1A55AA] text-white border-[#1A55AA] shadow-md' : 'bg-[#F4F6FA] text-[#999] border-transparent'}`}>
+                  <span className={`text-[15px] font-black ${selectedDay === day ? 'text-white' : 'text-[#333]'}`}>{day} {getDayLabel(day)}</span>
+                  <span className="text-[26px] my-1.5">{dayIcon[day]}</span>
+                  <span className={`text-[13px] font-bold ${selectedDay === day ? 'text-white/90' : 'text-[#555]'}`}>{dayTheme[day]}</span>
                 </button>
               ))}
             </div>
 
             <div className="flex items-start justify-between mb-5 px-1">
               <div className="flex-1">
-                <p className="text-[18px] font-black text-[#1A1A1A]">{selectedDay} ({getDayLabel(selectedDay)}) {dayTheme[selectedDay]}</p>
-                <p className="text-[13px] text-[#888] mt-0.5 leading-snug">{dayDesc[selectedDay]}</p>
+                <p className="text-[22px] font-black text-[#111111]">{selectedDay} ({getDayLabel(selectedDay)}) {dayTheme[selectedDay]}</p>
+                <p className="text-[16px] text-[#444] mt-1 leading-snug">{dayDesc[selectedDay]}</p>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-[14px] font-black text-[#1A55AA]">{realWeather.temp}</p>
-                <p className="text-[11px] text-[#AAA]">삿포로</p>
+                <p className="text-[17px] font-black text-[#1A55AA]">{realWeather.temp}</p>
+                <p className="text-[13px] text-[#666]">삿포로</p>
               </div>
             </div>
 
@@ -502,20 +520,38 @@ const dayDesc: Record<string, string> = {
                 return (
                   <div key={i} className="flex gap-3 mb-1">
                     <div className="flex flex-col items-center w-14 shrink-0">
-                      <span className={`text-[10px] font-black mb-1 ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#BBBBBB]'}`}>{item.time}</span>
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[16px] z-10 shadow-sm border-2 ${status === 'current' ? 'bg-[#1A55AA] border-[#1A55AA] shadow-[0_0_0_4px_rgba(26,85,170,0.15)]' : status === 'past' ? 'bg-[#EEEEEE] border-[#EEEEEE]' : 'bg-white border-[#E0E0E0]'}`}>{getItemIcon(item.task)}</div>
+                      <span className={`text-[13px] font-black mb-1 ${status === 'current' ? 'text-[#E13B30]' : 'text-[#777]'}`}>{item.time}</span>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[18px] z-10 shadow-sm border-2 ${status === 'current' ? 'bg-[#E13B30] border-[#E13B30] shadow-[0_0_0_4px_rgba(225,59,48,0.2)]' : status === 'past' ? 'bg-[#EEEEEE] border-[#EEEEEE]' : 'bg-white border-[#E0E0E0]'}`}>{getItemIcon(item.task)}</div>
                       {i < arr.length - 1 && <div className="w-[2px] flex-1 min-h-[24px] bg-[#EEEEEE] mt-1" />}
                     </div>
-                    <div className={`flex-1 pb-4 ${status === 'past' ? 'opacity-45' : ''}`}>
-                      <div className={`bg-white rounded-2xl border p-4 shadow-sm transition-all ${status === 'current' ? 'border-[#1A55AA]/30 shadow-[0_4px_20px_rgba(26,85,170,0.12)]' : 'border-[#EEEEEE]'}`}>
-                        <div className="flex items-center justify-between gap-2">
-                          <span className={`text-[16px] font-[900] leading-tight ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#1A1A1A]'}`}>{item.task}</span>
-                          <span className="text-[#CCCCCC] text-[18px] shrink-0">›</span>
+                    <div className={`flex-1 pb-5 ${status === 'past' ? 'opacity-40' : ''}`}>
+                      {status === 'current' ? (
+                        <div className="shine-card">
+                          <div className="shine-card-inner">
+                            <div className="flex items-center justify-between gap-2 mb-2">
+                              <span className="text-[20px] font-[900] leading-tight text-[#E13B30]">{item.task}</span>
+                              <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#E13B30]"><MapPin size={13} /> 지도</button>
+                            </div>
+                            <ul className="space-y-1.5 list-none text-left">
+                              {item.desc.split('\n').map((line: string, j: number) => (
+                                <li key={j} className="relative pl-4 text-[16px] text-[#222] leading-snug before:content-['•'] before:absolute before:left-0 before:text-[#E13B30] before:font-black">{line}</li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
-                        <p className="text-[13px] text-[#888] mt-1.5 leading-snug">{item.desc.split('\n')[0]}</p>
-                        {item.desc.includes('\n') && <p className="text-[12px] text-[#BBBBBB] mt-0.5 leading-snug">{item.desc.split('\n').slice(1).join(' ')}</p>}
-                        <button onClick={() => openMaps(item.task)} className={`mt-2.5 flex items-center gap-1 text-[12px] font-black ${status === 'current' ? 'text-[#1A55AA]' : 'text-[#AAAAAA]'}`}><MapPin size={11} /> 지도 보기</button>
-                      </div>
+                      ) : (
+                        <div className="bg-white rounded-2xl border border-[#E8E8E8] p-4 shadow-sm">
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <span className="text-[20px] font-[900] leading-tight text-[#111]">{item.task}</span>
+                            <button onClick={() => openMaps(item.task)} className="shrink-0 flex items-center gap-1 text-[13px] font-black text-[#888]"><MapPin size={13} /> 지도</button>
+                          </div>
+                          <ul className="space-y-1.5 list-none text-left">
+                            {item.desc.split('\n').map((line: string, j: number) => (
+                              <li key={j} className="relative pl-4 text-[16px] text-[#444] leading-snug before:content-['•'] before:absolute before:left-0 before:text-[#1A55AA] before:font-black">{line}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
