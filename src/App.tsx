@@ -17,7 +17,9 @@ interface DayWeather {
 
 export default function DallangmuApp() {
   const [activeTab, setActiveTab] = useState('home');
-  const [selectedDay, setSelectedDay] = useState('5/27');
+  const tripDays = ['5/27', '5/28', '5/29', '5/30'];
+  const todayKey = (() => { const n = new Date(); return `${n.getMonth()+1}/${n.getDate()}`; })();
+  const [selectedDay, setSelectedDay] = useState(tripDays.includes(todayKey) ? todayKey : '5/27');
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -374,9 +376,14 @@ export default function DallangmuApp() {
               </div>
             </div>
 
-            <h3 className="text-2xl font-[900] mb-5 px-1">오늘의 일정 (5/27)</h3>
+            <h3 className="text-2xl font-[900] mb-3 px-1">오늘의 일정</h3>
+            <div className="flex gap-2 mb-5 overflow-x-auto pb-1 no-scrollbar">
+              {tripDays.map(day => (
+                <button key={day} onClick={() => setSelectedDay(day)} className={`px-5 py-2 shrink-0 text-[15px] font-[900] rounded-full border transition-all ${selectedDay === day ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-white text-[#999999] border-[#EEEEEE]'}`}>{day}</button>
+              ))}
+            </div>
             <div className="space-y-4">
-              {fullSchedule['5/27'].map((item, i) => (
+              {fullSchedule[selectedDay].map((item, i) => (
                 <div key={i} className="bg-white rounded-[24px] border border-[#E8E8E8] shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden flex items-stretch">
                   <div className="w-[6px] bg-[#1A55AA] shrink-0" />
                   <div className="flex-1 p-5 flex items-start justify-between gap-3">
