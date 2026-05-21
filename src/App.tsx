@@ -501,7 +501,7 @@ const dayDesc: Record<string, string> = {
       <main className="w-full max-w-md px-4 pb-24">
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
-            <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
+            <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-white/20 text-white`}>
               {/* 삿포로 현재 날씨 고정 */}
               {weatherMap.sapporo ? (() => {
                 const cur = weatherMap.sapporo.current;
@@ -531,13 +531,13 @@ const dayDesc: Record<string, string> = {
               )}
 
               {/* 4일 그리드: 날짜별 방문 도시 날씨 */}
-              <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10 mb-2.5">
+              <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-white/30 mb-2.5">
                 {(['5/27','5/28','5/29','5/30'] as const).map((day) => {
                   const cityKey = DAY_CITY_MAP[day];
                   const cityLabel = cityKey === 'sapporo' ? '삿포로' : cityKey === 'biei' ? '비에이' : '오타루';
                   const dayWeather = weatherMap[cityKey]?.daily.find((d) => d.date === day);
                   return (
-                    <div key={day} className="flex flex-col items-center gap-0.5 bg-white/80 backdrop-blur-sm rounded-xl py-2 px-1 border border-white shadow-sm">
+                    <div key={day} className="flex flex-col items-center gap-0.5 bg-white/80 backdrop-blur-sm rounded-xl py-2 px-1 border border-white shadow-sm text-[#1A1A1A]">
                       <span className="text-[10px] font-black opacity-90 leading-tight">{cityLabel}</span>
                       <span className="text-[10px] font-black opacity-75 leading-tight">{`${String(day.split('/')[0]).padStart(2,'0')}/${String(day.split('/')[1]).padStart(2,'0')}(${getDayLabel(day)})`}</span>
                       <div className="my-0.5">{dayWeather ? getWeatherIcon(dayWeather.code, 24) : <Cloud size={24} className="text-gray-400" />}</div>
@@ -555,7 +555,7 @@ const dayDesc: Record<string, string> = {
 
               {/* 코디 — 하단 1번만, 삿포로 현재 기온 기준 */}
               {weatherMap.sapporo && (
-                <p className="text-[14px] font-bold text-center whitespace-pre-line leading-snug border-t border-black/20 pt-2.5">
+                <p className="text-[14px] font-bold text-center whitespace-pre-line leading-snug border-t border-white/30 pt-2.5">
                   {getCody(parseInt(weatherMap.sapporo.current.temp))}
                 </p>
               )}
