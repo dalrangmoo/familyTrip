@@ -509,6 +509,7 @@ const dayDesc: Record<string, string> = {
                   <>
                     <div className={`flex items-center justify-between px-4 py-2.5 rounded-xl ${w.box} shadow-inner mb-1.5`}>
                       <div>
+                        <p className="text-[11px] font-black opacity-50 mb-0.5">오늘({currentTime.getMonth()+1}/{currentTime.getDate()}) 삿포로 날씨</p>
                         <p className="text-[26px] font-[1000] leading-tight">삿포로 {cur.temp}</p>
                         <p className="text-[13px] font-bold opacity-60">체감 {cur.apparentTemp}</p>
                       </div>
