@@ -391,10 +391,10 @@ const dayDesc: Record<string, string> = {
 
   const getW = () => {
     const code = weatherMap.sapporo?.current.code ?? 0;
-    if (code <= 1)  return { bg: "from-[#FFD740] to-[#FF8F00]", box: "bg-amber-500/40",  line: "border-amber-500/50" };
-    if (code <= 3)  return { bg: "from-[#40C4FF] to-[#0091EA]", box: "bg-sky-500/40",    line: "border-sky-500/50" };
-    if (code <= 67) return { bg: "from-[#00BCD4] to-[#006064]", box: "bg-cyan-600/40",   line: "border-cyan-600/50" };
-    return           { bg: "from-[#CE93D8] to-[#7B1FA2]", box: "bg-purple-600/40", line: "border-purple-600/50" };
+    if (code <= 1)  return { bg: "from-[#FFF59D] to-[#FFD54F]", box: "bg-amber-400/25", line: "border-amber-400/40" };
+    if (code <= 3)  return { bg: "from-[#B3E5FC] to-[#E1F5FE]", box: "bg-sky-400/20",   line: "border-sky-400/30" };
+    if (code <= 67) return { bg: "from-[#80DEEA] to-[#B2EBF2]", box: "bg-cyan-400/20",  line: "border-cyan-400/30" };
+    return           { bg: "from-[#CE93D8] to-[#EDE7F6]", box: "bg-purple-400/20", line: "border-purple-400/30" };
   };
   const getWeatherMessage = (w: CurrentWeather): string => {
     if (w.precipProb >= 60) return "비 가능성이 높아요. 우산을 꼭 챙기세요. ☂️";
@@ -501,7 +501,7 @@ const dayDesc: Record<string, string> = {
       <main className="w-full max-w-md px-4 pb-24">
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
-            <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-white/20 text-white`}>
+            <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
               {/* 삿포로 현재 날씨 고정 */}
               {weatherMap.sapporo ? (() => {
                 const cur = weatherMap.sapporo.current;
@@ -531,13 +531,13 @@ const dayDesc: Record<string, string> = {
               )}
 
               {/* 4일 그리드: 날짜별 방문 도시 날씨 */}
-              <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-white/30 mb-2.5">
+              <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10 mb-2.5">
                 {(['5/27','5/28','5/29','5/30'] as const).map((day) => {
                   const cityKey = DAY_CITY_MAP[day];
                   const cityLabel = cityKey === 'sapporo' ? '삿포로' : cityKey === 'biei' ? '비에이' : '오타루';
                   const dayWeather = weatherMap[cityKey]?.daily.find((d) => d.date === day);
                   return (
-                    <div key={day} className="flex flex-col items-center gap-0.5 bg-white/80 backdrop-blur-sm rounded-xl py-2 px-1 border border-white shadow-sm text-[#1A1A1A]">
+                    <div key={day} className="flex flex-col items-center gap-0.5 bg-white/50 backdrop-blur-sm rounded-xl py-2 px-1 border border-white/70 shadow-sm">
                       <span className="text-[10px] font-black opacity-90 leading-tight">{cityLabel}</span>
                       <span className="text-[10px] font-black opacity-75 leading-tight">{`${String(day.split('/')[0]).padStart(2,'0')}/${String(day.split('/')[1]).padStart(2,'0')}(${getDayLabel(day)})`}</span>
                       <div className="my-0.5">{dayWeather ? getWeatherIcon(dayWeather.code, 24) : <Cloud size={24} className="text-gray-400" />}</div>
@@ -555,7 +555,7 @@ const dayDesc: Record<string, string> = {
 
               {/* 코디 — 하단 1번만, 삿포로 현재 기온 기준 */}
               {weatherMap.sapporo && (
-                <p className="text-[14px] font-bold text-center whitespace-pre-line leading-snug border-t border-white/30 pt-2.5">
+                <p className="text-[14px] font-bold opacity-80 text-center whitespace-pre-line leading-snug border-t border-black/10 pt-2.5">
                   {getCody(parseInt(weatherMap.sapporo.current.temp))}
                 </p>
               )}
