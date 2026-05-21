@@ -1,12 +1,70 @@
 import { useState, useEffect } from 'react';
-import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from 'lucide-react';
 
-// Vercel 타입 에러 방지를 위한 인터페이스 정의
-interface WeatherData {
-  temp: string;
-  msg: string;
-  code: number;
+const WEATHER_POINTS = [
+  { key: "sapporo", name: "삿포로", latitude: 43.0618, longitude: 141.3545 },
+  { key: "otaru", name: "오타루", latitude: 43.1907, longitude: 140.9947 },
+  { key: "biei", name: "비에이", latitude: 43.5883, longitude: 142.4671 },
+];
+
+const DAY_CITY_MAP: Record<string, string> = {
+  "5/27": "sapporo",
+  "5/28": "biei",
+  "5/29": "otaru",
+  "5/30": "sapporo",
+};
+
+function getOpenMeteoUrl(lat: number, lon: number) {
+  const params = new URLSearchParams({
+    latitude: String(lat),
+    longitude: String(lon),
+    timezone: "Asia/Tokyo",
+    current: [
+      "temperature_2m",
+      "apparent_temperature",
+      "precipitation",
+      "cloud_cover",
+      "weather_code",
+      "wind_speed_10m",
+    ].join(","),
+    hourly: [
+      "temperature_2m",
+      "apparent_temperature",
+      "precipitation_probability",
+      "weather_code",
+      "cloud_cover",
+      "wind_speed_10m",
+    ].join(","),
+    daily: [
+      "weather_code",
+      "temperature_2m_max",
+      "temperature_2m_min",
+      "precipitation_probability_max",
+    ].join(","),
+    forecast_days: "10",
+  });
+  return `https://api.open-meteo.com/v1/jma?${params.toString()}`;
 }
+
+interface CurrentWeather {
+  temp: string;
+  apparentTemp: string;
+  precipProb: number;
+  windSpeed: number;
+  cloudCover: number;
+  code: number;
+  msg: string;
+}
+
+interface CityDayWeather extends DayWeather {
+  cityName: string;
+  precipProb: number;
+}
+
+interface CityWeather {
+  current: CurrentWeather;
+  daily: CityDayWeather[];
+}
+import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from 'lucide-react';
 
 interface DayWeather {
   date: string;
@@ -36,40 +94,83 @@ const dayDesc: Record<string, string> = {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [realWeather, setRealWeather] = useState<WeatherData>({ temp: '..', msg: '날씨 로딩 중', code: 0 });
-  const [tripWeather, setTripWeather] = useState<DayWeather[]>([]);
+  const [weatherMap, setWeatherMap] = useState<Record<string, CityWeather>>({});
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     const fetchWeather = async () => {
       try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=43.0667&longitude=141.35&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&start_date=2026-05-27&end_date=2026-05-30&timezone=Asia%2FTokyo');
-        const data = await res.json();
-        const t = Math.round(data.current_weather.temperature);
-        const code = data.current_weather.weathercode;
-        
-        // [복구] 8단계 정밀 코디 로직 (절대 생략 없음)
-        const getCody = (temp: number) => {
-          if (temp >= 28) return "폭염 주의! 통기성 좋은 린넨이나 민소매로 가볍게 입으세요. ☀️";
-          if (temp >= 23) return "낮 활동이 많다면 반팔! 에어컨 대비 얇은 셔츠도 좋아요. 👕";
-          if (temp >= 20) return "긴팔 티셔츠 한 장이면 충분! 가벼운 발걸음으로 여행하세요. 😊";
-          if (temp >= 17) return "일교차가 커요! 사진용 예쁜 자켓을 꼭 챙기세요. 🧥";
-          if (temp >= 12) return "트렌치코트나 야상이 베스트!\n활동성과 스타일을 동시에 잡으세요. 🧥";
-          if (temp >= 9) return "아침저녁은 꽤 쌀쌀해요! 경량 패딩이나 도톰한 니트가 필수입니다. 🧣";
-          if (temp >= 5) return "추위에 떨면 여행 망쳐요! 울 코트나 패딩으로 든든하게 입으세요. ❄️";
-          return "여행지는 한겨울! 롱패딩과 핫팩으로 무장하고 나가세요. ❄️";
-        };
-        setRealWeather({ temp: `${t}°`, msg: getCody(t), code: code });
-        if (data.daily && data.daily.time) {
-          setTripWeather(data.daily.time.map((date: string, i: number) => ({
-            date: date.slice(5).replace('-', '/'),
-            max: Math.round(data.daily.temperature_2m_max[i]),
-            min: Math.round(data.daily.temperature_2m_min[i]),
-            code: data.daily.weathercode[i]
-          })));
-        }
+        const results = await Promise.all(
+          WEATHER_POINTS.map(async (point) => {
+            const res = await fetch(getOpenMeteoUrl(point.latitude, point.longitude));
+            const data = await res.json();
+
+            const nowStr = new Date().toISOString().slice(0, 13);
+            const hourIdx = (data.hourly.time as string[]).findIndex(
+              (t) => t.replace("+09:00", "").slice(0, 13) >= nowStr
+            );
+            const precipProb: number =
+              data.hourly.precipitation_probability[hourIdx >= 0 ? hourIdx : 0] ?? 0;
+
+            const t = Math.round(data.current.temperature_2m);
+            const appT = Math.round(data.current.apparent_temperature);
+            const code: number = data.current.weather_code;
+            const windSpeed: number = Math.round(data.current.wind_speed_10m);
+            const cloudCover: number = data.current.cloud_cover;
+
+            const tripDates = ["2026-05-27", "2026-05-28", "2026-05-29", "2026-05-30"];
+            const daily: CityDayWeather[] = tripDates
+              .map((td) => {
+                const idx = (data.daily.time as string[]).indexOf(td);
+                if (idx === -1) return null;
+                const m = parseInt(td.slice(5, 7));
+                const d = parseInt(td.slice(8, 10));
+                return {
+                  date: `${m}/${d}`,
+                  cityName: point.name,
+                  max: Math.round(data.daily.temperature_2m_max[idx]),
+                  min: Math.round(data.daily.temperature_2m_min[idx]),
+                  code: data.daily.weather_code[idx],
+                  precipProb: data.daily.precipitation_probability_max[idx] ?? 0,
+                };
+              })
+              .filter(Boolean) as CityDayWeather[];
+
+            const cityWeather: CityWeather = {
+              current: {
+                temp: `${t}°`,
+                apparentTemp: `${appT}°`,
+                precipProb,
+                windSpeed,
+                cloudCover,
+                code,
+                msg: "",
+              },
+              daily,
+            };
+            return { key: point.key, cityWeather };
+          })
+        );
+
+        const map: Record<string, CityWeather> = {};
+        results.forEach(({ key, cityWeather }) => {
+          map[key] = cityWeather;
+        });
+        setWeatherMap(map);
       } catch (err) {
-        setRealWeather({ temp: '6°', msg: "추우니 패딩으로 든든하게 입으세요! ❄️", code: 0 });
+        const fallback: CityWeather = {
+          current: {
+            temp: "6°",
+            apparentTemp: "4°",
+            precipProb: 0,
+            windSpeed: 0,
+            cloudCover: 0,
+            code: 0,
+            msg: "",
+          },
+          daily: [],
+        };
+        setWeatherMap({ sapporo: fallback, biei: fallback, otaru: fallback });
       }
     };
     fetchWeather();
@@ -277,12 +378,32 @@ const dayDesc: Record<string, string> = {
   const categories = ['전체', '야키니쿠', '징기스칸', '스프카레', '스시/해산물', '라멘', '카이센동', '디저트', '게 요리', '기타/지역'];
   const filteredGourmet = selectedCategory === '전체' ? gourmetData : gourmetData.filter(item => item.cat === selectedCategory);
 
-  const getW = () => {
-    if (realWeather.code <= 1) return { bg: "from-[#FFF59D] to-[#FFD54F]", box: "bg-amber-400/25", line: "border-amber-400/40" };
-    if (realWeather.code <= 3) return { bg: "from-[#B3E5FC] to-[#E1F5FE]", box: "bg-sky-400/20", line: "border-sky-400/30" };
-    if (realWeather.code <= 67) return { bg: "from-[#80DEEA] to-[#B2EBF2]", box: "bg-cyan-400/20", line: "border-cyan-400/30" };
-    return { bg: "from-[#CE93D8] to-[#EDE7F6]", box: "bg-purple-400/20", line: "border-purple-400/30" };
+  const getCody = (temp: number): string => {
+    if (temp >= 28) return "폭염 주의! 통기성 좋은 린넨이나 민소매로 가볍게 입으세요. ☀️";
+    if (temp >= 23) return "낮 활동이 많다면 반팔! 에어컨 대비 얇은 셔츠도 좋아요. 👕";
+    if (temp >= 20) return "긴팔 티셔츠 한 장이면 충분! 가벼운 발걸음으로 여행하세요. 😊";
+    if (temp >= 17) return "일교차가 커요! 사진용 예쁜 자켓을 꼭 챙기세요. 🧥";
+    if (temp >= 12) return "트렌치코트나 야상이 베스트!\n활동성과 스타일을 동시에 잡으세요. 🧥";
+    if (temp >= 9)  return "아침저녁은 꽤 쌀쌀해요! 경량 패딩이나 도톰한 니트가 필수입니다. 🧣";
+    if (temp >= 5)  return "추위에 떨면 여행 망쳐요! 울 코트나 패딩으로 든든하게 입으세요. ❄️";
+    return "여행지는 한겨울! 롱패딩과 핫팩으로 무장하고 나가세요. ❄️";
   };
+
+  const getW = () => {
+    const code = weatherMap.sapporo?.current.code ?? 0;
+    if (code <= 1)  return { bg: "from-[#FFF59D] to-[#FFD54F]", box: "bg-amber-400/25", line: "border-amber-400/40" };
+    if (code <= 3)  return { bg: "from-[#B3E5FC] to-[#E1F5FE]", box: "bg-sky-400/20",   line: "border-sky-400/30" };
+    if (code <= 67) return { bg: "from-[#80DEEA] to-[#B2EBF2]", box: "bg-cyan-400/20",  line: "border-cyan-400/30" };
+    return           { bg: "from-[#CE93D8] to-[#EDE7F6]", box: "bg-purple-400/20", line: "border-purple-400/30" };
+  };
+  const getWeatherMessage = (w: CurrentWeather): string => {
+    if (w.precipProb >= 60) return "비 가능성이 높아요. 우산을 꼭 챙기세요. ☂️";
+    if (w.precipProb >= 35) return "비 가능성이 조금 있어요. 접이식 우산을 추천해요. 🌂";
+    if (w.windSpeed >= 25) return "바람이 강해 체감온도가 낮게 느껴질 수 있어요. 🌬️";
+    if (w.cloudCover >= 70) return "구름이 많아 흐리게 느껴질 수 있어요. ☁️";
+    return "야외 일정에 무난한 날씨예요. 😊";
+  };
+
   const w = getW();
   const getWeatherLabel = (code: number) => {
     if (code === 0) return '맑음 ☀️';
@@ -381,24 +502,61 @@ const dayDesc: Record<string, string> = {
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
             <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
-              <div className={`flex items-center justify-between px-4 py-2.5 rounded-xl ${w.box} shadow-inner mb-2.5`}>
-                <p className="text-[26px] font-[1000]">삿포로 {realWeather.temp}</p>
-                <span className="text-[18px] font-bold opacity-60">{getWeatherLabel(realWeather.code)}</span>
-              </div>
-              <p className="text-[15px] font-bold opacity-80 text-center whitespace-pre-line leading-snug mb-2.5">{realWeather.msg}</p>
-              {tripWeather.length > 0 && (
-                <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10">
-                  {tripWeather.map((day, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1 bg-white/50 backdrop-blur-sm rounded-xl py-2 px-1 border border-white/70 shadow-sm">
-                      <span className="text-[11px] font-black opacity-60 leading-tight">{`${String(day.date.split('/')[0]).padStart(2,'0')}/${String(day.date.split('/')[1]).padStart(2,'0')}(${getDayLabel(day.date)})`}</span>
-                      <div>{getWeatherIcon(day.code, 28)}</div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[18px] font-[900]">{day.max}°</span>
-                        <span className="text-[13px] opacity-45 font-bold">{day.min}°</span>
+              {/* 삿포로 현재 날씨 고정 */}
+              {weatherMap.sapporo ? (() => {
+                const cur = weatherMap.sapporo.current;
+                return (
+                  <>
+                    <div className={`flex items-center justify-between px-4 py-2.5 rounded-xl ${w.box} shadow-inner mb-1.5`}>
+                      <div>
+                        <p className="text-[26px] font-[1000] leading-tight">삿포로 {cur.temp}</p>
+                        <p className="text-[13px] font-bold opacity-60">체감 {cur.apparentTemp}</p>
                       </div>
+                      <span className="text-[18px] font-bold opacity-60">{getWeatherLabel(cur.code)}</span>
                     </div>
-                  ))}
+                    <p className="text-[13px] font-bold opacity-70 text-center mb-1">
+                      강수확률 {cur.precipProb}% · 바람 {cur.windSpeed}km/h
+                    </p>
+                    <p className="text-[13px] font-bold opacity-60 text-center mb-2.5">
+                      {getWeatherMessage(cur)}
+                    </p>
+                  </>
+                );
+              })() : (
+                <div className={`flex items-center justify-between px-4 py-2.5 rounded-xl ${w.box} shadow-inner mb-2.5`}>
+                  <p className="text-[26px] font-[1000]">삿포로 --</p>
+                  <span className="text-[18px] font-bold opacity-60">로딩 중</span>
                 </div>
+              )}
+
+              {/* 4일 그리드: 날짜별 방문 도시 날씨 */}
+              <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10 mb-2.5">
+                {(['5/27','5/28','5/29','5/30'] as const).map((day) => {
+                  const cityKey = DAY_CITY_MAP[day];
+                  const cityLabel = cityKey === 'sapporo' ? '삿포로' : cityKey === 'biei' ? '비에이' : '오타루';
+                  const dayWeather = weatherMap[cityKey]?.daily.find((d) => d.date === day);
+                  return (
+                    <div key={day} className="flex flex-col items-center gap-0.5 bg-white/50 backdrop-blur-sm rounded-xl py-2 px-1 border border-white/70 shadow-sm">
+                      <span className="text-[10px] font-black opacity-50 leading-tight">{cityLabel}</span>
+                      <span className="text-[10px] font-black opacity-50 leading-tight">{`${String(day.split('/')[0]).padStart(2,'0')}/${String(day.split('/')[1]).padStart(2,'0')}(${getDayLabel(day)})`}</span>
+                      <div className="my-0.5">{dayWeather ? getWeatherIcon(dayWeather.code, 24) : <Cloud size={24} className="text-gray-300" />}</div>
+                      {dayWeather ? (
+                        <div className="flex items-center gap-1">
+                          <span className="text-[15px] font-[900]">{dayWeather.max}°</span>
+                          <span className="text-[11px] opacity-45 font-bold">{dayWeather.min}°</span>
+                        </div>
+                      ) : <span className="text-[12px] opacity-30">--</span>}
+                      {dayWeather && <span className="text-[10px] opacity-40 font-bold">{dayWeather.precipProb}%</span>}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 코디 — 하단 1번만, 삿포로 현재 기온 기준 */}
+              {weatherMap.sapporo && (
+                <p className="text-[14px] font-bold opacity-80 text-center whitespace-pre-line leading-snug border-t border-black/10 pt-2.5">
+                  {getCody(parseInt(weatherMap.sapporo.current.temp))}
+                </p>
               )}
             </div>
             
@@ -521,7 +679,7 @@ const dayDesc: Record<string, string> = {
                 <p className="text-[16px] text-[#444] mt-1 leading-snug">{dayDesc[selectedDay]}</p>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-[17px] font-black text-[#1A55AA]">{realWeather.temp}</p>
+                <p className="text-[17px] font-black text-[#1A55AA]">{weatherMap.sapporo?.current.temp ?? '--'}</p>
                 <p className="text-[13px] text-[#666]">삿포로</p>
               </div>
             </div>
@@ -588,7 +746,7 @@ const dayDesc: Record<string, string> = {
                 <p className="text-[16px] text-[#444] mt-1 leading-snug">{dayDesc[selectedDay]}</p>
               </div>
               <div className="shrink-0 ml-3 text-right">
-                <p className="text-[17px] font-black text-[#1A55AA]">{realWeather.temp}</p>
+                <p className="text-[17px] font-black text-[#1A55AA]">{weatherMap.sapporo?.current.temp ?? '--'}</p>
                 <p className="text-[13px] text-[#666]">삿포로</p>
               </div>
             </div>
