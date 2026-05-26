@@ -8,9 +8,8 @@ const DAY_CITY_MAP: Record<string, string> = {
 };
 
 const JMA_URLS = {
-  sapporo:  "https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json",
-  biei:     "https://www.jma.go.jp/bosai/forecast/data/forecast/012000.json",
-  overview: "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/016000.json",
+  sapporo: "https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json",
+  biei:    "https://www.jma.go.jp/bosai/forecast/data/forecast/012000.json",
 } as const;
 
 const OM_POINTS = {
@@ -82,8 +81,18 @@ const dayDesc: Record<string, string> = {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [weatherMap, setWeatherMap] = useState<Record<string, CityWeather>>({});
-  const [overviewText, setOverviewText] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const translateJA = async (text: string): Promise<string> => {
+    try {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=ko&dt=t&q=${encodeURIComponent(text)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      return (data[0] as any[]).map((item: any) => item[0]).join('');
+    } catch {
+      return text;
+    }
+  };
 
   const fetchWeather = async () => {
     setIsRefreshing(true);
@@ -113,37 +122,36 @@ const dayDesc: Record<string, string> = {
         areas.find((a: any) => a.area.name === name);
 
       /* 병렬 fetch — JMA JSON 우선, Open-Meteo는 실시간 hourly 보완용 */
-      const [d016, d012, omSapporo, omOtaru, omBiei, overview] = await Promise.all([
+      const [d016, d012, omSapporo, omOtaru, omBiei] = await Promise.all([
         fetch(JMA_URLS.sapporo).then(r => r.json()),
         fetch(JMA_URLS.biei).then(r => r.json()),
         fetch(getOMUrl(OM_POINTS.sapporo.lat, OM_POINTS.sapporo.lon)).then(r => r.json()),
         fetch(getOMUrl(OM_POINTS.otaru.lat,   OM_POINTS.otaru.lon)).then(r => r.json()),
         fetch(getOMUrl(OM_POINTS.biei.lat,    OM_POINTS.biei.lon)).then(r => r.json()),
-        fetch(JMA_URLS.overview).then(r => r.json()),
       ]);
 
-      setOverviewText(overview.text || '');
-
       /* jmaArr[0] = 단기예보, jmaArr[1] = 주간예보 */
-      const buildCity = (
+      const buildCity = async (
         jmaArr: any[], om: any,
         popAreaName: string,
         codeAreaName: string,
         tempCityName: string,
         weeklyAreaName: string
-      ): CityWeather => {
-        const short  = jmaArr[0]; // 단기: timeSeries[0~2]
-        const weekly = jmaArr[1]; // 주간: timeSeries[0~1]
+      ): Promise<CityWeather> => {
+        const short  = jmaArr?.[0]; // 단기: timeSeries[0~2]
+        const weekly = jmaArr?.[1]; // 주간: timeSeries[0~1]
 
         /* ── JMA 우선 항목 ── */
-        const popSeries     = short.timeSeries[1];
-        const popArea       = findArea(popSeries.areas, popAreaName);
-        const currentPopIdx = findCurrentPopIdx(popSeries.timeDefines);
+        const popSeries     = short?.timeSeries?.[1];
+        const popArea       = popSeries ? findArea(popSeries.areas, popAreaName) : null;
+        const currentPopIdx = popSeries ? findCurrentPopIdx(popSeries.timeDefines) : 0;
         const precipProb    = popArea ? parseInt(popArea.pops[currentPopIdx] ?? "0") || 0 : 0;
 
-        const codeSeries = short.timeSeries[0];
-        const codeArea   = findArea(codeSeries.areas, codeAreaName);
+        const codeSeries = short?.timeSeries?.[0];
+        const codeArea   = codeSeries ? findArea(codeSeries.areas, codeAreaName) : null;
         const todayCode  = codeArea ? parseInt(codeArea.weatherCodes[0] ?? "100") : 100;
+        const rawWeatherText = (codeArea?.weathers?.[0] ?? '').replace(/\s+/g, ' ').trim();
+        const msg = rawWeatherText ? await translateJA(rawWeatherText) : '';
 
         /* ── Open-Meteo 보완 항목 (실시간 hourly) ── */
         const hIdx      = findOMHourIdx(om.hourly.time);
@@ -156,11 +164,13 @@ const dayDesc: Record<string, string> = {
         const sunset       = (om.daily.sunset[0] ?? '').slice(11, 16);
 
         /* ── 7일 예보 (JMA 우선: 기온·강수·코드 모두 JMA weekly) ── */
-        const weeklyTimes    = weekly.timeSeries[0].timeDefines as string[];
-        const weeklyArea     = findArea(weekly.timeSeries[0].areas, weeklyAreaName);
-        const weeklyTempArea = findArea(weekly.timeSeries[1].areas, tempCityName);
+        const weeklyTs0      = weekly?.timeSeries?.[0];
+        const weeklyTs1      = weekly?.timeSeries?.[1];
+        const weeklyTimes    = (weeklyTs0?.timeDefines ?? []) as string[];
+        const weeklyArea     = weeklyTs0 ? findArea(weeklyTs0.areas, weeklyAreaName) : null;
+        const weeklyTempArea = weeklyTs1 ? findArea(weeklyTs1.areas, tempCityName) : null;
         const tripDates = ["2026-05-27","2026-05-28","2026-05-29","2026-05-30"];
-        const daily: CityDayWeather[] = tripDates.map(td => {
+        const daily: CityDayWeather[] = weeklyTimes.length > 0 ? tripDates.map(td => {
           const idx = findDateIdx(weeklyTimes, td);
           if (idx === -1) return null;
           const m = parseInt(td.slice(5, 7));
@@ -168,29 +178,30 @@ const dayDesc: Record<string, string> = {
           return {
             date: `${m}/${dd}`,
             cityName: tempCityName,
-            max:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMax[idx] ?? "0") : 0,
-            min:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMin[idx] ?? "0") : 0,
-            code:       weeklyArea ? parseInt(weeklyArea.weatherCodes[idx] ?? "100") : 100,
-            precipProb: weeklyArea ? parseInt(weeklyArea.pops[idx] ?? "0") || 0 : 0,
+            max:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMax?.[idx] ?? "0") : 0,
+            min:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMin?.[idx] ?? "0") : 0,
+            code:       weeklyArea ? parseInt(weeklyArea.weatherCodes?.[idx] ?? "100") : 100,
+            precipProb: weeklyArea ? parseInt(weeklyArea.pops?.[idx] ?? "0") || 0 : 0,
           };
-        }).filter(Boolean) as CityDayWeather[];
+        }).filter(Boolean) as CityDayWeather[] : [];
 
         return {
           current: {
             temp: `${currentTemp}°`,
             apparentTemp: `${apparentTemp}°`,
             precipProb, windSpeed, cloudCover, humidity,
-            sunrise, sunset, code: todayCode, msg: "",
+            sunrise, sunset, code: todayCode, msg,
           },
           daily,
         };
       };
 
-      setWeatherMap({
-        sapporo: buildCity(d016, omSapporo, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
-        otaru:   buildCity(d016, omOtaru,   "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
-        biei:    buildCity(d012, omBiei,    "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
-      });
+      const [sapporoW, otaruW, bieiW] = await Promise.all([
+        buildCity(d016, omSapporo, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
+        buildCity(d016, omOtaru,   "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
+        buildCity(d012, omBiei,    "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
+      ]);
+      setWeatherMap({ sapporo: sapporoW, otaru: otaruW, biei: bieiW });
     } catch (err) {
       console.error("날씨 fetch 실패:", err);
       const fallback: CityWeather = {
@@ -574,7 +585,7 @@ const dayDesc: Record<string, string> = {
                       </div>
                     </div>
                     <p className="text-[13px] font-bold opacity-90 text-center mb-2.5">
-                      {getWeatherMessage(cur)}
+                      {cur.msg || getWeatherMessage(cur)}
                     </p>
                   </>
                 );
@@ -616,14 +627,6 @@ const dayDesc: Record<string, string> = {
               )}
             </div>
             
-            {/* JMA 공식 개황문 */}
-            {overviewText ? (
-              <div className="w-full bg-white/80 border border-[#E0E8F5] rounded-[18px] px-4 py-3 mb-3 shadow-sm">
-                <p className="text-[10px] font-black text-[#1A55AA] mb-1 tracking-wide">🌐 일본기상청 공식 예보 (石狩・空知・後志地方)</p>
-                <p className="text-[12px] text-[#444] leading-relaxed">{overviewText}</p>
-              </div>
-            ) : null}
-
             {/* 현재 시각 카드 */}
             <div className="rounded-[18px] bg-gradient-to-br from-[#1A55AA] to-[#2E6FD8] px-5 py-4 mb-3 shadow-md text-center select-none">
               <p className="text-white/90 text-[13px] font-black tracking-[0.15em] mb-2">
