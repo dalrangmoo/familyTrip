@@ -44,6 +44,7 @@ interface CurrentWeather {
 interface CityDayWeather extends DayWeather {
   cityName: string;
   precipProb: number;
+  hasTemp: boolean;
 }
 
 interface CityWeather {
@@ -166,20 +167,27 @@ const dayDesc: Record<string, string> = {
         /* ── 7일 예보 (JMA 우선: 기온·강수·코드 모두 JMA weekly) ── */
         const weeklyTs0      = weekly?.timeSeries?.[0];
         const weeklyTs1      = weekly?.timeSeries?.[1];
-        const weeklyTimes    = (weeklyTs0?.timeDefines ?? []) as string[];
+        const weeklyTimes     = (weeklyTs0?.timeDefines ?? []) as string[];
+        const weeklyTempTimes = (weeklyTs1?.timeDefines ?? []) as string[]; // 기온용 날짜는 별도 배열
         const weeklyArea     = weeklyTs0 ? findArea(weeklyTs0.areas, weeklyAreaName) : null;
         const weeklyTempArea = weeklyTs1 ? findArea(weeklyTs1.areas, tempCityName) : null;
         const tripDates = ["2026-05-27","2026-05-28","2026-05-29","2026-05-30"];
         const daily: CityDayWeather[] = weeklyTimes.length > 0 ? tripDates.map(td => {
-          const idx = findDateIdx(weeklyTimes, td);
+          const idx     = findDateIdx(weeklyTimes, td);
+          const tempIdx = findDateIdx(weeklyTempTimes, td); // 기온 전용 인덱스
           if (idx === -1) return null;
           const m = parseInt(td.slice(5, 7));
           const dd = parseInt(td.slice(8, 10));
+          const maxRaw = (weeklyTempArea && tempIdx !== -1) ? weeklyTempArea.tempsMax?.[tempIdx] : null;
+          const minRaw = (weeklyTempArea && tempIdx !== -1) ? weeklyTempArea.tempsMin?.[tempIdx] : null;
+          const max = (maxRaw != null && maxRaw !== '') ? parseInt(maxRaw) : null;
+          const min = (minRaw != null && minRaw !== '') ? parseInt(minRaw) : null;
           return {
             date: `${m}/${dd}`,
             cityName: tempCityName,
-            max:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMax?.[idx] ?? "0") : 0,
-            min:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMin?.[idx] ?? "0") : 0,
+            max:        max ?? 0,
+            min:        min ?? 0,
+            hasTemp:    max !== null,
             code:       weeklyArea ? parseInt(weeklyArea.weatherCodes?.[idx] ?? "100") : 100,
             precipProb: weeklyArea ? parseInt(weeklyArea.pops?.[idx] ?? "0") || 0 : 0,
           };
@@ -609,8 +617,8 @@ const dayDesc: Record<string, string> = {
                       <div className="my-0.5">{dayWeather ? getWeatherIcon(dayWeather.code, 24) : <Cloud size={24} className="text-gray-400" />}</div>
                       {dayWeather ? (
                         <div className="flex items-center gap-1">
-                          <span className="text-[15px] font-[900]">{dayWeather.max}°</span>
-                          <span className="text-[11px] opacity-60 font-bold">{dayWeather.min}°</span>
+                          <span className="text-[15px] font-[900]">{dayWeather.hasTemp ? `${dayWeather.max}°` : '--'}</span>
+                          <span className="text-[11px] opacity-60 font-bold">{dayWeather.hasTemp ? `${dayWeather.min}°` : ''}</span>
                         </div>
                       ) : <span className="text-[12px] opacity-50">--</span>}
                       {dayWeather && <span className="text-[10px] opacity-70 font-bold">{dayWeather.precipProb}%</span>}
