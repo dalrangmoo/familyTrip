@@ -39,6 +39,7 @@ interface CurrentWeather {
   sunset: string;
   code: number;
   msg: string;
+  hourlyPops: string[]; // ["--","10","0","0"] — 00-06, 06-12, 12-18, 18-24
 }
 
 interface CityDayWeather extends DayWeather {
@@ -141,6 +142,16 @@ const dayDesc: Record<string, string> = {
         const codeArea   = codeSeries ? findArea(codeSeries.areas, codeAreaName) : null;
         const todayCode  = codeArea ? parseInt(codeArea.weatherCodes[0] ?? "100") : 100;
 
+        /* ── 오늘 시간대별 강수확률 (00-06 / 06-12 / 12-18 / 18-24) ── */
+        const todayJSTStr = nowJST.toISOString().slice(0, 10);
+        const popTimeDefines = (popSeries?.timeDefines ?? []) as string[];
+        const hourlyPops = ["00", "06", "12", "18"].map(hour => {
+          const idx = popTimeDefines.findIndex(t => t.includes(`${todayJSTStr}T${hour}:`));
+          if (idx === -1 || !popArea) return "--";
+          const val = popArea.pops[idx];
+          return (val != null && val !== "") ? val : "--";
+        });
+
         /* ── Open-Meteo 보완 항목 (실시간 hourly) ── */
         const hIdx      = findOMHourIdx(om.hourly.time);
         const currentTemp  = Math.round(om.hourly.temperature_2m[hIdx]);
@@ -191,7 +202,7 @@ const dayDesc: Record<string, string> = {
             temp: `${currentTemp}°`,
             apparentTemp: `${apparentTemp}°`,
             precipProb, windSpeed, cloudCover, humidity,
-            sunrise, sunset, code: todayCode, msg: "",
+            sunrise, sunset, code: todayCode, msg: "", hourlyPops,
           },
           daily,
         };
@@ -205,7 +216,7 @@ const dayDesc: Record<string, string> = {
     } catch (err) {
       console.error("날씨 fetch 실패:", err);
       const fallback: CityWeather = {
-        current: { temp: "--°", apparentTemp: "--°", precipProb: 0, windSpeed: 0, cloudCover: 0, humidity: 0, sunrise: "--:--", sunset: "--:--", code: 100, msg: "" },
+        current: { temp: "--°", apparentTemp: "--°", precipProb: 0, windSpeed: 0, cloudCover: 0, humidity: 0, sunrise: "--:--", sunset: "--:--", code: 100, msg: "", hourlyPops: ["--","--","--","--"] },
         daily: [],
       };
       setWeatherMap({ sapporo: fallback, biei: fallback, otaru: fallback });
@@ -567,22 +578,14 @@ const dayDesc: Record<string, string> = {
                       </div>
                     </div>
                     <div className="grid grid-cols-4 gap-1 mb-2">
-                      <div className="flex flex-col items-center bg-white/40 rounded-xl py-1.5">
-                        <span className="text-[10px] font-black opacity-60">강수확률</span>
-                        <span className="text-[15px] font-[900]">{cur.precipProb}%</span>
-                      </div>
-                      <div className="flex flex-col items-center bg-white/40 rounded-xl py-1.5">
-                        <span className="text-[10px] font-black opacity-60">바람</span>
-                        <span className="text-[15px] font-[900]">{cur.windSpeed}<span className="text-[10px]">km</span></span>
-                      </div>
-                      <div className="flex flex-col items-center bg-white/40 rounded-xl py-1.5">
-                        <span className="text-[10px] font-black opacity-60">습도</span>
-                        <span className="text-[15px] font-[900]">{cur.humidity}%</span>
-                      </div>
-                      <div className="flex flex-col items-center bg-white/40 rounded-xl py-1.5">
-                        <span className="text-[10px] font-black opacity-60">구름</span>
-                        <span className="text-[15px] font-[900]">{cur.cloudCover}%</span>
-                      </div>
+                      {(["00-06","06-12","12-18","18-24"] as const).map((label, i) => (
+                        <div key={label} className="flex flex-col items-center bg-white/40 rounded-xl py-1.5">
+                          <span className="text-[10px] font-black opacity-60">{label}</span>
+                          <span className="text-[15px] font-[900]">
+                            {cur.hourlyPops[i] === "--" ? "--" : `${cur.hourlyPops[i]}%`}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                     <p className="text-[13px] font-bold opacity-90 text-center mb-2.5">
                       {getWeatherMessage(cur)}
