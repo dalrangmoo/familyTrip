@@ -22,7 +22,7 @@ function getOMUrl(lat: number, lon: number) {
   const p = new URLSearchParams({
     latitude: String(lat), longitude: String(lon), timezone: "Asia/Tokyo",
     hourly: ["temperature_2m","apparent_temperature","precipitation","wind_speed_10m","relative_humidity_2m","cloud_cover"].join(","),
-    daily:  ["sunrise","sunset"].join(","),
+    daily:  ["sunrise","sunset","temperature_2m_max","temperature_2m_min"].join(","),
     forecast_days: "10",
   });
   return `https://api.open-meteo.com/v1/jma?${p.toString()}`;
@@ -180,8 +180,14 @@ const dayDesc: Record<string, string> = {
           const dd = parseInt(td.slice(8, 10));
           const maxRaw = (weeklyTempArea && tempIdx !== -1) ? weeklyTempArea.tempsMax?.[tempIdx] : null;
           const minRaw = (weeklyTempArea && tempIdx !== -1) ? weeklyTempArea.tempsMin?.[tempIdx] : null;
-          const max = (maxRaw != null && maxRaw !== '') ? parseInt(maxRaw) : null;
-          const min = (minRaw != null && minRaw !== '') ? parseInt(minRaw) : null;
+          const jmaMax = (maxRaw != null && maxRaw !== '') ? parseInt(maxRaw) : null;
+          const jmaMin = (minRaw != null && minRaw !== '') ? parseInt(minRaw) : null;
+          // JMA 기온 없으면 OM daily fallback
+          const omDailyIdx = (om.daily.time as string[]).findIndex((t: string) => t === td);
+          const omMax = omDailyIdx !== -1 ? Math.round(om.daily.temperature_2m_max[omDailyIdx]) : null;
+          const omMin = omDailyIdx !== -1 ? Math.round(om.daily.temperature_2m_min[omDailyIdx]) : null;
+          const max = jmaMax ?? omMax;
+          const min = jmaMin ?? omMin;
           return {
             date: `${m}/${dd}`,
             cityName: tempCityName,
