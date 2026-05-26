@@ -609,7 +609,7 @@ const dayDesc: Record<string, string> = {
               {/* 4일 그리드: 5/28,5/29는 당일 여행이므로 삿포로 기준으로 표시 */}
               <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10 mb-2.5">
                 {(['5/27','5/28','5/29','5/30'] as const).map((day) => {
-                  const gridCityKey = (day === '5/28' || day === '5/29') ? 'sapporo' : DAY_CITY_MAP[day];
+                  const gridCityKey = (day === todayKey && (day === '5/28' || day === '5/29')) ? 'sapporo' : DAY_CITY_MAP[day];
                   const gridCityLabel = gridCityKey === 'sapporo' ? '삿포로' : gridCityKey === 'biei' ? '비에이' : '오타루';
                   const dayWeather = weatherMap[gridCityKey]?.daily.find((d) => d.date === day);
                   return (
