@@ -26,14 +26,6 @@ function getOpenMeteoUrl(lat: number, lon: number) {
       "weather_code",
       "wind_speed_10m",
     ].join(","),
-    hourly: [
-      "temperature_2m",
-      "apparent_temperature",
-      "precipitation_probability",
-      "weather_code",
-      "cloud_cover",
-      "wind_speed_10m",
-    ].join(","),
     daily: [
       "weather_code",
       "temperature_2m_max",
@@ -42,7 +34,7 @@ function getOpenMeteoUrl(lat: number, lon: number) {
     ].join(","),
     forecast_days: "10",
   });
-  return `https://api.open-meteo.com/v1/jma?${params.toString()}`;
+  return `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
 }
 
 interface CurrentWeather {
@@ -508,11 +500,11 @@ const dayDesc: Record<string, string> = {
       <main className="w-full max-w-md px-4 pb-24">
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
-            <div className={`relative w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
+            <div className={`relative w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5 transition-opacity duration-300 ${isRefreshing ? 'opacity-60' : 'opacity-100'}`}>
               <button
                 onClick={fetchWeather}
                 disabled={isRefreshing}
-                className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/70 backdrop-blur-sm shadow-sm border border-black/10 active:scale-90 transition-all disabled:opacity-50"
+                className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/70 backdrop-blur-sm shadow-sm border border-black/10 active:scale-90 transition-all disabled:opacity-50 z-10"
                 aria-label="날씨 새로고침"
               >
                 <RefreshCw size={14} className={`text-[#1A55AA] ${isRefreshing ? 'animate-spin' : ''}`} />
