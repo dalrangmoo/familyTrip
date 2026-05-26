@@ -84,17 +84,6 @@ const dayDesc: Record<string, string> = {
   const [weatherMap, setWeatherMap] = useState<Record<string, CityWeather>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const translateJA = async (text: string): Promise<string> => {
-    try {
-      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=ko&dt=t&q=${encodeURIComponent(text)}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      return (data[0] as any[]).map((item: any) => item[0]).join('');
-    } catch {
-      return text;
-    }
-  };
-
   const fetchWeather = async () => {
     setIsRefreshing(true);
     try {
@@ -132,13 +121,13 @@ const dayDesc: Record<string, string> = {
       ]);
 
       /* jmaArr[0] = 단기예보, jmaArr[1] = 주간예보 */
-      const buildCity = async (
+      const buildCity = (
         jmaArr: any[], om: any,
         popAreaName: string,
         codeAreaName: string,
         tempCityName: string,
         weeklyAreaName: string
-      ): Promise<CityWeather> => {
+      ): CityWeather => {
         const short  = jmaArr?.[0]; // 단기: timeSeries[0~2]
         const weekly = jmaArr?.[1]; // 주간: timeSeries[0~1]
 
@@ -151,8 +140,6 @@ const dayDesc: Record<string, string> = {
         const codeSeries = short?.timeSeries?.[0];
         const codeArea   = codeSeries ? findArea(codeSeries.areas, codeAreaName) : null;
         const todayCode  = codeArea ? parseInt(codeArea.weatherCodes[0] ?? "100") : 100;
-        const rawWeatherText = (codeArea?.weathers?.[0] ?? '').replace(/\s+/g, ' ').trim();
-        const msg = rawWeatherText ? await translateJA(rawWeatherText) : '';
 
         /* ── Open-Meteo 보완 항목 (실시간 hourly) ── */
         const hIdx      = findOMHourIdx(om.hourly.time);
@@ -204,18 +191,17 @@ const dayDesc: Record<string, string> = {
             temp: `${currentTemp}°`,
             apparentTemp: `${apparentTemp}°`,
             precipProb, windSpeed, cloudCover, humidity,
-            sunrise, sunset, code: todayCode, msg,
+            sunrise, sunset, code: todayCode, msg: "",
           },
           daily,
         };
       };
 
-      const [sapporoW, otaruW, bieiW] = await Promise.all([
-        buildCity(d016, omSapporo, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
-        buildCity(d016, omOtaru,   "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
-        buildCity(d012, omBiei,    "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
-      ]);
-      setWeatherMap({ sapporo: sapporoW, otaru: otaruW, biei: bieiW });
+      setWeatherMap({
+        sapporo: buildCity(d016, omSapporo, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
+        otaru:   buildCity(d016, omOtaru,   "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
+        biei:    buildCity(d012, omBiei,    "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
+      });
     } catch (err) {
       console.error("날씨 fetch 실패:", err);
       const fallback: CityWeather = {
@@ -599,7 +585,7 @@ const dayDesc: Record<string, string> = {
                       </div>
                     </div>
                     <p className="text-[13px] font-bold opacity-90 text-center mb-2.5">
-                      {cur.msg || getWeatherMessage(cur)}
+                      {getWeatherMessage(cur)}
                     </p>
                   </>
                 );
