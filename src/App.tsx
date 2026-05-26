@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
 
-const WEATHER_POINTS = [
-  { key: "sapporo", name: "삿포로", latitude: 43.0618, longitude: 141.3545 },
-  { key: "otaru", name: "오타루", latitude: 43.1907, longitude: 140.9947 },
-  { key: "biei", name: "비에이", latitude: 43.5883, longitude: 142.4671 },
-];
-
 const DAY_CITY_MAP: Record<string, string> = {
   "5/27": "sapporo",
   "5/28": "biei",
@@ -13,29 +7,10 @@ const DAY_CITY_MAP: Record<string, string> = {
   "5/30": "sapporo",
 };
 
-function getOpenMeteoUrl(lat: number, lon: number) {
-  const params = new URLSearchParams({
-    latitude: String(lat),
-    longitude: String(lon),
-    timezone: "Asia/Tokyo",
-    current: [
-      "temperature_2m",
-      "apparent_temperature",
-      "precipitation",
-      "cloud_cover",
-      "weather_code",
-      "wind_speed_10m",
-    ].join(","),
-    daily: [
-      "weather_code",
-      "temperature_2m_max",
-      "temperature_2m_min",
-      "precipitation_probability_max",
-    ].join(","),
-    forecast_days: "10",
-  });
-  return `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
-}
+const JMA_URLS = {
+  sapporo: "https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json",
+  biei:    "https://www.jma.go.jp/bosai/forecast/data/forecast/012000.json",
+} as const;
 
 interface CurrentWeather {
   temp: string;
@@ -56,7 +31,7 @@ interface CityWeather {
   current: CurrentWeather;
   daily: CityDayWeather[];
 }
-import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, RefreshCw } from 'lucide-react';
+import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudLightning, RefreshCw } from 'lucide-react';
 
 interface DayWeather {
   date: string;
@@ -92,76 +67,87 @@ const dayDesc: Record<string, string> = {
   const fetchWeather = async () => {
     setIsRefreshing(true);
     try {
-      const results = await Promise.all(
-        WEATHER_POINTS.map(async (point) => {
-          const res = await fetch(getOpenMeteoUrl(point.latitude, point.longitude));
-          const data = await res.json();
+      const nowJST = new Date(Date.now() + 9 * 60 * 60 * 1000);
 
-          /* 오늘(JST) daily precipitation_probability_max 사용 — JMA hourly 미지원 대응 */
-          const todayJST = new Date(Date.now() + 9 * 60 * 60 * 1000)
-            .toISOString().slice(0, 10);
-          const todayDailyIdx = (data.daily.time as string[]).indexOf(todayJST);
-          const precipProb: number =
-            todayDailyIdx >= 0
-              ? data.daily.precipitation_probability_max[todayDailyIdx] ?? 0
-              : 0;
+      const findCurrentPopIdx = (timeDefines: string[]) => {
+        let idx = 0;
+        for (let i = 0; i < timeDefines.length; i++) {
+          if (new Date(timeDefines[i]) <= nowJST) idx = i;
+        }
+        return idx;
+      };
 
-            const t = Math.round(data.current.temperature_2m);
-            const appT = Math.round(data.current.apparent_temperature);
-            const code: number = data.current.weather_code;
-            const windSpeed: number = Math.round(data.current.wind_speed_10m);
-            const cloudCover: number = data.current.cloud_cover;
+      const findDateIdx = (timeDefines: string[], dateStr: string) =>
+        timeDefines.findIndex(t => t.startsWith(dateStr));
 
-            const tripDates = ["2026-05-27", "2026-05-28", "2026-05-29", "2026-05-30"];
-            const daily: CityDayWeather[] = tripDates
-              .map((td) => {
-                const idx = (data.daily.time as string[]).indexOf(td);
-                if (idx === -1) return null;
-                const m = parseInt(td.slice(5, 7));
-                const d = parseInt(td.slice(8, 10));
-                return {
-                  date: `${m}/${d}`,
-                  cityName: point.name,
-                  max: Math.round(data.daily.temperature_2m_max[idx]),
-                  min: Math.round(data.daily.temperature_2m_min[idx]),
-                  code: data.daily.weather_code[idx],
-                  precipProb: data.daily.precipitation_probability_max[idx] ?? 0,
-                };
-              })
-              .filter(Boolean) as CityDayWeather[];
+      const findArea = (areas: any[], name: string) =>
+        areas.find((a: any) => a.area.name === name);
 
-            const cityWeather: CityWeather = {
-              current: {
-                temp: `${t}°`,
-                apparentTemp: `${appT}°`,
-                precipProb,
-                windSpeed,
-                cloudCover,
-                code,
-                msg: "",
-              },
-              daily,
-            };
-            return { key: point.key, cityWeather };
-          })
-        );
+      const [d016, d012] = await Promise.all([
+        fetch(JMA_URLS.sapporo).then(r => r.json()),
+        fetch(JMA_URLS.biei).then(r => r.json()),
+      ]);
 
-      const map: Record<string, CityWeather> = {};
-      results.forEach(({ key, cityWeather }) => {
-        map[key] = cityWeather;
+      const buildCity = (
+        d0: any, d1: any,
+        popAreaName: string,
+        codeAreaName: string,
+        tempCityName: string,
+        weeklyAreaName: string
+      ): CityWeather => {
+        const popSeries  = d0.timeSeries[1];
+        const popArea    = findArea(popSeries.areas, popAreaName);
+        const currentPopIdx = findCurrentPopIdx(popSeries.timeDefines);
+        const precipProb = popArea ? parseInt(popArea.pops[currentPopIdx] ?? "0") || 0 : 0;
+
+        const tempSeries = d0.timeSeries[2];
+        const tempArea   = findArea(tempSeries.areas, tempCityName);
+        const todayMax   = tempArea ? parseInt(tempArea.temps[0] ?? "0") : 0;
+        const todayMin   = tempArea ? parseInt(tempArea.temps[2] ?? "0") : 0;
+
+        const codeSeries = d0.timeSeries[0];
+        const codeArea   = findArea(codeSeries.areas, codeAreaName);
+        const todayCode  = codeArea ? parseInt(codeArea.weatherCodes[0] ?? "100") : 100;
+
+        const weeklyTimes    = d1.timeSeries[0].timeDefines as string[];
+        const weeklyArea     = findArea(d1.timeSeries[0].areas, weeklyAreaName);
+        const weeklyTempArea = findArea(d1.timeSeries[1].areas, tempCityName);
+        const tripDates = ["2026-05-27", "2026-05-28", "2026-05-29", "2026-05-30"];
+        const daily: CityDayWeather[] = tripDates.map(td => {
+          const idx = findDateIdx(weeklyTimes, td);
+          if (idx === -1) return null;
+          const m = parseInt(td.slice(5, 7));
+          const d = parseInt(td.slice(8, 10));
+          return {
+            date: `${m}/${d}`,
+            cityName: tempCityName,
+            max:  weeklyTempArea ? parseInt(weeklyTempArea.tempsMax[idx] ?? "0") : 0,
+            min:  weeklyTempArea ? parseInt(weeklyTempArea.tempsMin[idx] ?? "0") : 0,
+            code: weeklyArea ? parseInt(weeklyArea.weatherCodes[idx] ?? "100") : 100,
+            precipProb: weeklyArea ? parseInt(weeklyArea.pops[idx] ?? "0") || 0 : 0,
+          };
+        }).filter(Boolean) as CityDayWeather[];
+
+        return {
+          current: {
+            temp: `${todayMax}°`,
+            apparentTemp: `${todayMin}°`,
+            precipProb, windSpeed: 0, cloudCover: 0,
+            code: todayCode, msg: "",
+          },
+          daily,
+        };
+      };
+
+      setWeatherMap({
+        sapporo: buildCity(d016, d016, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
+        otaru:   buildCity(d016, d016, "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
+        biei:    buildCity(d012, d012, "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
       });
-      setWeatherMap(map);
     } catch (err) {
+      console.error("JMA fetch 실패:", err);
       const fallback: CityWeather = {
-        current: {
-          temp: "6°",
-          apparentTemp: "4°",
-          precipProb: 0,
-          windSpeed: 0,
-          cloudCover: 0,
-          code: 0,
-          msg: "",
-        },
+        current: { temp: "--°", apparentTemp: "--°", precipProb: 0, windSpeed: 0, cloudCover: 0, code: 100, msg: "" },
         daily: [],
       };
       setWeatherMap({ sapporo: fallback, biei: fallback, otaru: fallback });
@@ -389,40 +375,36 @@ const dayDesc: Record<string, string> = {
   };
 
   const getW = () => {
-    const code = weatherMap.sapporo?.current.code ?? 0;
-    if (code <= 1)  return { bg: "from-[#FFF59D] to-[#FFD54F]", box: "bg-amber-400/25", line: "border-amber-400/40" };
-    if (code <= 3)  return { bg: "from-[#B3E5FC] to-[#E1F5FE]", box: "bg-sky-400/20",   line: "border-sky-400/30" };
-    if (code <= 67) return { bg: "from-[#80DEEA] to-[#B2EBF2]", box: "bg-cyan-400/20",  line: "border-cyan-400/30" };
+    const code = weatherMap.sapporo?.current.code ?? 100;
+    if (code < 200) return { bg: "from-[#FFF59D] to-[#FFD54F]", box: "bg-amber-400/25", line: "border-amber-400/40" };
+    if (code < 210) return { bg: "from-[#B3E5FC] to-[#E1F5FE]", box: "bg-sky-400/20",   line: "border-sky-400/30" };
+    if (code < 400) return { bg: "from-[#80DEEA] to-[#B2EBF2]", box: "bg-cyan-400/20",  line: "border-cyan-400/30" };
     return           { bg: "from-[#CE93D8] to-[#EDE7F6]", box: "bg-purple-400/20", line: "border-purple-400/30" };
   };
   const getWeatherMessage = (w: CurrentWeather): string => {
     if (w.precipProb >= 60) return "비 가능성이 높아요. 우산을 꼭 챙기세요. ☂️";
     if (w.precipProb >= 35) return "비 가능성이 조금 있어요. 접이식 우산을 추천해요. 🌂";
-    if (w.windSpeed >= 25) return "바람이 강해 체감온도가 낮게 느껴질 수 있어요. 🌬️";
-    if (w.cloudCover >= 70) return "구름이 많아 흐리게 느껴질 수 있어요. ☁️";
+    if (w.code >= 210 && w.code < 400) return "흐리고 비가 올 수 있어요. ☁️";
     return "야외 일정에 무난한 날씨예요. 😊";
   };
 
   const w = getW();
   const getWeatherLabel = (code: number) => {
-    if (code === 0) return '맑음 ☀️';
-    if (code <= 2) return '구름 조금 ⛅';
-    if (code === 3) return '흐림 ☁️';
-    if (code <= 48) return '안개 🌫️';
-    if (code <= 67) return '비 🌧️';
-    if (code <= 77) return '눈 ❄️';
-    if (code <= 82) return '소나기 🌦️';
-    return '천둥번개 ⛈️';
+    if (code < 110) return '맑음 ☀️';
+    if (code < 200) return '맑고 구름 ⛅';
+    if (code < 210) return '흐림 ☁️';
+    if (code < 300) return '흐리고 비 🌧️';
+    if (code < 400) return '비 🌧️';
+    if (code < 500) return '눈 ❄️';
+    return '특보 ⛈️';
   };
 
   const getWeatherIcon = (code: number, size = 32) => {
-    if (code === 0) return <Sun size={size} className="text-amber-400" />;
-    if (code <= 2) return <CloudSun size={size} className="text-gray-400" />;
-    if (code === 3) return <Cloud size={size} className="text-gray-500" />;
-    if (code <= 48) return <Cloud size={size} className="text-gray-400" />;
-    if (code <= 67) return <CloudRain size={size} className="text-blue-500" />;
-    if (code <= 77) return <CloudSnow size={size} className="text-blue-300" />;
-    if (code <= 82) return <CloudDrizzle size={size} className="text-blue-400" />;
+    if (code < 110) return <Sun size={size} className="text-amber-400" />;
+    if (code < 200) return <CloudSun size={size} className="text-gray-400" />;
+    if (code < 210) return <Cloud size={size} className="text-gray-500" />;
+    if (code < 400) return <CloudRain size={size} className="text-blue-500" />;
+    if (code < 500) return <CloudSnow size={size} className="text-blue-300" />;
     return <CloudLightning size={size} className="text-purple-400" />;
   };
 
@@ -518,12 +500,12 @@ const dayDesc: Record<string, string> = {
                       <div>
                         <p className="text-[11px] font-black opacity-80 mb-0.5">오늘({currentTime.getMonth()+1}/{currentTime.getDate()}) 삿포로 날씨</p>
                         <p className="text-[26px] font-[1000] leading-tight">삿포로 {cur.temp}</p>
-                        <p className="text-[13px] font-bold opacity-90">체감 {cur.apparentTemp}</p>
+                        <p className="text-[13px] font-bold opacity-90">최저 {cur.apparentTemp}</p>
                       </div>
                       <span className="text-[18px] font-bold opacity-90">{getWeatherLabel(cur.code)}</span>
                     </div>
                     <p className="text-[13px] font-bold opacity-90 text-center mb-1">
-                      강수확률 {cur.precipProb}% · 바람 {cur.windSpeed}km/h
+                      강수확률 {cur.precipProb}%
                     </p>
                     <p className="text-[13px] font-bold opacity-90 text-center mb-2.5">
                       {getWeatherMessage(cur)}
