@@ -105,13 +105,14 @@ const dayDesc: Record<string, string> = {
           const res = await fetch(getOpenMeteoUrl(point.latitude, point.longitude));
           const data = await res.json();
 
-          /* JST(UTC+9) 기준 현재 시각으로 인덱스 탐색 */
-          const nowStr = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 13);
-          const hourIdx = (data.hourly.time as string[]).findIndex(
-            (t) => t.replace("+09:00", "").slice(0, 13) >= nowStr
-          );
+          /* 오늘(JST) daily precipitation_probability_max 사용 — JMA hourly 미지원 대응 */
+          const todayJST = new Date(Date.now() + 9 * 60 * 60 * 1000)
+            .toISOString().slice(0, 10);
+          const todayDailyIdx = (data.daily.time as string[]).indexOf(todayJST);
           const precipProb: number =
-            data.hourly.precipitation_probability[hourIdx >= 0 ? hourIdx : 0] ?? 0;
+            todayDailyIdx >= 0
+              ? data.daily.precipitation_probability_max[todayDailyIdx] ?? 0
+              : 0;
 
             const t = Math.round(data.current.temperature_2m);
             const appT = Math.round(data.current.apparent_temperature);
