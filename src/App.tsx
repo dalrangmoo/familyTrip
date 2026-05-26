@@ -23,7 +23,7 @@ function getOMUrl(lat: number, lon: number) {
   const p = new URLSearchParams({
     latitude: String(lat), longitude: String(lon), timezone: "Asia/Tokyo",
     hourly: ["temperature_2m","apparent_temperature","precipitation","wind_speed_10m","relative_humidity_2m","cloud_cover"].join(","),
-    daily:  ["sunrise","sunset","temperature_2m_max","temperature_2m_min"].join(","),
+    daily:  ["sunrise","sunset"].join(","),
     forecast_days: "10",
   });
   return `https://api.open-meteo.com/v1/jma?${p.toString()}`;
@@ -124,37 +124,41 @@ const dayDesc: Record<string, string> = {
 
       setOverviewText(overview.text || '');
 
+      /* jmaArr[0] = 단기예보, jmaArr[1] = 주간예보 */
       const buildCity = (
-        d0: any, d1: any, om: any,
+        jmaArr: any[], om: any,
         popAreaName: string,
         codeAreaName: string,
         tempCityName: string,
         weeklyAreaName: string
       ): CityWeather => {
+        const short  = jmaArr[0]; // 단기: timeSeries[0~2]
+        const weekly = jmaArr[1]; // 주간: timeSeries[0~1]
+
         /* ── JMA 우선 항목 ── */
-        const popSeries     = d0.timeSeries[1];
+        const popSeries     = short.timeSeries[1];
         const popArea       = findArea(popSeries.areas, popAreaName);
         const currentPopIdx = findCurrentPopIdx(popSeries.timeDefines);
         const precipProb    = popArea ? parseInt(popArea.pops[currentPopIdx] ?? "0") || 0 : 0;
 
-        const codeSeries = d0.timeSeries[0];
+        const codeSeries = short.timeSeries[0];
         const codeArea   = findArea(codeSeries.areas, codeAreaName);
         const todayCode  = codeArea ? parseInt(codeArea.weatherCodes[0] ?? "100") : 100;
 
         /* ── Open-Meteo 보완 항목 (실시간 hourly) ── */
-        const hIdx       = findOMHourIdx(om.hourly.time);
-        const currentTemp   = Math.round(om.hourly.temperature_2m[hIdx]);
-        const apparentTemp  = Math.round(om.hourly.apparent_temperature[hIdx]);
-        const windSpeed     = Math.round(om.hourly.wind_speed_10m[hIdx]);
-        const humidity      = om.hourly.relative_humidity_2m[hIdx] ?? 0;
-        const cloudCover    = om.hourly.cloud_cover[hIdx] ?? 0;
-        const sunrise       = (om.daily.sunrise[0] ?? '').slice(11, 16);
-        const sunset        = (om.daily.sunset[0] ?? '').slice(11, 16);
+        const hIdx      = findOMHourIdx(om.hourly.time);
+        const currentTemp  = Math.round(om.hourly.temperature_2m[hIdx]);
+        const apparentTemp = Math.round(om.hourly.apparent_temperature[hIdx]);
+        const windSpeed    = Math.round(om.hourly.wind_speed_10m[hIdx]);
+        const humidity     = om.hourly.relative_humidity_2m[hIdx] ?? 0;
+        const cloudCover   = om.hourly.cloud_cover[hIdx] ?? 0;
+        const sunrise      = (om.daily.sunrise[0] ?? '').slice(11, 16);
+        const sunset       = (om.daily.sunset[0] ?? '').slice(11, 16);
 
-        /* ── 7일 예보 (JMA 우선: 기온·강수·코드 모두 JMA data[1]) ── */
-        const weeklyTimes    = d1.timeSeries[0].timeDefines as string[];
-        const weeklyArea     = findArea(d1.timeSeries[0].areas, weeklyAreaName);
-        const weeklyTempArea = findArea(d1.timeSeries[1].areas, tempCityName);
+        /* ── 7일 예보 (JMA 우선: 기온·강수·코드 모두 JMA weekly) ── */
+        const weeklyTimes    = weekly.timeSeries[0].timeDefines as string[];
+        const weeklyArea     = findArea(weekly.timeSeries[0].areas, weeklyAreaName);
+        const weeklyTempArea = findArea(weekly.timeSeries[1].areas, tempCityName);
         const tripDates = ["2026-05-27","2026-05-28","2026-05-29","2026-05-30"];
         const daily: CityDayWeather[] = tripDates.map(td => {
           const idx = findDateIdx(weeklyTimes, td);
@@ -164,9 +168,9 @@ const dayDesc: Record<string, string> = {
           return {
             date: `${m}/${dd}`,
             cityName: tempCityName,
-            max:       weeklyTempArea ? parseInt(weeklyTempArea.tempsMax[idx] ?? "0") : 0,
-            min:       weeklyTempArea ? parseInt(weeklyTempArea.tempsMin[idx] ?? "0") : 0,
-            code:      weeklyArea ? parseInt(weeklyArea.weatherCodes[idx] ?? "100") : 100,
+            max:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMax[idx] ?? "0") : 0,
+            min:        weeklyTempArea ? parseInt(weeklyTempArea.tempsMin[idx] ?? "0") : 0,
+            code:       weeklyArea ? parseInt(weeklyArea.weatherCodes[idx] ?? "100") : 100,
             precipProb: weeklyArea ? parseInt(weeklyArea.pops[idx] ?? "0") || 0 : 0,
           };
         }).filter(Boolean) as CityDayWeather[];
@@ -183,9 +187,9 @@ const dayDesc: Record<string, string> = {
       };
 
       setWeatherMap({
-        sapporo: buildCity(d016, d016, omSapporo, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
-        otaru:   buildCity(d016, d016, omOtaru,   "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
-        biei:    buildCity(d012, d012, omBiei,    "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
+        sapporo: buildCity(d016, omSapporo, "石狩地方", "石狩地方", "札幌",   "石狩・空知・後志地方"),
+        otaru:   buildCity(d016, omOtaru,   "後志地方", "後志地方", "倶知安", "石狩・空知・後志地方"),
+        biei:    buildCity(d012, omBiei,    "上川地方", "上川地方", "旭川",   "上川・留萌地方"),
       });
     } catch (err) {
       console.error("날씨 fetch 실패:", err);
