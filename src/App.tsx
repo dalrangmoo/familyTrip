@@ -606,9 +606,19 @@ const dayDesc: Record<string, string> = {
                 </div>
               )}
 
-              {/* 4일 그리드: 5/28,5/29는 당일 여행이므로 삿포로 기준으로 표시 */}
-              <div className="grid grid-cols-4 gap-1.5 pt-2.5 border-t border-black/10 mb-2.5">
-                {(['5/27','5/28','5/29','5/30'] as const).map((day) => {
+              {/* 4일 그리드: 오늘 이전 날짜 숨김, 5/28,5/29 당일은 삿포로 표시 */}
+              {(() => {
+                const allDays = ['5/27','5/28','5/29','5/30'] as const;
+                const todayDate = new Date(2026, parseInt(todayKey.split('/')[0])-1, parseInt(todayKey.split('/')[1]));
+                const visibleDays = allDays.filter(day => {
+                  const d = new Date(2026, parseInt(day.split('/')[0])-1, parseInt(day.split('/')[1]));
+                  return d >= todayDate;
+                });
+                const colsMap: Record<number,string> = { 1:'grid-cols-1', 2:'grid-cols-2', 3:'grid-cols-3', 4:'grid-cols-4' };
+                const colsClass = colsMap[visibleDays.length] ?? 'grid-cols-4';
+                return (
+              <div className={`grid ${colsClass} gap-1.5 pt-2.5 border-t border-black/10 mb-2.5`}>
+                {visibleDays.map((day) => {
                   const gridCityKey = (day === todayKey && (day === '5/28' || day === '5/29')) ? 'sapporo' : DAY_CITY_MAP[day];
                   const gridCityLabel = gridCityKey === 'sapporo' ? '삿포로' : gridCityKey === 'biei' ? '비에이' : '오타루';
                   const dayWeather = weatherMap[gridCityKey]?.daily.find((d) => d.date === day);
@@ -628,6 +638,8 @@ const dayDesc: Record<string, string> = {
                   );
                 })}
               </div>
+                );
+              })()}
 
               {/* 코디 — 오늘 여행 도시 기온 기준 */}
               {weatherMap[currentCityKey] && (
