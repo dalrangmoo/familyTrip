@@ -64,7 +64,7 @@ interface CityWeather {
   current: CurrentWeather;
   daily: CityDayWeather[];
 }
-import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from 'lucide-react';
+import { Home, Calendar, Utensils, Navigation, MapPin, Menu, X, Sun, Cloud, CloudSun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, RefreshCw } from 'lucide-react';
 
 interface DayWeather {
   date: string;
@@ -95,22 +95,23 @@ const dayDesc: Record<string, string> = {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [weatherMap, setWeatherMap] = useState<Record<string, CityWeather>>({});
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    const fetchWeather = async () => {
-      try {
-        const results = await Promise.all(
-          WEATHER_POINTS.map(async (point) => {
-            const res = await fetch(getOpenMeteoUrl(point.latitude, point.longitude));
-            const data = await res.json();
+  const fetchWeather = async () => {
+    setIsRefreshing(true);
+    try {
+      const results = await Promise.all(
+        WEATHER_POINTS.map(async (point) => {
+          const res = await fetch(getOpenMeteoUrl(point.latitude, point.longitude));
+          const data = await res.json();
 
-            const nowStr = new Date().toISOString().slice(0, 13);
-            const hourIdx = (data.hourly.time as string[]).findIndex(
-              (t) => t.replace("+09:00", "").slice(0, 13) >= nowStr
-            );
-            const precipProb: number =
-              data.hourly.precipitation_probability[hourIdx >= 0 ? hourIdx : 0] ?? 0;
+          /* JST(UTC+9) 기준 현재 시각으로 인덱스 탐색 */
+          const nowStr = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 13);
+          const hourIdx = (data.hourly.time as string[]).findIndex(
+            (t) => t.replace("+09:00", "").slice(0, 13) >= nowStr
+          );
+          const precipProb: number =
+            data.hourly.precipitation_probability[hourIdx >= 0 ? hourIdx : 0] ?? 0;
 
             const t = Math.round(data.current.temperature_2m);
             const appT = Math.round(data.current.apparent_temperature);
@@ -152,27 +153,32 @@ const dayDesc: Record<string, string> = {
           })
         );
 
-        const map: Record<string, CityWeather> = {};
-        results.forEach(({ key, cityWeather }) => {
-          map[key] = cityWeather;
-        });
-        setWeatherMap(map);
-      } catch (err) {
-        const fallback: CityWeather = {
-          current: {
-            temp: "6°",
-            apparentTemp: "4°",
-            precipProb: 0,
-            windSpeed: 0,
-            cloudCover: 0,
-            code: 0,
-            msg: "",
-          },
-          daily: [],
-        };
-        setWeatherMap({ sapporo: fallback, biei: fallback, otaru: fallback });
-      }
-    };
+      const map: Record<string, CityWeather> = {};
+      results.forEach(({ key, cityWeather }) => {
+        map[key] = cityWeather;
+      });
+      setWeatherMap(map);
+    } catch (err) {
+      const fallback: CityWeather = {
+        current: {
+          temp: "6°",
+          apparentTemp: "4°",
+          precipProb: 0,
+          windSpeed: 0,
+          cloudCover: 0,
+          code: 0,
+          msg: "",
+        },
+        daily: [],
+      };
+      setWeatherMap({ sapporo: fallback, biei: fallback, otaru: fallback });
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     fetchWeather();
     return () => clearInterval(timer);
   }, []);
@@ -501,7 +507,15 @@ const dayDesc: Record<string, string> = {
       <main className="w-full max-w-md px-4 pb-24">
         {activeTab === 'home' && (
           <div className="animate-in fade-in duration-500 pt-6">
-            <div className={`w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
+            <div className={`relative w-full p-4 rounded-[22px] mb-4 shadow-sm bg-gradient-to-br ${w.bg} border border-black/5`}>
+              <button
+                onClick={fetchWeather}
+                disabled={isRefreshing}
+                className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/70 backdrop-blur-sm shadow-sm border border-black/10 active:scale-90 transition-all disabled:opacity-50"
+                aria-label="날씨 새로고침"
+              >
+                <RefreshCw size={14} className={`text-[#1A55AA] ${isRefreshing ? 'animate-spin' : ''}`} />
+              </button>
               {/* 삿포로 현재 날씨 고정 */}
               {weatherMap.sapporo ? (() => {
                 const cur = weatherMap.sapporo.current;
